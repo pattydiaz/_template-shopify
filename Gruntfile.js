@@ -3,7 +3,7 @@ const pngquant = require('imagemin-pngquant');
 const jpegoptim = require('imagemin-jpegoptim');
 
 const pkg = require("./package.json");
-const theme = `./ma-${pkg.name}-theme`;
+const theme = `./${pkg.name}-theme`;
 const nm = "./node_modules/";
 
 const lib = [
