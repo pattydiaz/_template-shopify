@@ -1,0 +1,37 @@
+// Hiding class, making content visible only to screen readers but not visually
+// https://css-tricks.com/inclusively-hidden/
+.sr-only:not(:focus):not(:active) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: 1em;
+  padding: 1em;
+  font-size: 13px;
+  font-family: sans-serif;
+  line-height: 1;
+  text-decoration: none;
+  background-color: #333;
+  color: #fff;
+
+  &:focus {
+    left: 1em;
+    z-index: 1000;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) { * {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}}

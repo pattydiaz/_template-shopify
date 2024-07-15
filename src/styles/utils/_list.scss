@@ -1,0 +1,15 @@
+.ls {
+  
+  &-none {
+    list-style: none;
+
+    &:not([class*="m"]) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &-col {
+    columns: 2;
+  }
+}

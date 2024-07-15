@@ -1,0 +1,22 @@
+.text {  
+  &-normal { font-style: $fs-normal; }
+  &-italic { font-style: $fs-italic; }
+  &-thin { font-weight: $fw-thin; }
+  &-xlight { font-weight: $fw-xlight; }
+  &-light { font-weight: $fw-light; }
+  &-normal { font-weight: $fw-normal; }
+  &-medium { font-weight: $fw-medium; }
+  &-semibold { font-weight: $fw-semibold; }
+  &-bold { font-weight: $fw-bold; }
+  &-xbold { font-weight: $fw-xbold; }
+  &-black { font-weight: $fw-black; }
+  &-center { text-align: center; }
+  &-left { text-align: left; }
+  &-right { text-align: right; }
+  &-lowercase { text-transform: lowercase; }
+  &-uppercase { text-transform: uppercase; }
+  &-capitalize { text-transform: capitalize; }
+  &-unset { text-transform: unset; }
+  &-nowrap { white-space: nowrap; }
+  &-decoration { @include text-decoration; }
+}

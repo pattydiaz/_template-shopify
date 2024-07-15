@@ -1,0 +1,203 @@
+{
+  "sections": {
+    "main": {
+      "type": "section-hero",
+      "blocks": {
+        "subheading_Am8Bkz": {
+          "type": "subheading",
+          "settings": {
+            "subheading-spacing-top": "none",
+            "subheading-spacing-bottom": "none",
+            "subheading": "Lorem Ipsum"
+          }
+        },
+        "heading_rCaMzt": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "h",
+            "heading-spacing-bottom": "1",
+            "heading": "Home Hero"
+          }
+        },
+        "blurb_pWNFeC": {
+          "type": "blurb",
+          "settings": {
+            "blurb-spacing-top": "none",
+            "blurb-spacing-bottom": "none",
+            "blurb-width": 400,
+            "blurb": "This is a simplified demo built to test Shopify + AJAX only with products, to transition seamlessly between products."
+          }
+        },
+        "button_DGf66A": {
+          "type": "button",
+          "settings": {
+            "button-spacing-top": "2",
+            "button-spacing-bottom": "none",
+            "button-type": "primary",
+            "button-theme": "dark",
+            "button-text": "Lorem Ipsum CTA",
+            "button-url": "#"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_Am8Bkz",
+        "heading_rCaMzt",
+        "blurb_pWNFeC",
+        "button_DGf66A"
+      ],
+      "settings": {
+        "spacing-top": "false",
+        "spacing-bottom": "false",
+        "spacing-header": false,
+        "section-size": "full",
+        "container-size": "md",
+        "text-color": "dark",
+        "text-alignment": "center",
+        "animation": true,
+        "bg-img": "shopify:\/\/shop_images\/theme_cover_image.jpg",
+        "img-pos-y": 50,
+        "img-pos-x": 60,
+        "img-overlay": 0.1
+      }
+    },
+    "section_split_zkDEzj": {
+      "type": "section-split",
+      "blocks": {
+        "heading_Yc9Cef": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading-type": "2",
+            "heading": "Lorem Ipsum"
+          }
+        },
+        "blurb_NpYQ9Y": {
+          "type": "blurb",
+          "settings": {
+            "blurb-spacing-top": "1",
+            "blurb-spacing-bottom": "none",
+            "blurb-width": 320,
+            "blurb": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?"
+          }
+        },
+        "button_z9fmFx": {
+          "type": "button",
+          "settings": {
+            "button-spacing-top": "3",
+            "button-spacing-bottom": "none",
+            "button-type": "primary",
+            "button-theme": "dark",
+            "button-text": "Lorem Ipsum CTA",
+            "button-url": "#"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Yc9Cef",
+        "blurb_NpYQ9Y",
+        "button_z9fmFx"
+      ],
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": false,
+        "container-size": "xl",
+        "img": "shopify:\/\/shop_images\/snowboards.jpg",
+        "img-ratio": "ratio-4x5",
+        "img-position-x": 0,
+        "img-position-y": 50,
+        "split-swap": false,
+        "split-spacing-tablet": 20,
+        "split-spacing-desktop": 30
+      }
+    },
+    "section_split_8PYJzK": {
+      "type": "section-split",
+      "blocks": {
+        "heading_TPec6Q": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading-type": "2",
+            "heading": "Lorem Ipsum"
+          }
+        },
+        "blurb_9rLxpX": {
+          "type": "blurb",
+          "settings": {
+            "blurb-spacing-top": "1",
+            "blurb-spacing-bottom": "none",
+            "blurb-width": 400,
+            "blurb": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?"
+          }
+        }
+      },
+      "block_order": [
+        "heading_TPec6Q",
+        "blurb_9rLxpX"
+      ],
+      "settings": {
+        "spacing-top": "none",
+        "spacing-bottom": "sm",
+        "spacing-header": false,
+        "container-size": "xl",
+        "img": "shopify:\/\/shop_images\/theme_cover_image.jpg",
+        "img-ratio": "ratio-4x5",
+        "img-position-x": 100,
+        "img-position-y": 50,
+        "split-swap": true,
+        "split-spacing-tablet": 20,
+        "split-spacing-desktop": 30
+      }
+    },
+    "section_intro_kY8ADb": {
+      "type": "section-intro",
+      "blocks": {
+        "heading_4Pkhp8": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading-type": "3",
+            "heading": "Featured Products"
+          }
+        }
+      },
+      "block_order": [
+        "heading_4Pkhp8"
+      ],
+      "settings": {
+        "spacing-top": "sm",
+        "spacing-bottom": "sm",
+        "spacing-header": false,
+        "container-size": "xx",
+        "text-color": "dark",
+        "text-alignment": "left",
+        "animation": false
+      }
+    },
+    "section_products_4DJmja": {
+      "type": "section-products",
+      "settings": {
+        "spacing-top": "none",
+        "spacing-bottom": "md",
+        "spacing-header": false,
+        "container-size": "xx",
+        "products-list": "featured",
+        "products-limit": 3,
+        "products-width-mobile": "100",
+        "products-width-desktop": "33"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_split_zkDEzj",
+    "section_split_8PYJzK",
+    "section_intro_kY8ADb",
+    "section_products_4DJmja"
+  ]
+}

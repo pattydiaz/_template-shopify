@@ -1,0 +1,267 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+
+assign container-size = section.settings.container-size | prepend: ' container-'
+
+assign collection-handle = section.settings.products-list
+if collection-handle != blank
+  assign collection = collections[collection-handle]
+endif
+
+assign products-width-mobile = section.settings.products-width-mobile | prepend: 'w-'
+assign products-width-desktop = section.settings.products-width-desktop | prepend: 'wd-'
+
+%}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="products-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="container{{ container-size }}">
+
+    {% if collection != null %}
+      
+      {% assign limit = section.settings.products-limit %}
+      {% paginate collection.products by limit %}
+        <ul class="d-flex-wrap ls-none">
+          
+          {% assign products = collection.products | sort: 'title-ascending' %}
+          {% for product in products %}
+  
+            <li class="{{ products-width-mobile }} {{ products-width-desktop }} px-1 py-2 text-center">
+              <a href="{{ product.url }}" class="button-opacity d-block" title="{{ product.title }}">
+                <div class="ratio-1x1{% if product.featured_image == blank or request.design_mode == true %} bg-black{% else %} bg-white{% endif %}">
+                  {% render 'component-image' img: product.featured_image size: '150x'  %}
+                </div>
+                <div class="mt-1">{{ product.title }}</div>
+              </a>
+            </li>
+  
+          {% endfor %}
+        </ul>
+  
+      {% endpaginate %}
+      
+    {% endif %}
+
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Products",
+  "tag":"section",
+  "class": "products section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "spacing-top",
+      "default": "md",
+      "label": "Section Spacing Top",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "spacing-bottom",
+      "default": "md",
+      "label": "Section Spacing Bottom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-header",
+      "default": false,
+      "label": "Add extra spacing for header"
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container-size",
+      "default": "xx",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }, {
+          "label": "Maximum",
+          "value": "max"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Products Options"
+    },
+    {
+      "type": "collection",
+      "label": "Products List",
+      "id": "products-list"
+    },
+    {
+      "type": "number",
+      "label": "Products Limit",
+      "id": "products-limit",
+      "default": 1000,
+      "placeholder": "Limit of 1000"
+    },
+    {
+      "type": "select",
+      "label": "Product Width (Mobile)",
+      "id": "products-width-mobile",
+      "default": "50",
+      "options": [
+        {
+          "label": "100%",
+          "value": "100"
+        },
+        {
+          "label": "50%",
+          "value": "50"
+        },
+        {
+          "label": "33.3%",
+          "value": "33"
+        },
+        {
+          "label": "25%",
+          "value": "25"
+        },
+        {
+          "label": "20%",
+          "value": "20"
+        },
+        {
+          "label": "10%",
+          "value": "10"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "Product Width (Desktop)",
+      "id": "products-width-desktop",
+      "default": "25",
+      "options": [
+        {
+          "label": "100%",
+          "value": "100"
+        },
+        {
+          "label": "50%",
+          "value": "50"
+        },
+        {
+          "label": "33.3%",
+          "value": "33"
+        },
+        {
+          "label": "25%",
+          "value": "25"
+        },
+        {
+          "label": "20%",
+          "value": "20"
+        },
+        {
+          "label": "10%",
+          "value": "10"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Products"
+    }
+  ]
+}
+{% endschema %}

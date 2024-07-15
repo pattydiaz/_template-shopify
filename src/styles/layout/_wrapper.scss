@@ -1,0 +1,11 @@
+#wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  z-index: 5;
+  
+  @include bp-up(md) {
+    min-height: 690px;
+  }
+}

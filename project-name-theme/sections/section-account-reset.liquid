@@ -1,0 +1,140 @@
+{% liquid
+  assign spacing-top = section.settings.spacing-top
+  if spacing-top == true
+    assign spacing-top = section.settings.spacing-size-top | prepend: ' gap-tm--'
+  else
+    assign spacing-top = ''
+  endif
+
+  assign spacing-bottom = section.settings.spacing-bottom
+  if spacing-bottom == true
+    assign spacing-bottom = section.settings.spacing-size-bottom | prepend: ' gap-bm--'
+  else
+    assign spacing-bottom = ''
+  endif
+%}
+
+<div class="reset-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="gap-hh"></div>
+
+  <div class="container container-sm">
+
+    <div class="reset-content mb-2">
+      <h2 class="heading-3">{{ 'customer.reset_password.title' | t }}</h2>
+      <div class="blurb buddy mt-1">{{ 'customer.reset_password.subtext' | t }}</div>
+    </div>
+
+    {% form 'reset_customer_password' %}
+
+      {{ form.errors | default_errors }}
+
+      <div class="input my-2">
+        <label for="password" class="sr-only">{{ 'customer.reset_password.password' | t }}</label>
+        <input type="password" value="" name="customer[password]" size="16" class="input-field" placeholder="{{ 'customer.reset_password.password' | t }}" />
+      </div>
+
+      <div class="input my-2">
+        <label for="password_confirmation" class="sr-only">{{ 'customer.reset_password.password_confirm' | t }}</label>
+        <input type="password" value="" name="customer[password_confirmation]" size="16" class="input-field" placeholder="{{ 'customer.reset_password.password_confirm' | t }}" />
+      </div>
+
+      <div class="cta mt-3">
+        <input type="submit" value="{{ 'customer.reset_password.submit' | t }}" class="btn btn-primary color-brown" />
+      </div>
+
+    {% endform %}
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Account Reset",
+  "class": "reset section",
+  "tag": "section",
+  "limit": 1,
+  "templates": ["customers/reset_password"],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-top",
+      "default": true,
+      "label": "Section Spacing Top"
+    },
+    {
+      "type": "select",
+      "id": "spacing-size-top",
+      "default": "lg",
+      "label": "Spacing Size Top",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-bottom",
+      "default": true,
+      "label": "Section Spacing Bottom"
+    }, {
+      "type": "select",
+      "id": "spacing-size-bottom",
+      "default": "lg",
+      "label": "Spacing Size Bottom",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Account Reset"
+    }
+  ]
+}
+{% endschema %}

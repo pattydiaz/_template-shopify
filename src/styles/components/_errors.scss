@@ -1,0 +1,8 @@
+.errors {
+  
+  ul {
+    @include ul-remove(0, $spacing 0);
+    @include caption;
+    color: $error;
+  }
+}

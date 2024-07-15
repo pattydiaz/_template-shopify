@@ -1,0 +1,10 @@
+.lazy {
+  
+  &:not(.not-animated) {
+    @include animate-in;
+    
+    &.loaded {
+      animation: fade-in 0.4s ease forwards;
+    }
+  }
+}

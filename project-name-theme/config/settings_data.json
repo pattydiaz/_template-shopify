@@ -1,0 +1,50 @@
+{
+  "current": {
+    "social_instagram_link": "",
+    "social_facebook_link": "",
+    "social_twitter_link": "",
+    "social_youtube_link": "",
+    "social_vimeo_link": "",
+    "favicon": "",
+    "checkout_logo_image": "",
+    "checkout_logo_position": "",
+    "checkout_logo_size": "",
+    "checkout_body_background_color": "",
+    "checkout_input_background_color_mode": "",
+    "checkout_sidebar_background_color": "",
+    "checkout_heading_font": "",
+    "checkout_body_font": "",
+    "checkout_accent_color": "",
+    "checkout_button_color": "",
+    "checkout_error_color": "",
+    "sections": {
+      "layout-header": {
+        "type": "layout-header",
+        "settings": {
+          "header-nav": "main-menu"
+        }
+      },
+      "layout-footer": {
+        "type": "layout-footer",
+        "settings": {
+          "footer-nav": "footer"
+        }
+      },
+      "layout-nav": {
+        "type": "layout-nav",
+        "settings": {
+        }
+      },
+      "layout-drawer": {
+        "type": "layout-drawer",
+        "settings": {
+        }
+      }
+    },
+    "content_for_index": [
+
+    ]
+  },
+  "presets": {
+  }
+}

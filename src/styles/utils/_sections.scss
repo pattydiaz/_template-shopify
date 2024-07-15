@@ -1,0 +1,91 @@
+.section {
+	$self: &;
+	position: relative;
+  width: 100%;
+  
+  div[class*="-text"] {
+    position: relative;
+    height: 100%;
+    width: 100%;
+		z-index: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    &.text-center {
+      align-items: center;
+    }
+
+    &.text-left {
+      align-items: flex-start;
+    }
+
+    &.text-right {
+      align-items: flex-end;
+    }
+  }
+  
+  &-full {
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+		min-height: 500px;
+    
+		@include bp-up(md) {
+      min-height: 690px;
+		}
+
+    > .container {
+      height: 100%;
+      width: 100%;
+    }
+    
+    .bg-cover,
+    .bg-inline {
+      min-height: 500px;
+
+      @include bp-up(md) {
+        min-height: 690px;
+      }
+    }
+
+    div[class*="-text"] {
+      min-height: 500px;
+
+      @include bp-up(md) {
+        min-height: 690px;
+      }
+    }
+
+    div[class*="-wrapper"] {
+      @extend #{$self}-full;
+    }
+	}
+
+	&-default {
+    padding-top: $spacing*10;
+		padding-bottom: $spacing*10;
+    
+    @include bp-up(sm) {
+      padding-top: $spacing*15;
+      padding-bottom: $spacing*15;
+    }
+		
+		&--top {
+			padding-top: $spacing*10;
+      
+      @include bp-up(sm) {
+        padding-top: $spacing*15;
+      }
+
+		}
+
+		&--bottom {
+			padding-bottom: $spacing*10;
+      
+      @include bp-up(sm) {
+        padding-bottom: $spacing*15;
+      }
+    }
+  
+	}
+}

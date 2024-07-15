@@ -1,0 +1,54 @@
+<div class="header-wrap p-2 d-flex d-flex--sp-between">
+
+  <div class="header-logo">
+    <a class="logo" href="{{ routes.root_url }}" title="{{ shop.name }}">
+      <span class="heading-6 text-bold">{{ shop.name }}</span>
+    </a>
+  </div>
+
+  <div class="header-main d-flex d-flex--center">
+    {% if linklists[section.settings.header-nav] %}
+      <ul class="header-nav d-flex ls-none mx-1">
+        {% for link in linklists[section.settings.header-nav].links %}
+          {% if linklists[section.settings.header-nav].levels == 1 %}
+            <li class="mx-1">
+              <a href="{{ link.url }}" class="button-opacity subheading" title="{{ link.title | escape }}">{{ link.title | escape }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <ul class="header-icons d-flex ls-none mx-nh">
+      <li>
+        <a href="/cart" class="button-opacity d-block icon-sm" title="Cart">
+          <span><i class="icon-cart"></i></span>
+          <i class="count caption{% if cart.item_count == 0 %} count--hide{% endif %}">{{ cart.item_count }}</i>
+        </a>
+      </li>
+      <li>
+        <a href="/account" class="button-opacity d-block icon-sm" title="{% if customer %}My Account{% else %}Login{% endif %}">
+          <span><i class="icon-account"></i></span>
+          <i class="logged{% unless customer %} logged--hide{% endunless %}"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+</div>
+
+{% schema %}
+  {
+    "name": "Header",
+    "tag": "header",
+    "class": "header",
+    "settings" : [
+      {
+        "type": "link_list",
+        "id": "header-nav",
+        "label": "Navigation Menu"
+      }
+    ]
+  }
+{% endschema %}

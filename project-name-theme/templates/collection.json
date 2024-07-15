@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "section-hero",
+      "blocks": {
+        "heading_3iwVxn": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading": "{{ collection.title }}"
+          }
+        }
+      },
+      "block_order": [
+        "heading_3iwVxn"
+      ],
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": true,
+        "section-size": "none",
+        "container-size": "md",
+        "text-color": "dark",
+        "text-alignment": "center",
+        "animation": false,
+        "img-pos-y": 50,
+        "img-pos-x": 50,
+        "img-overlay": 0
+      }
+    },
+    "section_products_enwVWM": {
+      "type": "section-products",
+      "settings": {
+        "spacing-top": "sm",
+        "spacing-bottom": "md",
+        "spacing-header": false,
+        "container-size": "xx"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_products_enwVWM"
+  ]
+}

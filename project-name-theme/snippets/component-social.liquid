@@ -1,0 +1,44 @@
+<ul class="social ls-none d-flex">
+  {%- if settings.social_instagram_link != blank -%}
+    <li>
+      <a href="{{ settings.social_instagram_link }}" class="d-ib button-scale" title="{{ 'general.social.links.instagram' | t }}" target="_blank" rel="nofollow">
+        <i class="icon-sm">{% render 'icon-social-instagram' %}</i>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_facebook_link != blank -%}
+    <li>
+      <a href="{{ settings.social_facebook_link }}" class="d-ib button-scale" title="{{ 'general.social.links.facebook' | t }}" target="_blank" rel="nofollow">
+        <i class="icon-sm">{% render 'icon-social-facebook' %}</i>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_twitter_link != blank -%}
+    <li>
+      <a href="{{ settings.social_twitter_link }}" class="d-ib button-scale" title="{{ 'general.social.links.twitter' | t }}" target="_blank" rel="nofollow">
+        <i class="icon-sm">{% render 'icon-social-twitter' %}</i>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_linkedin_link != blank -%}
+    <li>
+      <a href="{{ settings.social_linkedin_link }}" class="d-ib button-scale" title="{{ 'general.social.links.linkedin' | t }}" target="_blank" rel="nofollow">
+        <i class="icon-sm">{% render 'icon-social-linkedin' %}</i>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_youtube_link != blank -%}
+    <li>
+      <a href="{{ settings.social_youtube_link }}" class="d-ib button-scale" title="{{ 'general.social.links.youtube' | t }}" target="_blank" rel="nofollow">
+        <i class="icon-sm">{% render 'icon-social-youtube' %}</i>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_vimeo_link != blank -%}
+    <li>
+      <a href="{{ settings.social_vimeo_link }}" class="d-ib button-scale" title="{{ 'general.social.links.vimeo' | t }}" target="_blank" rel="nofollow">
+        <i class="icon-sm">{% render 'icon-social-vimeo' %}</i>
+      </a>
+    </li>
+  {%- endif -%}
+</ul>

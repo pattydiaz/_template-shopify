@@ -1,0 +1,44 @@
+{% liquid
+
+  if class == blank
+    assign class = 'img-cover'
+  endif
+
+  if size == blank
+    assign size = '2000x'
+  endif
+
+  if lazy == false
+    assign lazy = false
+  else 
+    assign lazy = true
+  endif
+
+  if lazy == true
+    assign data = 'data-'
+    assign lazy_class = ' lazy'
+  elsif lazy == false 
+    assign data = ''
+    assign lazy_class = ''
+  endif
+%}
+
+{% if img != blank %}
+  <img {{ data }}srcset="
+    {%- if img.width >= 150 -%}{{ img | img_url: '150x' }} 150w,{%- endif -%}
+    {%- if img.width >= 375 -%}{{ img | img_url: '375x' }} 375w,{%- endif -%}
+    {%- if img.width >= 750 -%}{{ img | img_url: '750x' }} 750w,{%- endif -%}
+    {%- if img.width >= 1100 -%}{{ img | img_url: '1100x' }} 1100w,{%- endif -%}
+    {%- if img.width >= 1500 -%}{{ img | img_url: '1500x' }} 1500w,{%- endif -%}
+    {%- if img.width >= 1780 -%}{{ img | img_url: '1780x' }} 1780w,{%- endif -%}
+    {%- if img.width >= 2000 -%}{{ img | img_url: '2000x' }} 2000w,{%- endif -%}
+    {{ img | img_url: 'master' }} {{ img.width }}w" 
+    class="{{ class }}{{ lazy_class }}" 
+    sizes="" 
+    {{ data }}src="{{ img | img_url: size }}" 
+    loading="lazy" 
+    alt="{{ img.alt | escape }}" 
+    width="{{ img.width }}" 
+    height="{{ img.width | divided_by: img.aspect_ratio }}"
+  >
+{% endif %}

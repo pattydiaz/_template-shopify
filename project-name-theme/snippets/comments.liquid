@@ -1,0 +1,81 @@
+{%- assign new_comment = false -%}
+{%- if comment and comment.created_at -%}
+  {%- assign new_comment = true -%}
+  {%- assign new_comment_id = comment.id -%}
+{%- endif -%}
+
+{%- if new_comment -%}
+  {%- assign duplicate_comment = false -%}
+  {%- for comment in article.comments -%}
+    {%- if comment.id == new_comment_id -%}
+      {%- assign duplicate_comment = true -%}
+      {% break %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if duplicate_comment -%}
+    {%- assign number_of_comments = article.comments_count -%}
+  {%- else -%}
+    {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+  {%- endif -%}
+  {%- else -%}
+    {%- assign number_of_comments = article.comments_count -%}
+{%- endif -%}
+
+<!-- Code to output article content can be added here. -->
+
+<div class="comments gap-tm--md">
+  <div class="container container-md">
+
+    <div class="comments-content">
+      <h2 class="heading-3">Comments{% if article.comments_count > 0 %}&nbsp;&nbsp;( <small>{{ article.comments_count }}</small> ){% endif %}</h2>
+    </div>
+    
+    {%- if blog.comments_enabled? -%}
+      {%- if number_of_comments > 0 -%}
+        <ul class="comments-list ls-none">
+    
+          <!-- If a comment was just submitted with no blank field, show it. -->
+          {%- if new_comment -%}
+            <li class="comments-list-item border-bottom-black py-4">
+              <div class="body-lg text-italic">Posted by <span class="text-capitalize">{{ comment.author }}</span> on {{ comment.created_at | time_tag: format: 'long' }}</div>
+              <div class="blurb contents mt-q">{{ comment.content }}</div>
+            </li>
+          {%- endif -%}
+    
+          {% for comment in article.comments %}
+            {% unless comment.id == new_comment_id %}
+              <li class="comments-list-item border-bottom-black py-4">
+                <div class="body-lg text-italic">Posted by <span class="text-capitalize">{{ comment.author }}</span> on {{ comment.created_at | time_tag: format: 'long' }}</div>
+                <div class="blurb contents mt-q">{{ comment.content }}</div>
+              </li>
+            {% endunless %}
+          {% endfor %}
+    
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+
+    <div class="comments-form gap-tm--xs">
+      {% form 'new_comment', article, class: 'd-flex-wrap mx-n1' %}
+        <div class="input w-100 wt-50 px-1 mb-2">
+          <label class="sr-only" for="name">Your Name</label>
+          <input type="text" name="comment[author]" value="{{ form.author }}" placeholder="Your Name" class="input-field">
+        </div>
+        <div class="input w-100 wt-50 px-1 mb-2">
+          <label class="sr-only" for="email">Email Address</label>
+          <input type="email" name="comment[email]" value="{{ form.email }}" placeholder="Email Address" class="input-field">
+        </div>
+        <div class="input w-100 px-1 mb-2">
+          <label class="sr-only" for="comment">Comment</label>
+          <textarea name="comment[body]" placeholder="Comment" class="input-textarea">{{ form.body }}</textarea>
+        </div>
+        <div class="input w-100 px-1">
+          <input type="submit" value="Submit" class="input-submit btn btn-primary">
+        </div>
+        {{ form.errors | default_errors }}
+      {% endform %}
+    </div>
+  
+  </div>
+</div>

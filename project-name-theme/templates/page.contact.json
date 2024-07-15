@@ -1,0 +1,144 @@
+{
+  "sections": {
+    "main": {
+      "type": "section-hero",
+      "blocks": {
+        "subheading_JANaaL": {
+          "type": "subheading",
+          "settings": {
+            "subheading-spacing-top": "none",
+            "subheading-spacing-bottom": "h",
+            "subheading": "Lorem Ipsum"
+          }
+        },
+        "heading_N8r9DK": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading": "{{ page.title }}"
+          }
+        },
+        "blurb_fVYQhR": {
+          "type": "blurb",
+          "settings": {
+            "blurb-spacing-top": "1",
+            "blurb-spacing-bottom": "none",
+            "blurb-width": 400,
+            "blurb": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis."
+          }
+        }
+      },
+      "block_order": [
+        "subheading_JANaaL",
+        "heading_N8r9DK",
+        "blurb_fVYQhR"
+      ],
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": true,
+        "section-size": "none",
+        "container-size": "lg",
+        "text-color": "dark",
+        "text-alignment": "center",
+        "animation": false,
+        "img-pos-y": 50,
+        "img-pos-x": 50,
+        "img-overlay": 0
+      }
+    },
+    "section_split_7r8jGw": {
+      "type": "section-split",
+      "blocks": {
+        "heading_kARqc8": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading-type": "2",
+            "heading": "Lorem Ipsum"
+          }
+        },
+        "blurb_QATVFX": {
+          "type": "blurb",
+          "settings": {
+            "blurb-spacing-top": "1",
+            "blurb-spacing-bottom": "none",
+            "blurb-width": 400,
+            "blurb": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?"
+          }
+        },
+        "button_VVz7Th": {
+          "type": "button",
+          "settings": {
+            "button-spacing-top": "2",
+            "button-spacing-bottom": "none",
+            "button-type": "primary",
+            "button-text": "Lorem Ipsum CTA",
+            "button-url": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_kARqc8",
+        "blurb_QATVFX",
+        "button_VVz7Th"
+      ],
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": false,
+        "container-size": "lg",
+        "img": "shopify:\/\/shop_images\/1139359692.webp",
+        "img-ratio": "ratio-1x1",
+        "img-position-x": 40,
+        "img-position-y": 50,
+        "split-swap": false,
+        "split-spacing-tablet": 20,
+        "split-spacing-desktop": 30
+      }
+    },
+    "section_intro_gNq3pM": {
+      "type": "section-intro",
+      "blocks": {
+        "heading_NhPNwb": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading-type": "2",
+            "heading": "Lorem Ipsum"
+          }
+        },
+        "blurb_iV4b9P": {
+          "type": "blurb",
+          "settings": {
+            "blurb-spacing-top": "2",
+            "blurb-spacing-bottom": "none",
+            "blurb-width": 600,
+            "blurb": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?"
+          }
+        }
+      },
+      "block_order": [
+        "heading_NhPNwb",
+        "blurb_iV4b9P"
+      ],
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "lg",
+        "spacing-header": false,
+        "container-size": "lg",
+        "text-color": "dark",
+        "text-alignment": "center",
+        "animation": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_split_7r8jGw",
+    "section_intro_gNq3pM"
+  ]
+}

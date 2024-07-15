@@ -1,0 +1,71 @@
+$widths: (
+  "5": 5%,
+  "15": 15%,
+  "25": 25%,
+  "33": 33.333%,
+  "75": 75%,
+);
+
+@for $i from 1 through 10 {
+  .w-#{$i*10} {
+    width: $i*10%;
+  }
+}
+
+@each $name, $width in $widths {
+  .w-#{$name} {
+    width: #{$width};
+  }
+}
+
+@for $i from 1 through 10 {
+  .wt-#{$i*10} {
+    @include bp-up(md) {
+      width: $i*10%;
+    }
+  }
+}
+
+@each $name, $width in $widths {
+  .wt-#{$name} {
+    @include bp-up(md) {
+      width: #{$width};
+    }
+  }
+}
+
+@for $i from 1 through 10 {
+  .wd-#{$i*10} {
+    @include bp-up(lg) {
+      width: $i*10%;
+    }
+  }
+}
+
+@each $name, $width in $widths {
+  .wd-#{$name} {
+    @include bp-up(lg) {
+      width: #{$width};
+    }
+  }
+}
+
+.wc {
+  width: var(--wc-m, var(--wc));
+  
+  @include bp-up(md) {
+    width: var(--wc-t, var(--wc));
+  }
+
+  @include bp-up(lg) {
+    width: var(--wc);
+  }
+}
+
+.w-max {
+  max-width: var(--mw, 560px);
+}
+
+.w-full {
+  @include fullwidth;
+}

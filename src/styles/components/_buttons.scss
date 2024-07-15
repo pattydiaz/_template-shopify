@@ -1,0 +1,183 @@
+@mixin text-decoration($important: null) {
+  position: relative $important;
+  background: linear-gradient(to left, transparentize($black, 1) 0, transparentize($black, 1) 50%, $black 50%, $black 100%) $important;
+  background-size: 200% 1px $important;
+  background-position: 0 100% $important;
+  background-repeat: no-repeat $important;
+  transition: background-position .3s ease $important;
+  
+  @include hover {
+    background-position: -100% 100% $important;
+  }
+}
+
+@mixin btn-default($important: null) {
+  display: inline-block $important;
+  text-decoration: none $important;
+  cursor: pointer $important;
+  pointer-events: all $important;
+  white-space: nowrap $important;
+}
+
+@mixin btn-primary($important: null, $theme: 'dark') {
+  @include btn-default($important);
+  min-width: 140px $important;
+  padding-left: $spacing*2.5 $important;
+  padding-right: $spacing*2.5 $important;
+  padding-top: $spacing*1.4 $important;
+  padding-bottom: $spacing*1.4 $important;
+  @include button($important);
+  text-align: center $important;
+
+  @if $theme == 'dark' {
+    background-color: $black $important;
+    color: $white $important;
+    border: 2px solid $black $important;
+  }
+  
+  @else {
+    background-color: $white $important;
+    color: $black $important;
+    border: 2px solid $white $important;
+  }
+
+  @include hover {
+    
+  }
+}
+
+@mixin btn-secondary($important: null, $theme: 'dark') {
+  @include btn-default($important);
+  min-width: 140px $important;
+  padding-left: $spacing*2.5 $important;
+  padding-right: $spacing*2.5 $important;
+  padding-top: $spacing*1.4 $important;
+  padding-bottom: $spacing*1.4 $important;
+  @include button($important);
+  text-align: center $important;
+  background-color: $transparent $important;
+  
+  @if $theme == 'dark' {
+    color: $black $important;
+    border: 2px solid $black $important;
+  }
+  
+  @else {
+    color: $white $important;
+    border: 2px solid $white $important;
+  }
+
+  @include hover {
+    
+  }
+}
+
+@mixin btn-disabled {
+  cursor: no-drop;
+  opacity: .5;
+  pointer-events: none;
+}
+
+button {
+  padding: 0;
+  cursor: pointer;
+}
+
+.button {
+  $self: &;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+
+  &-transparent {
+    @extend #{$self};
+    background-color: transparent;
+  }
+
+  &-default {
+    @include text-decoration;
+  }
+
+  &-color {
+    @extend #{$self};
+    background-color: transparent;
+    color: currentColor;
+    transition: color .3s ease;
+    
+    @include hover {
+      color: var(--hover);
+    }
+  }
+
+  &-opacity {
+    @extend #{$self};
+    background-color: transparent;
+    color: currentColor;
+    opacity: 1;
+    transition: opacity .3s ease;
+    will-change: opacity;
+    
+    @include hover {
+      opacity: .6;
+    }
+  }
+
+  &-scale {
+    @extend #{$self};
+    background-color: transparent;
+    color: currentColor;
+    transform: scale(1) translate3d(0,0,0);
+    transition: transform .45s ease;
+    
+    @include hover {
+      transform: scale(1.1) translate3d(0,0,0);
+    }
+  }
+}
+
+.btn {
+  $self: &;
+
+  &-primary {
+    @include btn-primary;
+
+    &--dark {@include btn-primary($theme:'dark')};
+    &--light {@include btn-primary($theme:'light')};
+  }
+  
+  &-secondary {
+    @include btn-secondary;
+
+    &--dark {@include btn-secondary($theme:'dark')};
+    &--light {@include btn-secondary($theme:'light')};
+  }
+
+  &[disabled="disabled"],
+  &.disabled {
+    @include btn-disabled;
+  }
+
+  &.loading {
+    position: relative;
+    overflow: hidden;
+
+    &:before,
+    &:after{
+      content:'';
+      @include cover;
+    }
+
+    &:before {
+      @include flex-center;
+      background-color: inherit;
+      color: currentColor;
+    }
+    
+    &:after {
+      @include mask('icon-loading.svg', 28px);
+      background-color: currentColor;
+      animation: spin 1.2s linear infinite;
+    }
+  }
+
+}

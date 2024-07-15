@@ -1,0 +1,37 @@
+.accordion {
+  $self: &;
+
+  &-header {
+
+    &[class*="button"] {}
+  }
+
+  &-content {
+    height: 0;
+    overflow: hidden;
+    transition: height .4s $ease-default;
+
+    >* {
+      @include fade-in(.4s, $ease-default);
+    }
+
+    &.active {
+      >* {
+        @include end-opacity;
+      }
+    }
+
+    &.mobile-only {
+      @include bp-up(md) {
+        height: auto !important;
+      }
+
+      >* {
+        @include bp-up(md) {
+          @include end-opacity;
+        }
+      }
+    }
+  }
+
+}

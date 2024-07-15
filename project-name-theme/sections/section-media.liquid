@@ -1,0 +1,297 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+
+assign container-size = section.settings.container-size | prepend: ' container-'
+assign container-spacing = section.settings.container-spacing
+
+assign img = section.settings.img
+assign img-ratio = section.settings.img-ratio
+assign img-position-x = section.settings.img-position-x
+assign img-position-y = section.settings.img-position-y
+assign img-position = img-position-x | prepend: '--position:' | append: '% ' | append: img-position-y | append: '%;'
+
+assign vid = section.settings.vid
+
+%}
+
+{{ vid.sources['url'] }}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="media-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="container{{container-size}}{% if container-spacing == true %} px-0{% endif %}">
+    <div class="{{ img-ratio }}{% if img == blank or request.design_mode == true %} bg-black{% endif %}" style="{{ img-position }}">
+      {% render 'component-image', img: img, class: 'img-cover', size: '1500x' %}
+      {% if img != blank and vid != blank %}
+        {% render 'component-video' vid: vid %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Media",
+  "tag": "section",
+  "class": "media section",
+  "settings": [
+    {
+        "type": "header",
+        "content": "Spacing Options",
+        "info": "Spacing only works if Section Size is set to 'none'"
+      },
+      {
+        "type": "select",
+        "id": "spacing-top",
+        "default": "none",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing-bottom",
+        "default": "none",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container-size",
+        "default": "none",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }, {
+            "label": "Maximum",
+            "value": "max"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "label": "Remove all container spacing",
+        "id": "container-spacing",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Image Options"
+      },
+      {
+        "type": "image_picker",
+        "id": "img",
+        "label": "Image",
+        "info": "Image is required as fallback for video."
+      },
+      {
+        "type": "url",
+        "id": "vid",
+        "label": "Looping Video",
+        "info": "Upload video to Shopify > Content > Files and paste in URL."
+      },
+      {
+        "type": "select",
+        "id": "img-ratio",
+        "default": "ratio-21x9",
+        "label": "Image Ratio",
+        "options": [
+          {
+            "label":"Ratio 1x1",
+            "value": "ratio-1x1"
+          },
+          {
+            "label": "Ratio 2x1",
+            "value": "ratio-2x1"
+          },
+          {
+            "label": "Ratio 1x2",
+            "value": "ratio-1x2"
+          },
+          {
+            "label": "Ratio 4x3",
+            "value": "ratio-4x3"
+          },
+          {
+            "label": "Ratio 3x4",
+            "value": "ratio-3x4"
+          },
+          {
+            "label": "Ratio 5x4",
+            "value": "ratio-5x4"
+          },
+          {
+            "label": "Ratio 4x5",
+            "value": "ratio-4x5"
+          },
+          {
+            "label": "Ratio 5x7",
+            "value": "ratio-5x7"
+          },
+          {
+            "label": "Ratio 7x5",
+            "value": "ratio-7x5"
+          },
+          {
+            "label":" Ratio 16x9",
+            "value": "ratio-16x9"
+          },
+          {
+            "label":" Ratio 9x16",
+            "value": "ratio-9x16"
+          },
+          {
+            "label":"R atio 16x10",
+            "value": "ratio-16x10"
+          },
+          {
+            "label":"R atio 10x16",
+            "value": "ratio-10x16"
+          },
+          {
+            "label":" Ratio 21x9",
+            "value": "ratio-21x9"
+          },
+          {
+            "label":" Ratio 9x21",
+            "value": "ratio-9x21"
+          },
+          {
+            "label":" Ratio 18x6",
+            "value": "ratio-18x6"
+          },
+          {
+            "label":" Ratio 6x18",
+            "value": "ratio-6x18"
+          },
+          {
+            "label":" Ratio 10x1",
+            "value": "ratio-10x1"
+          },
+          {
+            "label":" Ratio 1x10",
+            "value": "ratio-1x10"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "img-position-x",
+        "default": 50,
+        "label": "Image Position (L/R)",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%"
+      },
+      {
+        "type": "range",
+        "id": "img-position-y",
+        "default": 50,
+        "label": "Image Position (T/B)",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%"
+      }
+  ],
+  "presets": [
+    {
+      "name": "Media"
+    }
+  ]
+}
+{% endschema %}

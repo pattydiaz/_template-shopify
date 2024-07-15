@@ -1,0 +1,121 @@
+.d-flex {
+  $self: &;
+  display: flex;
+
+  &-wrap {
+    @extend #{$self};
+    flex-wrap: wrap;
+  }
+
+  &-col {
+    @extend #{$self};
+    flex-direction: column;
+  }
+
+  &-col-wrap {
+    @extend #{$self};
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  &--align-center {
+    align-items: center;
+  }
+
+  &--align-top {
+    align-items: flex-start;
+  }
+
+  &--align-bottom {
+    align-items: flex-end;
+  }
+
+  &--center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &--sp-between {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &--top {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  &--bottom {
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  &-t {
+    @include bp-up(md) {
+      display: flex;
+    }
+
+    &-wrap {
+      @extend #{$self}-t;
+      @include bp-up(md) {
+        flex-wrap: wrap;
+      }
+    }
+
+    &-col-wrap {
+      @extend #{$self}-t;
+      @include bp-up(md) {
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &-d {
+    @include bp-up(lg) {
+      display: flex;
+    }
+
+    &-wrap {
+      @extend #{$self}-d;
+      @include bp-up(lg) {
+        flex-wrap: wrap;
+      }
+    }
+
+    &-col-wrap {
+      @extend #{$self}-d;
+      @include bp-up(lg) {
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &-swap {
+
+    &#{$self}-t,
+    &#{$self}-t-wrap {
+
+      [class*="col"] {
+        &:nth-of-type(2) {
+          @include bp-up(md) {
+            order: -1;
+          }
+        }
+      }
+    }
+
+    &#{$self}-d,
+    &#{$self}-d-wrap {
+
+      [class*="col"] {
+        &:nth-of-type(2) {
+          @include bp-up(lg) {
+            order: -1;
+          }
+        }
+      }
+    }
+  }
+}

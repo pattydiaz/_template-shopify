@@ -1,0 +1,14 @@
+@each $name, $color in $colors {
+  .border-#{$name} {
+    border: var(--border-width, 2px) solid #{$color};
+  }
+
+  .border-bottom-#{$name} {
+    border-bottom: var(--border-width, 2px) solid #{$color};
+  }
+
+  .border-y-#{$name} {
+    border-top: var(--border-width, 2px) solid #{$color};
+    border-bottom: var(--border-width, 2px) solid #{$color};
+  }
+}

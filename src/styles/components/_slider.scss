@@ -1,0 +1,27 @@
+.slider {
+  $self: &;
+
+  &-pagination {}
+
+  &-btn {
+
+    &#{$self}-prev {}
+    &#{$self}-next {}
+
+    &.swiper-button-lock {
+      @include hide;
+    }
+  }
+
+  &-mobile { 
+    @include bp-up(md) {
+      overflow: visible;
+    }
+
+    .swiper-wrapper {
+      @include bp-up(md) {
+        transform: none !important;
+      }
+    }
+  }
+}

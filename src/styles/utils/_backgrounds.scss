@@ -1,0 +1,33 @@
+.bg {
+  $self: &;
+
+  &-cover {
+    @include cover(absolute,  !important);
+    pointer-events: none;
+    z-index: 0;
+
+    img {
+      object-position: var(--position, 50% 50%);
+    }
+  }
+
+  &-inline {
+    @extend #{$self}-cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: var(--position, 50% 50%);
+  }
+
+  &--overlay {
+
+    &:after {
+      content: '';
+      @include cover;
+      background-color: var(--bg, $black);
+      opacity: var(--opacity, .4);
+      pointer-events: none;
+      z-index: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}

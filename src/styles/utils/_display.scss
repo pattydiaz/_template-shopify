@@ -1,0 +1,36 @@
+.d {
+  &-none { display: none; }
+  &-block { display: block; }
+  &-inline { display: inline; }
+  &-ib { display: inline-block; }
+  &-ib-middle {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+@each $name, $breakpoint in $breakpoints {
+  .d-down-#{$name}-none {
+    @include bp-down($breakpoint - 0.02) {
+      display: none;
+    }
+  }
+
+  .d-down-#{$name}-block {
+    @include bp-down($breakpoint - 0.02) {
+      display: block;
+    }
+  }
+
+  .d-up-#{$name}-none {
+    @include bp-up($breakpoint) {
+      display: none;
+    }
+  }
+
+  .d-up-#{$name}-block {
+    @include bp-up($breakpoint) {
+      display: block;
+    }
+  }
+}

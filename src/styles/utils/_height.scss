@@ -1,0 +1,40 @@
+@for $i from 1 through 10 {
+  .h-#{$i*10} {
+    height: $i*10vh;
+  }
+}
+
+@for $i from 1 through 10 {
+  .hd-#{$i*10} {
+    @include bp-up(md) {
+      height: $i*10vh;
+    }
+  }
+}
+
+$heights: (
+  "25": 25vh,
+  "33": 33.333vh,
+);
+
+@each $name, $height in $heights {
+  .h-#{$name} {
+    height: #{$height};
+  }
+}
+
+@each $name, $height in $heights {
+  .hd-#{$name} {
+    @include bp-up(md) {
+      height: #{$height};
+    }
+  }
+}
+
+.hc {
+  height: var(--height);
+}
+
+.h-max {
+  max-width: var(--mh, 560px);
+}

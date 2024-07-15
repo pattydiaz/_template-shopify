@@ -1,0 +1,179 @@
+{% liquid
+  assign spacing-top = section.settings.spacing-top
+  if spacing-top == true
+    assign spacing-top = section.settings.spacing-size-top | prepend: ' gap-tm--'
+  else
+    assign spacing-top = ''
+  endif
+
+  assign spacing-bottom = section.settings.spacing-bottom
+  if spacing-bottom == true
+    assign spacing-bottom = section.settings.spacing-size-bottom | prepend: ' gap-bm--'
+  else
+    assign spacing-bottom = ''
+  endif
+%}
+
+<div class="account-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="gap-hh"></div>
+
+  <div class="container container-xl">
+
+    <div class="account-row d-flex-t">
+
+      <div class="account-column account-orders column" style="--column-width: 70%; --column-padding-up: 30px;">
+        <h2 class="heading-3 mb-2">{{ 'customer.orders.title' | t }}</h2>
+        {% if customer.orders.size > 0 %}
+
+          <div class="order-header">
+            <ul class="order-row ls-none d-none d-flex-t py-2">
+              <li class="order-row-item heading-4 w-15 px-1">{{ 'customer.orders.order_number' | t }}</li>
+              <li class="order-row-item heading-4 w-25 px-1 text-right">{{ 'customer.orders.date' | t }}</li>
+              <li class="order-row-item heading-4 w-20 px-1 text-right">{{ 'customer.orders.payment_status' | t }}</li>
+              <li class="order-row-item heading-4 w-20 px-1 text-right">{{ 'customer.orders.fulfillment_status' | t }}</li>
+              <li class="order-row-item heading-4 w-20 px-1 text-right">{{ 'customer.orders.total' | t }}</li>
+            </ul>
+          </div>
+
+          <div class="order-body">
+            {% for order in customer.orders %}
+              <ul class="order-row ls-none d-flex-wrap py-3">
+                <li class="order-row-item w-50 wt-15 px-1">
+                  <a href="{{ order.customer_url }}" class="text-bold text-decoration" title="{{ order.name }}">{{ order.name }}</a>
+                </li>
+                <li class="order-row-item w-50 wt-25 px-1 text-right">{{ order.created_at | date: "%b %d, %Y" }}</li>
+                <li class="order-row-item w-33 wt-20 px-1 text-right">
+                  <div class="d-up-md-none heading-4 py-2">{{ 'customer.orders.payment_status' | t }}</div>
+                  <a href="{{ order.order_status_url }}" class="text-decoration" title="{{ order.financial_status | capitalize }}">{{ order.financial_status | capitalize }}</a>
+                </li>
+                <li class="order-row-item w-33 wt-20 px-1 text-right">
+                  <div class="d-up-md-none heading-4 py-2">{{ 'customer.orders.fulfillment_status' | t }}</div>
+                  {{ order.fulfillment_status_label }}
+                </li>
+                <li class="order-row-item w-33 wt-20 px-1 text-right text-bold">
+                  <div class="d-up-md-none heading-4 py-2">{{ 'customer.orders.total' | t }}</div>
+                  {{ order.total_price | money }}
+                </li>
+              </ul>
+            {% endfor %}
+          </div>
+
+        {% else %}
+          <p>{{ 'customer.orders.none' | t }}</p>
+        {% endif %}
+      </div>
+
+      <div class="account-column account-addresses column" style="--column-width: 30%; --column-padding-up: 30px;">
+        <h2 class="heading-3 mb-2">{{ 'customer.account.details' | t }}</h2>
+        {% if customer.default_address %}
+          <div class="address mb-3">
+            <div>{{ customer.default_address | format_address }}</div>
+            {% if customer.default_address.phone %}<div>{{ customer.default_address.phone }}</div>{% endif %}
+          </div>
+        {% else %}
+          <p>{{ 'customer.account.no_addresses' | t }}</p>
+        {% endif %}
+        <div class="cta mt-3">
+          <a href="{{ routes.account_addresses_url }}" class="btn btn-primary" title="{{ 'customer.account.add_new_address' | t }}">{{ 'customer.account.add_new_address' | t }}</a>
+        </div>
+        <div class="cta mt-1">
+          <a href="{{ routes.account_logout_url }}" class="btn btn-secondary" title="{{ 'customer.log_out' | t }}">{{ 'customer.log_out' | t }}</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Account",
+  "class": "account section",
+  "tag": "section",
+  "limit": 1,
+  "templates": ["customers/account"],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-top",
+      "default": true,
+      "label": "Section Spacing Top"
+    },
+    {
+      "type": "select",
+      "id": "spacing-size-top",
+      "default": "lg",
+      "label": "Spacing Size Top",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-bottom",
+      "default": true,
+      "label": "Section Spacing Bottom"
+    }, {
+      "type": "select",
+      "id": "spacing-size-bottom",
+      "default": "lg",
+      "label": "Spacing Size Bottom",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Account"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,6 @@
+.swipe {
+  @include cover(fixed);
+  background-color: $transparent;
+  transform: translate3d(100%,0,0);
+  overflow: hidden;
+}

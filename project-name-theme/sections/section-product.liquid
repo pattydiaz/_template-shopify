@@ -1,0 +1,267 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+
+assign container-size = section.settings.container-size | prepend: ' container-'
+
+assign background_color = product.metafields.custom.background_color
+
+assign collection_count = 0
+for collection in product.collections
+  unless collection.handle contains 'featured'
+    if collection_count == 0
+      assign current_collection = collection.handle
+    endif
+    assign collection_count = collection_count | plus: 1
+  endunless
+endfor
+
+%}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="product-wrap{{ spacing-top }}{{ spacing-bottom }}" data-background="{{ background_color }}">
+
+  <div id="product">
+    <div class="swipe" style="background-color: {{ background_color }}"></div>
+
+    <div class="container{{ container-size }}">
+  
+
+      <div class="product-main d-flex-t d-flex--center">
+        <div class="product-main-img column" style="--column-padding-up: 0;">
+          <div class="w-100 ratio-1x1{% if product.featured_image == blank or request.design_mode == true %} bg-black{% else %} bg-white{% endif %}">
+            {% render 'component-image' img: product.featured_image lazy: false size: '750x'  %}
+          </div>
+        </div>
+
+        <div class="product-main-content column" style="--column-padding-up: 5%;">
+          <div class="product-title heading-4">{{ product.title }}</div>
+          {% if product.description != blank %}
+            <div class="product-description contents mt-q">{{ product.description }}</div>
+          {% endif %}
+          <div class="product-price heading-6 mt-q">{{ product.price |  money_without_trailing_zeros }}</div>
+          {% if product.available %}
+  
+            {%- form 'product', product, id: product_form_id, class: 'product-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        
+              {% assign variant_count = 0 %}
+              {% for variant in product.variants %}
+                {% assign variant_count = forloop.length %}
+              {% endfor %}
+      
+              <div class="input-wrap d-flex mt-3">
+      
+                <div class="input w-100 w-max mr-2" style="--mw: 70px;">
+                  <label for="Quantity" class="subheading d-block mb-1">QTY</label>
+                  <input type="number" id="Quantity" name="quantity" value="1" min="1" pattern="\d*" class="input-number">
+                </div>
+      
+                <div class="input w-100 w-max" style="--mw: 400px;">
+                  {% if product.variants.size > 1 %}
+                    <label for="productSelect" class="subheading d-block mb-1">Size</label>
+                    <select id="productSelect" name="id" class="input-select w-max" style="--mw: 250px;">
+                      <option value="" disabled selected>Select {{ product.options[0] }}</option>
+                      {% for variant in product.variants %}
+                        {% assign divider = '&nbsp;&nbsp;&ndash;&nbsp;&nbsp;' %}
+                        {% if variant.available == true %}
+                          <option value="{{ variant.id }}" data-price="{{ variant.price | money }}">{{ variant.title }}{{ divider }}{{ variant.price | money }}</option>
+                        {% else %}
+                          <option disabled="disabled">{{ variant.title }}{{ divider }}sold out</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  {% elsif product.variants.size == 1 %}
+
+                    {% for variant in product.variants %}
+                      <input type="radio" name="id" id="productSelect" value="{{ variant.id }}" checked="checked">
+                    {% endfor %}
+
+                  {% endif %}
+                </div>
+      
+              </div>
+      
+              <div class="input mt-2">
+                <button id="productAddtoCart" type="submit" name="add" aria-label="Add to Cart" class="btn btn-primary">Add to Cart</button>
+              </div>
+              
+            {%- endform -%}
+
+          {% else %}
+            
+            <div class="subheading mt-2">Sold Out</div>
+      
+          {% endif %}
+        </div>
+      </div>
+
+
+      {% if current_collection != blank %}
+        <div class="product-more gap-ym--md">
+          <h2 class="heading-3 mb-1">More Products</h2>
+          {% liquid  
+            assign products_all = collections[current_collection].products
+            assign products_all = products_all | sort: 'best-selling'
+          %}
+          <ul class="d-flex-wrap ls-none mx-n1">
+            {% for product in products_all %}
+              <li class="product-click w-50 wd-25 px-1 py-2 text-center">
+                <a href="{{ product.url }}" class="button-opacity d-block" title="{{ product.title }}">
+                  <div class="ratio-1x1{% if product.featured_image == blank or request.design_mode == true %} bg-black{% else %} bg-white{% endif %}">
+                    {% render 'component-image' img: product.featured_image lazy: false size: '150x'  %}
+                  </div>
+                  <div class="mt-1">{{ product.title }}</div>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+  
+
+    </div>
+
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "product section",
+  "limit": 1,
+  "templates": ["product"],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "spacing-top",
+      "default": "md",
+      "label": "Section Spacing Top",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "spacing-bottom",
+      "default": "md",
+      "label": "Section Spacing Bottom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-header",
+      "default": false,
+      "label": "Add extra spacing for header"
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container-size",
+      "default": "xx",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }, {
+          "label": "Maximum",
+          "value": "max"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product"
+    }
+  ]
+}
+{% endschema %}

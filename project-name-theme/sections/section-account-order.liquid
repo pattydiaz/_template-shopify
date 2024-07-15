@@ -1,0 +1,226 @@
+{% liquid
+  assign spacing-top = section.settings.spacing-top
+  if spacing-top == true
+    assign spacing-top = section.settings.spacing-size-top | prepend: ' gap-tm--'
+  else
+    assign spacing-top = ''
+  endif
+
+  assign spacing-bottom = section.settings.spacing-bottom
+  if spacing-bottom == true
+    assign spacing-bottom = section.settings.spacing-size-bottom | prepend: ' gap-bm--'
+  else
+    assign spacing-bottom = ''
+  endif
+%}
+
+<div class="order-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="gap-hh"></div>
+
+  <div class="container container-xl">
+    <div class="order-row d-flex-t">
+
+      <div class="order-column order-details column" style="--column-width: 70%; --column-padding-up: 30px;">
+        <h3 class="heading-3">{{ 'customer.order.title' | t: name: order.name }}</h3>
+        {%- assign order_date = order.created_at | time_tag: format: "date_at_time" -%}
+        <div class="mt-h">{{ 'customer.order.date_html' | t: date: order_date }}</div>
+        {%- if order.cancelled -%}
+          {%- assign cancelled_at = order.cancelled_at | time_tag: format: "date_at_time" -%}
+          <div class="mt-1">
+            <div class="caption color-red">{{ 'customer.order.cancelled_html' | t: date: cancelled_at }}</div>
+            <div class="caption color-red">{{ 'customer.order.cancelled_reason' | t: reason: order.cancel_reason_label }}</div>
+          </div>
+        {%- endif -%}
+
+        <div class="order-header mt-2">
+          <ul class="order-row ls-none d-none d-flex-t py-2">
+            <li class="order-row-item heading-4 w-40 px-1">{{ 'customer.order.product' | t }}</li>
+            <li class="order-row-item heading-4 w-20 px-1 text-right">{{ 'customer.order.price' | t }}</li>
+            <li class="order-row-item heading-4 w-20 px-1 text-right">{{ 'customer.order.quantity' | t }}</li>
+            <li class="order-row-item heading-4 w-20 px-1 text-right">{{ 'customer.order.total' | t }}</li>
+          </ul>
+        </div>
+
+        <div class="order-body">
+          {% for line_item in order.line_items %}
+            <ul class="order-row ls-none d-flex-wrap py-2">
+              <li class="order-row-item w-50 wt-10 pl-1 w-max" style="--mw: 120px;">
+                <a href="{{ line_item.url }}" class="d-block button p-1 bg-cream-dark">
+                  <div class="ratio-1x1">
+                    {% if line_item.image %}
+                      {% render 'component-image', img: line_item.image, class: 'img-contain', size: '300x' %}
+                    {% else %}
+                      <span class="caption text-center">No image available.</span>
+                    {% endif %}
+                  </div>
+                </a>
+              </li>
+              <li class="order-row-item w-50 wt-30 px-1">
+                <a href="{{ line_item.url }}" class="button-opacity d-ib" title="{{ line_item.title }}">
+                  <div class="body-lg">{{ line_item.title }}</div>
+                </a>
+                {%- if line_item.product.has_only_default_variant == false -%}
+                  {%- for option in line_item.options_with_values -%}
+                    <div class="variant text-italic">
+                      <span class="variant-name">{{ option.name }}: </span>
+                      <span class="variant-value">{{ option.value }}</span>
+                    </div>
+                  {%- endfor -%}
+                  <p class="product-option">{{ line_item.selling_plan_allocation.selling_plan.name }}</p>
+                {%- endif -%}
+              </li>
+              <li class="order-row-item w-33 wt-20 px-1 text-right">
+                <div class="d-up-md-none heading-4 py-2">{{ 'customer.order.price' | t }}</div>
+                {{ line_item.original_line_price | money }}
+              </li>
+              <li class="order-row-item w-33 wt-20 px-1 text-right">
+                <div class="d-up-md-none heading-4 py-2">{{ 'customer.order.quantity' | t }}</div>
+                {{ line_item.quantity }}
+              </li>
+              <li class="order-row-item w-33 wt-20 px-1 text-right">
+                <div class="d-up-md-none heading-4 py-2">{{ 'customer.order.total' | t }}</div>
+                {{ line_item.final_line_price | money }}
+              </li>
+            </ul>
+          {% endfor %}
+        </div>
+
+        <div class="order-footer mt-2">
+          <div class="subtotal mt-2 d-flex d-flex--sp-between">
+            <div class="subtotal-title">{{ 'customer.order.subtotal' | t }}</div>
+            <div class="subtotal-value">{{ order.line_items_subtotal_price | money }}</div>
+          </div>
+          <div class="shipping d-flex d-flex--sp-between">
+            <div class="shipping-title">{{ 'customer.order.shipping' | t }} ({{ order.shipping_method.title }})</div>
+            <div class="shipping-value">{{ order.shipping_price | money }}</div>
+          </div>
+          <div class="discounts d-flex d-flex--sp-between">
+            <div class="discounts-title">{{ 'customer.order.discount' | t | append: 's' }}</div>
+            <div class="discounts-value">-{{ order.discounts_amount | money }}</div>
+          </div>
+          <div class="total mt-1 d-flex d-flex--sp-between">
+            <div class="total-title body-lg text-bold">{{ 'customer.order.total' | t }}</div>
+            <div class="total-value body-lg text-bold">{{ order.total_price | money_with_currency }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-column order-addresses column" style="--column-width: 30%; --column-padding-up: 30px;">
+        <div class="billing">
+          <div class="heading-4 mb-2">{{ 'customer.order.billing_address' | t }}</div>
+          <div>
+            <span><strong>{{ 'customer.order.payment_status' | t }}:&nbsp;</strong></span>
+            <a href="{{ order.order_status_url }}" class="text-capitalize text-decoration">{{ order.financial_status }}</a>
+          </div>
+          <div>{{ order.billing_address | format_address }}</div>
+        </div>
+
+        <div class="shipping mt-4">
+          <div class="heading-4 mb-2">{{ 'customer.order.shipping_address' | t }}</div>
+          <div>
+            <span><strong>{{ 'customer.order.fulfillment_status' | t }}:&nbsp;</strong></span>
+            <span class="text-capitalize">{{ order.fulfillment_status }}</span>
+          </div>
+          <div>{{ order.shipping_address | format_address }}</div>
+        </div>
+
+        <div class="cta mt-3">
+          <a href="{{ routes.account_url }}" class="btn btn-primary" title="{{ 'customer.account.return' | t }}">{{ 'customer.account.return' | t }}</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Account Order",
+    "tag": "section",
+    "class": "order section",
+    "limit": 1,
+    "templates": ["customers/order"],
+    "settings": [
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-top",
+        "default": true,
+        "label": "Section Spacing Top"
+      },
+      {
+        "type": "select",
+        "id": "spacing-size-top",
+        "default": "lg",
+        "label": "Spacing Size Top",
+        "options": [
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-bottom",
+        "default": true,
+        "label": "Section Spacing Bottom"
+      }, {
+        "type": "select",
+        "id": "spacing-size-bottom",
+        "default": "lg",
+        "label": "Spacing Size Bottom",
+        "options": [
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Branding"
+      }
+    ]
+  }
+{% endschema %}

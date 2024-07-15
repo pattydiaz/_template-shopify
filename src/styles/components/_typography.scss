@@ -1,0 +1,66 @@
+@mixin heading-1($important: null) {
+  font: $fs-normal $fw-normal 50px/1 $ff-sans-serif $important;
+
+  @include bp-up(md) { font-size: 60px $important; }
+  @include bp-up(xl) { font-size: 80px $important; }
+}
+
+@mixin heading-2($important: null) {
+  font: $fs-normal $fw-normal 30px/1 $ff-sans-serif $important;
+
+  @include bp-up(md) { font-size: 40px $important; }
+  @include bp-up(xl) { font-size: 50px $important; }
+}
+
+@mixin heading-3($important: null) {
+  font: $fs-normal $fw-normal 24px/1 $ff-sans-serif $important;
+
+  @include bp-up(xl) { font-size: 40px $important; }
+}
+
+@mixin heading-4($important: null) {
+  font: $fs-normal $fw-normal 20px/1 $ff-sans-serif $important;
+  
+  @include bp-up(xl) { font-size: 30px $important; }
+}
+
+@mixin heading-5($important: null) {
+  font: $fs-normal $fw-normal 18px/1 $ff-sans-serif $important;
+  
+  @include bp-up(xl) { font-size: 25px $important; }
+  
+}
+
+@mixin heading-6($important: null) {
+  font: $fs-normal $fw-normal 18px/1 $ff-sans-serif $important;
+}
+
+@mixin subheading($important: null) {
+  font: $fs-normal $fw-bold 12px/1 $ff-sans-serif $important;
+  text-transform: uppercase $important;
+  letter-spacing: 1.5px $important;
+}
+
+@mixin body($important: null) {
+  font: $fs-normal $fw-normal 14px/1.4 $ff-sans-serif $important;
+}
+
+@mixin caption($important: null) {
+  font: $fs-normal $fw-normal 12px/1.4 $ff-sans-serif $important;
+}
+
+@mixin button($important: null) {
+  font: $fs-normal $fw-bold 10px/1 $ff-sans-serif $important;
+  text-transform: uppercase $important;
+  letter-spacing: 2px $important;
+}
+
+.heading-1 { @include heading-1 };
+.heading-2 { @include heading-2 };
+.heading-3 { @include heading-3 };
+.heading-4 { @include heading-4 };
+.heading-5 { @include heading-5 };
+.heading-6 { @include heading-6 };
+.subheading { @include subheading };
+.body { @include body; }
+.caption { @include caption; }

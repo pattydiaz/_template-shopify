@@ -1,0 +1,188 @@
+.animated {
+  $self: &;
+
+  &-item {
+    &.fade-in { @include fade-in; }
+    &.fade-up-in { @include fade-up-in; }
+    &.fade-down-in { @include fade-down-in; }
+    &.fade-right-in { @include fade-right-in; }
+    &.fade-left-in { @include fade-left-in; }
+
+    &.animate-in { @include animate-in; }
+    &.animate-up-in { @include animate-up-in; }
+    &.animate-down-in { @include animate-down-in; }
+    &.animate-right-in { @include animate-right-in; }
+    &.animate-left-in { @include animate-left-in; }
+  }
+  
+  &-group {
+    &.fade-up-in {
+      >* {
+        @include fade-up-in;
+        @include child-delay;
+      }
+      
+      &-slow {
+        >* {
+          @include fade-up-in;
+          @include child-delay($delay:0.3s);
+        }
+      }
+    }
+    
+    &.fade-down-in {
+      >* {
+        @include fade-down-in;
+        @include child-delay;
+      }
+      
+      &-slow {
+        >* {
+          @include fade-down-in;
+          @include child-delay($delay:0.3s);
+        }
+      }
+    }
+    
+    &.fade-left-in {
+      >* {
+        @include fade-left-in;
+        @include child-delay;
+      }
+      
+      &-slow {
+        >* {
+          @include fade-left-in;
+          @include child-delay($delay:0.3s);
+        }
+      }
+    }
+    
+    &.fade-right-in {
+      >* {
+        @include fade-right-in;
+        @include child-delay;
+      }
+      
+      &-slow {
+        >* {
+          @include fade-right-in;
+          @include child-delay($delay:0.3s);
+        }
+      }
+    }
+
+    &.animate-in,
+    &.animate-in-slow {
+      > * {
+        @include animate-in;
+      }
+    }
+
+    &.animate-up-in,
+    &.animate-up-in-slow {
+      > * {
+        @include animate-up-in;
+      }
+    }
+
+    &.animate-down-in,
+    &.animate-down-in-slow {
+      > * {
+        @include animate-down-in;
+      }
+    }
+
+    &.animate-left-in,
+    &.animate-left-in-slow {
+      > * {
+        @include animate-left-in;
+      }
+    }
+
+    &.animate-right-in,
+    &.animate-right-in-slow {
+      > * {
+        @include animate-right-in;
+      }
+    }
+  }
+
+  &.active,
+  &.active-reverse {
+    &#{$self}-item {
+      
+      &.fade-in {
+        @include end-opacity;
+      }
+
+      &.fade-up-in,
+      &.fade-down-in,
+      &.fade-left-in,
+      &.fade-right-in {
+        @include end-transform;
+      }
+
+      &.animate-in {
+        animation: fade-in $duration-default $ease-default forwards;
+      }
+
+      &.animate-up-in,
+      &.animate-down-in,
+      &.animate-left-in,
+      &.animate-right-in {
+        animation: transform-in $duration-default $ease-default forwards;
+      }
+
+      &.animate-delay-1 { animation-delay: 0.1s; }
+      &.animate-delay-2 { animation-delay: 0.2s; }
+      &.animate-delay-3 { animation-delay: 0.3s; }
+    }
+
+    &#{$self}-group {
+
+      &.fade-up-in,
+      &.fade-down-in,
+      &.fade-left-in,
+      &.fade-right-in {
+        >* {
+          @include end-transform(true);
+        }
+      }
+
+      &.animate-in {
+        >* {
+          animation: fade-in $duration-default $ease-default forwards;
+          @include animate-delay;
+        }
+      }
+
+      &.animate-up-in,
+      &.animate-down-in,
+      &.animate-left-in,
+      &.animate-right-in {
+        >* {
+          animation: transform-in $duration-default $ease-default forwards;
+          @include animate-delay;
+        }
+      }
+
+      &.animate-in-slow {
+        >* {
+          animation: fade-in $duration-default $ease-default forwards;
+          @include animate-delay($delay:0.3s);
+        }
+      }
+
+      &.animate-up-in-slow,
+      &.animate-down-in-slow,
+      &.animate-left-in-slow,
+      &.animate-right-in-slow {
+        >* {
+          animation: transform-in $duration-default $ease-default forwards;
+          @include animate-delay($delay:0.3s);
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+.modal {
+  $self: &;
+
+  @include cover(fixed);
+  @include hide;
+  transition: opacity .8s ease, visibility .8s ease;
+  background-color: transparentize($black,0.15);
+  z-index: 200;
+
+  &--open {
+    @include show;
+  }
+
+  &-wrapper {
+    height: 100%;
+    width: 100%;
+
+    #{$self}:not(#{$self}--scroll) & {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #{$self}--scroll & {
+      overflow: scroll;
+      padding-top: $spacing*10;
+      padding-bottom: $spacing*10;
+    }
+  }
+
+  &-container {
+    width: 100%;
+    @include animate-up-in;
+    animation-delay: .4s;
+  
+    #{$self}--open & {
+      animation: transform-in 0.8s ease forwards;
+    }
+  }
+
+  &-btn {
+    +#{$self}-content {
+      display: none;
+    }
+  }
+
+  &-close {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+  }
+}

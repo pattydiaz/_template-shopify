@@ -1,0 +1,23 @@
+.img {
+  $self: &;
+
+  &-fluid {
+    max-width: 100%;
+  }
+
+  &-full {
+    width: 100%;
+  }
+
+  &-cover {
+    @include object-fit;
+  }
+
+  &-contain {
+    @include object-fit(contain);
+  }
+
+  &-fix {
+    @include pixel-fix;
+  }
+}

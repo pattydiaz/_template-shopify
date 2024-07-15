@@ -1,0 +1,10 @@
+.float {
+
+  &--cover {
+    @include cover;
+  }
+
+  &--center {
+    @include center;
+  }
+}

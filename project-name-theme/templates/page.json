@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "section-hero",
+      "blocks": {
+        "heading_ABnNqM": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading": "{{ page.title }}"
+          }
+        }
+      },
+      "block_order": [
+        "heading_ABnNqM"
+      ],
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": true,
+        "section-size": "none",
+        "container-size": "md",
+        "text-color": "dark",
+        "text-alignment": "center",
+        "animation": false,
+        "img-pos-y": 50,
+        "img-pos-x": 50,
+        "img-overlay": 0
+      }
+    },
+    "95071ef8-087e-4236-ba63-e7acf602566d": {
+      "type": "section-content",
+      "settings": {
+        "spacing-top": "false",
+        "spacing-bottom": "md",
+        "spacing-header": false,
+        "container-size": "md"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "95071ef8-087e-4236-ba63-e7acf602566d"
+  ]
+}

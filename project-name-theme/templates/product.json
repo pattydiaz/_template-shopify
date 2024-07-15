@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "section_product_aJxYcH": {
+      "type": "section-product",
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": true,
+        "container-size": "xl"
+      }
+    }
+  },
+  "order": [
+    "section_product_aJxYcH"
+  ]
+}

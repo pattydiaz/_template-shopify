@@ -1,0 +1,19 @@
+@each $name, $breakpoint in $breakpoints {
+
+  .break-up-#{$name} {
+    br {
+      @include bp-up(#{$name}) {
+        display: none;
+      }
+    }
+  }
+
+  .break-down-#{$name} {
+    br {
+      @include bp-down(#{$name}) {
+        display: none;
+      }
+    }
+  }
+
+}

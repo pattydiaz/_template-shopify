@@ -1,0 +1,151 @@
+{% liquid
+  assign spacing-top = section.settings.spacing-top
+  if spacing-top == true
+    assign spacing-top = section.settings.spacing-size-top | prepend: ' gap-tm--'
+  else
+    assign spacing-top = ''
+  endif
+
+  assign spacing-bottom = section.settings.spacing-bottom
+  if spacing-bottom == true
+    assign spacing-bottom = section.settings.spacing-size-bottom | prepend: ' gap-bm--'
+  else
+    assign spacing-bottom = ''
+  endif
+%}
+
+<div class="register-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="gap-hh"></div>
+
+  <div class="container container-sm">
+
+    <div class="register-content mb-2">
+      <h1 class="heading-3">{{ 'customer.register.title' | t }}</h1>
+      <div class="blurb buddy mt-1">{{ 'customer.register.subtext' | t }}</div>
+    </div>
+
+    {% form 'create_customer' %}
+
+      {{ form.errors | default_errors }}
+
+      <div class="input my-2">
+        <label for="first-name" class="sr-only">{{ 'customer.register.first_name' | t }}</label>
+        <input type="text" value="" name="customer[first_name]" size="30" placeholder="{{ 'customer.register.first_name' | t }}" class="input-field" />
+      </div>
+
+      <div class="input my-2">
+        <label for="last-name" class="sr-only">{{ 'customer.register.last_name' | t }}</label>
+        <input type="text" value="" name="customer[last_name]" size="30" placeholder="{{ 'customer.register.last_name' | t }}" class="input-field" />
+      </div>
+
+      <div class="input my-2">
+        <label for="email" class="sr-only">{{ 'customer.register.email' | t }}</label>
+        <input type="email" value="" name="customer[email]" size="30" placeholder="{{ 'customer.register.email' | t }}" class="input-field" />
+      </div>
+
+      <div class="input my-2">
+        <label for="password" class="sr-only">{{ 'customer.register.password' | t }}</label>
+        <input type="password" value="" name="customer[password]" size="30" placeholder="{{ 'customer.register.password' | t }}" class="input-field" />
+      </div>
+      
+      <div class="cta mt-4">
+        <input type="submit" value="{{ 'customer.register.submit' | t }}" class="btn btn-primary" />
+        <a href="{{ routes.account_url }}" class="btn btn-secondary ml-1" title="Cancel">Cancel</a>
+      </div>
+
+    {% endform %}
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Account Register",
+  "class": "register section",
+  "tag": "section",
+  "limit": 1,
+  "templates": ["customers/register"],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-top",
+      "default": true,
+      "label": "Section Spacing Top"
+    },
+    {
+      "type": "select",
+      "id": "spacing-size-top",
+      "default": "lg",
+      "label": "Spacing Size Top",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-bottom",
+      "default": true,
+      "label": "Section Spacing Bottom"
+    }, {
+      "type": "select",
+      "id": "spacing-size-bottom",
+      "default": "lg",
+      "label": "Spacing Size Bottom",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Account Register"
+    }
+  ]
+}
+{% endschema %}

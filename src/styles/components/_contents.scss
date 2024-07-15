@@ -1,0 +1,165 @@
+.contents {
+
+  h1 {@include heading-1;}
+  h2 {@include heading-2;}
+  h3 {@include heading-3;}
+  h4 {@include heading-4;}
+  h5 {@include heading-5;}
+  h6 {@include heading-6;}
+
+  h1,h2,h3,h4,h5,h6 {
+    margin-bottom: $spacing/2;
+  }
+
+  p+h1,
+  p+h2,
+  p+h3,
+  p+h4,
+  p+h5,
+  p+h6 {
+    margin-top: $spacing*4;
+  }
+
+  p+p,
+  p+div,
+  p+pre {
+    margin-top: $spacing*1.5;
+  }
+
+  blockquote {
+    max-width: 80%;
+    margin: $spacing auto;
+    padding: $spacing*2 0;
+    @include heading-3;
+    text-align: center;
+    color: currentColor;
+  }
+
+  hr {
+    position: relative;
+    height: 2px;
+    width: 90%;
+    margin: $spacing*3 auto;
+    border-bottom: 2px solid currentColor;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  ul,
+  ol {
+    padding-top: $spacing*1.5;
+    padding-bottom: $spacing*1.5;
+    padding-left: $spacing*3;
+  
+    li {
+      margin-bottom: $spacing/2;
+
+      &:last-child,
+      &:only-child {
+        margin-bottom: 0;
+      }
+  
+      >ul,
+      >ol {
+        padding-top: $spacing;
+        padding-bottom: 0;
+      }
+    }
+  
+  }
+  
+  ul+ol {
+    padding-top: 0;
+  }
+  
+  ol+ul {
+    padding-top: 0;
+  }
+
+  ul+h1,
+  ol+h1,
+  ul+h2,
+  ol+h2,
+  ul+h3,
+  ol+h3,
+  ul+h4,
+  ol+h4,
+  ul+h5,
+  ol+h5,
+  ul+h6,
+  ol+h6 {
+    padding-top: $spacing*3;
+  }
+  
+  h1+ul,
+  h1+ol,
+  h2+ul,
+  h2+ol,
+  h3+ul,
+  h3+ol,
+  h4+ul,
+  h4+ol,
+  h5+ul,
+  h5+ol,
+  h6+ul,
+  h6+ol {
+    padding-top: 0;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  
+    td {
+      padding: $spacing;
+      border: 1px solid currentColor;
+    }
+  }
+  
+  table+h1,
+  table+h2,
+  table+h3,
+  table+h4,
+  table+h5,
+  table+h6 {
+    padding-top: $spacing*3;
+  }
+
+  div+h1, 
+  div+h2, 
+  div+h3, 
+  div+h4, 
+  div+h5, 
+  div+h6 {
+    padding-top: $spacing*3;
+  }
+
+  iframe {
+    max-width: 100%;
+  }
+
+  > img,
+  p > img {
+    max-width: 100%;
+    margin-top: $spacing*3;
+    margin-bottom: $spacing*3;
+  }
+
+  div[style*="center"] {
+    
+    > img {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  div[style*="right"] {
+
+    > img {
+      margin-left: auto;
+    }
+  }
+}

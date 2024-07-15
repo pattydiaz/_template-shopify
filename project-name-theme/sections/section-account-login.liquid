@@ -1,0 +1,178 @@
+{% liquid
+  assign spacing-top = section.settings.spacing-top
+  if spacing-top == true
+    assign spacing-top = section.settings.spacing-size-top | prepend: ' gap-tm--'
+  else
+    assign spacing-top = ''
+  endif
+
+  assign spacing-bottom = section.settings.spacing-bottom
+  if spacing-bottom == true
+    assign spacing-bottom = section.settings.spacing-size-bottom | prepend: ' gap-bm--'
+  else
+    assign spacing-bottom = ''
+  endif
+%}
+
+<div class="login-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="gap-hh"></div>
+
+  <div class="container container-lg">
+    <div class="login-row d-flex-t">
+
+      <div class="login-columm login-account column" style="--column-padding-up: 30px">
+
+        <div id="login" class="login-account-signin">
+          <h2 class="heading-4 mb-4">{{ 'customer.login_page.create_account' | t }}</h2>
+
+          {% form 'customer_login' %} 
+
+            {{ form.errors | default_errors }}
+
+            <div class="input mt-2">
+              <label for="email" class="sr-only">{{ 'customer.login_page.email' | t }}</label>
+              <input type="email" name="customer[email]" placeholder="{{ 'customer.login_page.email' | t }}" autocomplete="off" class="input-field" />
+            </div>
+
+            <div class="input mt-2">
+              <label for="password" class="sr-only">{{ 'customer.login_page.password' | t }}</label>
+              <input type="password" name="customer[password]" placeholder="{{ 'customer.login_page.password' | t }}" autocomplete="off" class="input-field" />
+              <div class="cta mt-2 text-right">
+                <a id="forgot_password" href="#recover" title="{{ 'customer.login_page.forgot_password' | t }}" class="login-btn button-opacity caption">{{ 'customer.login_page.forgot_password' | t }}</a>
+              </div>
+            </div>
+
+            <div class="cta my-1">
+              <input type="submit" value="{{ 'customer.login_page.sign_in' | t }}" class="btn btn-primary color-brown" />
+            </div>
+
+          {% endform %}
+
+        </div>
+
+        <div id="recover" class="login-account-password d-none">
+          <h2 class="heading-4 mb-1">{{ 'customer.recover_password.title' | t }}</h2>
+          <div class="blurb mb-4">{{ 'customer.recover_password.subtext' | t }}</div>
+
+          {% form 'recover_customer_password' %} 
+
+            {{ form.errors | default_errors }}
+
+            <div class="input my-2">
+              <label for="email" class="sr-only">{{ 'customer.login_page.email' | t }}</label>
+              <input type="email" name="email" placeholder="{{ 'customer.login_page.email' | t }}" autocomplete="off" class="input-field" />
+            </div>
+
+            <div class="button-group">
+              <input type="submit" value="{{ 'customer.login_page.submit' | t }}" class="btn btn-primary color-brown" />
+              <a id="cancel" href="#login" title="{{ 'customer.login_page.cancel' | t }}" class="login-btn btn btn-secondary ml-1">{{ 'customer.login_page.cancel' | t }}</a>
+            </div>
+            
+          {% endform %}
+        </div>
+
+      </div>
+
+      <div class="login-column login-create column" style="--column-padding-up: 30px">
+        <h2 class="heading-4 mb-4">{{ 'customer.register.title' | t }}</h2>
+        <div class="blurb buddy">{{ 'customer.register.subtext' | t }}</div>
+        <div class="cta mt-2">
+          <a href="{{ routes.account_register_url }}" class="btn btn-primary" title="{{ 'customer.register.submit' | t }}">{{ 'customer.register.submit' | t }}</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Account Login",
+  "class": "login section",
+  "tag": "section",
+  "limit": 1,
+  "templates": ["customers/login"],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-top",
+      "default": true,
+      "label": "Section Spacing Top"
+    },
+    {
+      "type": "select",
+      "id": "spacing-size-top",
+      "default": "lg",
+      "label": "Spacing Size Top",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-bottom",
+      "default": true,
+      "label": "Section Spacing Bottom"
+    }, {
+      "type": "select",
+      "id": "spacing-size-bottom",
+      "default": "lg",
+      "label": "Spacing Size Bottom",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Account Login"
+    }
+  ]
+}
+{% endschema %}

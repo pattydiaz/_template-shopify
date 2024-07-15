@@ -1,0 +1,142 @@
+@mixin font($fname, $ffile, $fweight, $fstyle) {
+  @font-face {
+    font-family: "#{$fname}";
+    font-weight: $fweight;
+    font-style: $fstyle;
+    font-display: swap;
+    unicode-range: U+?????;
+    src: 
+      local("#{$fname}"),
+      url("#{$ffile}.woff") format("woff"),
+      url("#{$ffile}.woff2") format("woff2");
+  }
+}
+
+@mixin hover {
+  body:not(.mobile) & {
+    &:hover,
+    &:focus {
+      @content;
+    }
+  }
+}
+
+@mixin cover($position: absolute, $important: null) {
+  position: $position $important;
+  top: 0 $important;
+  left: 0 $important;
+  width: 100% $important;
+  height: 100% $important;
+}
+
+@mixin fullwidth($important: null) {
+  position: relative $important;
+  left: 50% $important;
+  max-width: initial $important;
+  width: 100vw $important;
+  margin-left: -50vw $important;
+}
+
+@mixin transform-fix {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+@mixin pixel-fix {
+  transform: translate3d(0,0,0) scale(1.005);
+}
+
+@mixin hide($animate: false, $duration: $duration-default, $ease: $ease-default) {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  @if $animate == true {
+    will-change: opacity;
+    transition: opacity $duration $ease, visibility $duration $ease;
+  }
+}
+
+@mixin show($animate: false, $duration: $duration-default, $ease: $ease-default) {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+
+  @if $animate == true {
+    will-change: opacity;
+    transition: opacity $duration $ease, visibility $duration $ease;
+  }
+}
+
+@mixin center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+@mixin object-fit($objectfit: cover, $objectposition: var(--position, 50% 50%)) {
+  height: 100%;
+  width: 100%;
+  object-fit: $objectfit;
+  object-position: $objectposition;
+}
+
+@mixin input-reset($important: null) {
+  appearance: none $important;
+  border: none $important;
+  border-radius: 0 $important;
+  box-shadow: none $important;
+  box-sizing: border-box $important;
+}
+
+@mixin mask($url, $size: contain, $position: 50% 50%, $repeat: no-repeat) {
+  mask-image: url($url);
+  mask-size: $size;
+  mask-position: $position;
+  mask-repeat: $repeat;
+}
+
+@mixin ul-remove($margin:0, $padding:0) {
+  margin: $margin;
+  padding: $padding;
+  list-style: none;
+}
+
+@mixin aspect-ratio($width, $height) {
+  padding-bottom: ($height / $width) * 100%;
+}
+
+@mixin force-black {
+  filter: contrast(0) brightness(0);
+}
+
+@mixin force-white {
+  filter: brightness(0) invert(1);
+}
+
+@mixin sr-only($important: null) {
+  position: absolute $important;
+  width: 1px $important;
+  height: 1px $important;
+  padding: 0 $important;
+  overflow: hidden $important;
+  clip: rect(0 0 0 0) $important;
+  clip-path: inset(50%) $important;
+  white-space: nowrap $important;
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin underline($height: 2px) {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: $height;
+}

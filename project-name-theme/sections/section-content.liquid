@@ -1,0 +1,157 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+assign container-size = section.settings.container-size | prepend: ' container-'
+  
+%}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+{% if page.url contains 'design-guide' %}
+  {% render 'block-design-guide' %}
+{% else %}
+
+  <div class="stuff-wrap{{ spacing-top }}{{ spacing-bottom }}">
+    <div class="container{{ container-size }} contents">{{ page.content }}</div>
+  </div>
+
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Page Content",
+    "tag": "section",
+    "class": "stuff section",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing-top",
+        "default": "none",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing-bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      }, 
+      {
+        "type": "header",
+        "content": "Content Options"
+      }, 
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container-size",
+        "default": "md",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }, {
+            "label": "Maximum",
+            "value": "max"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Page Content"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,173 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+
+assign container-size = section.settings.container-size | prepend: ' container-'
+
+%}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="collections-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="container{{ container-size }}">
+
+    {% assign all_collections = collections | sort: 'title' | reverse %}
+    <ul class="d-flex-wrap ls-none">
+      {% for collection in all_collections %}
+        {% unless collection.handle contains 'featured' %}
+
+          <li class="w-100 pb-2">
+            <a href="{{ collection.url }}" class="pos-relative bg--overlay" title="{{ collection.title }}" style="--opacity: 0.7;">
+              <div class="ratio-21x9">
+                {% render 'component-image' img: collection.featured_image %}
+              </div>
+              <div class="heading-3 float--center color-white z-2">{{ collection.title }}</div>
+            </a>
+          </li>
+
+        {% endunless %}
+      {% endfor %}
+    </ul>
+
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Collections",
+  "tag":"section",
+  "class": "collections section",
+  "templates": ["list-collections"],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "spacing-top",
+      "default": "md",
+      "label": "Section Spacing Top",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "spacing-bottom",
+      "default": "md",
+      "label": "Section Spacing Bottom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-header",
+      "default": false,
+      "label": "Add extra spacing for header"
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container-size",
+      "default": "xx",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }, {
+          "label": "Maximum",
+          "value": "max"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections"
+    }
+  ]
+}
+{% endschema %}

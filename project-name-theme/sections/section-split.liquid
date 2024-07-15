@@ -1,0 +1,804 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+
+assign container-size = section.settings.container-size | prepend: ' container-'
+
+assign img = section.settings.img
+assign img-ratio = section.settings.img-ratio
+assign img-position-x = section.settings.img-position-x
+assign img-position-y = section.settings.img-position-y
+assign img-position = img-position-x | prepend: '--position:' | append: '% ' | append: img-position-y | append: '%;'
+
+assign split-swap = section.settings.split-swap
+if split-swap == true
+  assign split-swap = ' d-flex-swap'
+else 
+  assign split-swap = ''
+endif
+
+assign split-spacing-tablet = section.settings.split-spacing-tablet | prepend: '--column-spacing:' | append: 'px;'
+assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend: '--column-spacing:' | append: 'px;'
+
+%}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="hero-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="container{{ container-size }} d-flex-d d-flex--center{{ split-swap }}{% if request.design_mode == false %} animated animated-group animate-up-in{% endif %}">
+
+    <div class="column" style="{{ split-spacing-tablet }} {{ split-spacing-desktop }}">
+      <div class="{{ img-ratio }}{% if img == blank or request.design_mode == true %} bg-black{% endif %}" style="{{ img-position }}">
+        {% render 'component-image', img: img, class: 'img-cover', size: '1500x' %}
+      </div>
+    </div>
+
+    <div class="column d-flex-d d-flex--center" style="{{ split-spacing-tablet }} {{ split-spacing-desktop }}">
+      <div class="column-container d-ib">
+        {% if section.blocks %}
+    
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+  
+  
+              {%- when 'subheading' -%}
+              {% liquid
+                assign subheading = block.settings.subheading
+                assign subheading-spacing-top = block.settings.subheading-spacing-top | prepend: ' mt-'
+                assign subheading-spacing-bottom = block.settings.subheading-spacing-bottom | prepend: ' mb-'
+              %}  
+              <h3 class="subheading{{ subheading-spacing-top }}{{ subheading-spacing-bottom }}">{{ subheading }}</h3>
+  
+  
+              {%- when 'heading' -%}
+              {% liquid
+                assign heading = block.settings.heading
+                assign heading-spacing-top = block.settings.heading-spacing-top | prepend: ' mt-'
+                assign heading-spacing-bottom = block.settings.heading-spacing-bottom | prepend: ' mb-'
+                assign heading-type = block.settings.heading-type | prepend: 'heading-'
+              %}
+              <h1 class="{{ heading-type }}{{ heading-spacing-top }}{{ heading-spacing-bottom }}">{{ heading }}</h1>
+  
+  
+              {%- when 'blurb' -%}
+              {% liquid
+                assign blurb = block.settings.blurb
+                assign blurb-spacing-top = block.settings.blurb-spacing-top | prepend: ' mt-'
+                assign blurb-spacing-bottom = block.settings.blurb-spacing-bottom | prepend: ' mb-'
+                assign blurb-width = block.settings.blurb-width | prepend: '--mw:' | append: 'px;'
+              %}
+              <div class="blurb buddy w-max{% if text-alignment contains 'center' %} mx-auto{% endif %}{{ blurb-spacing-top }}{{ blurb-spacing-bottom }}" style="{{ blurb-width }}">{{ blurb }}</div>
+  
+  
+              {%- when 'button' -%}
+              {% liquid
+                assign button-spacing-top = block.settings.button-spacing-top | prepend: ' mt-'
+                assign button-spacing-bottom = block.settings.button-spacing-bottom | prepend: ' mb-'
+                assign button-type = block.settings.button-type
+                assign button-theme = block.settings.button-theme
+                assign button-url = block.settings.button-url
+                assign button-text = block.settings.button-text
+              %}
+              <div class="cta{{ button-spacing-top }}{{ button-spacing-bottom }}">
+                <a href="{{ button-url }}" class="btn btn-{{ button-type }}--{{ button-theme }}" title="{{ button-text }}">{{ button-text }}</a>
+              </div>
+  
+  
+            {%- endcase -%}
+          {%- endfor -%}
+  
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Split",
+    "tag": "section",
+    "class": "split section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Spacing Options",
+        "info": "Spacing only works if Section Size is set to 'none'"
+      },
+      {
+        "type": "select",
+        "id": "spacing-top",
+        "default": "md",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing-bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "id": "container-size",
+        "default": "md",
+        "label": "Container Size",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }, {
+            "label": "Maximum",
+            "value": "max"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Image Options"
+      },
+      {
+        "type": "image_picker",
+        "id": "img",
+        "label": "Image"
+      },
+      {
+        "type": "select",
+        "id": "img-ratio",
+        "default": "ratio-1x1",
+        "label": "Image Ratio",
+        "options": [
+          {
+            "label":"Ratio 1x1",
+            "value": "ratio-1x1"
+          },
+          {
+            "label": "Ratio 2x1",
+            "value": "ratio-2x1"
+          },
+          {
+            "label": "Ratio 1x2",
+            "value": "ratio-1x2"
+          },
+          {
+            "label": "Ratio 4x3",
+            "value": "ratio-4x3"
+          },
+          {
+            "label": "Ratio 3x4",
+            "value": "ratio-3x4"
+          },
+          {
+            "label": "Ratio 5x4",
+            "value": "ratio-5x4"
+          },
+          {
+            "label": "Ratio 4x5",
+            "value": "ratio-4x5"
+          },
+          {
+            "label": "Ratio 5x7",
+            "value": "ratio-5x7"
+          },
+          {
+            "label": "Ratio 7x5",
+            "value": "ratio-7x5"
+          },
+          {
+            "label":" Ratio 16x9",
+            "value": "ratio-16x9"
+          },
+          {
+            "label":" Ratio 9x16",
+            "value": "ratio-9x16"
+          },
+          {
+            "label":"R atio 16x10",
+            "value": "ratio-16x10"
+          },
+          {
+            "label":"R atio 10x16",
+            "value": "ratio-10x16"
+          },
+          {
+            "label":" Ratio 21x9",
+            "value": "ratio-21x9"
+          },
+          {
+            "label":" Ratio 9x21",
+            "value": "ratio-9x21"
+          },
+          {
+            "label":" Ratio 18x6",
+            "value": "ratio-18x6"
+          },
+          {
+            "label":" Ratio 6x18",
+            "value": "ratio-6x18"
+          },
+          {
+            "label":" Ratio 10x1",
+            "value": "ratio-10x1"
+          },
+          {
+            "label":" Ratio 1x10",
+            "value": "ratio-1x10"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "img-position-x",
+        "default": 50,
+        "label": "Image Position (L/R)",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%"
+      },
+      {
+        "type": "range",
+        "id": "img-position-y",
+        "default": 50,
+        "label": "Image Position (T/B)",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%"
+      },
+      {
+        "type": "header",
+        "content": "Split Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "split-swap",
+        "default": false,
+        "label": "Swap the column order"
+      },
+      {
+        "type": "range",
+        "id": "split-spacing-tablet",
+        "default": 20,
+        "label": "Spacing L/R (Tablet)",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "split-spacing-desktop",
+        "default": 30,
+        "label": "Spacing L/R (Desktop)",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"heading-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"heading-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "heading-type",
+            "label": "Heading Type",
+            "default": "2",
+            "options": [
+              {
+                "label": "Heading 1",
+                "value": "1"
+              },
+              {
+                "label": "Heading 2",
+                "value": "2"
+              },
+              {
+                "label": "Heading 3",
+                "value": "3"
+              },
+              {
+                "label": "Heading 4",
+                "value": "4"
+              },
+              {
+                "label": "Heading 5",
+                "value": "5"
+              },
+              {
+                "label": "Heading 6",
+                "value": "6"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Lorem Ipsum",
+            "label": "Heading"
+          }
+        ]
+      },
+      {
+        "type": "subheading",
+        "name": "Subheading",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"subheading-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"subheading-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "subheading",
+            "default": "Lorem Ipsum",
+            "label": "Subheading"
+          }
+        ]
+      },
+      {
+        "type": "blurb",
+        "name": "Text Blurb",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"blurb-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"blurb-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "blurb-width",
+            "default": 400,
+            "label": "Text Blurb Width",
+            "step": 10,
+            "min": 200,
+            "max": 600,
+            "unit": "px"
+          }, 
+          {
+            "type": "textarea",
+            "id": "blurb",
+            "default": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?",
+            "label": "Text Blurb"
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "name": "Button",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"button-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"button-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"button-type",
+            "label": "Button Type",
+            "default": "primary",
+            "options": [
+              {
+                "label":"Primary",
+                "value": "primary"
+              },
+              {
+                "label":"Secondary",
+                "value": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"button-theme",
+            "label": "Button Theme",
+            "default": "dark",
+            "options": [
+              {
+                "label":"Dark",
+                "value": "dark"
+              },
+              {
+                "label":"Light",
+                "value": "light"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "button-text",
+            "default": "Lorem Ipsum CTA",
+            "label": "Button Text"
+          }, {
+            "type": "url",
+            "id": "button-url",
+            "label": "Button Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Split",
+        "blocks": [
+          {
+            "type": "heading"
+          }, {
+            "type": "blurb"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

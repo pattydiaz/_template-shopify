@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+    {%- endif -%}
+
+    <title>
+      {% if request.page_type == 'search' %}
+        Search Results &vert; {{ shop.name }}
+      {% else %}
+        {{ page_title }}
+        {%- if current_tags %}
+          &vert; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+        {%- if current_page != 1 %}
+          &vert; Page {{ current_page }}{% endif -%}
+        {%- unless page_title contains shop.name %}
+          &vert; {{ shop.name }}{% endunless -%}
+      {% endif %}
+    </title>
+
+    {% if page.url contains 'style-guide' or page.url contains 'sample' %}
+      <meta name="robots" content="noindex">
+    {% endif %}
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% render 'meta-tags' %}
+
+    {{ content_for_header }}
+
+    {% render 'fonts' %}
+
+    {{ 'main.css' | asset_url | stylesheet_tag }}
+
+  </head>
+
+  {%- liquid 
+  
+    if template.name == "index" 
+      assign body_class = "home"
+
+    elsif template.name == "page" 
+      if template.suffix 
+        assign body_class = template.suffix 
+      else 
+        assign body_class = "default"
+      endif 
+
+    elsif article 
+      if template.suffix 
+        assign body_class = template.suffix 
+      else 
+        assign body_class = "default" 
+      endif
+
+    elsif product
+      assign body_class = "product"
+
+    elsif template.directory == "customers"
+      assign body_class = "account"
+
+    else
+      if template.name != ''
+        assign body_class = template.name
+      else 
+        assign body_class = "default"
+      endif
+
+    endif
+
+    if request.design_mode == true
+      assign page_class = ' no-animate'
+    else
+      assign page_class = ''
+    endif
+
+  %}
+
+  <body class="{{ body_class }}">
+
+    {% comment %} {% render 'block-modal' %} {% endcomment %}
+    {% comment %} {% render 'block-announcement' %} {% endcomment %}
+
+    <a href="#main" class="skip-to-content button">Skip to Content</a>
+
+    <div id="page" class="page{{ page_class }}">
+
+      {% section 'layout-header' %}
+      {% section 'layout-drawer' %}
+
+      <main id="main" class="main" role="main" tabindex="-1">
+
+        <div id="wrapper" class="{{ body_class | append: '-page' }}">
+          {{ content_for_layout }}
+        </div>
+
+        {% section 'layout-footer' %}
+
+      </main>
+
+    </div>
+
+    <script src="{{ 'main.js' | asset_url }}" defer="defer"></script>
+
+  </body>
+</html>

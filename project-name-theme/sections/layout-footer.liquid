@@ -1,0 +1,48 @@
+<div class="footer-wrap bg-black">
+  <div class="container">
+
+
+    <div class="footer-newsletter gap-ym--md text-center color-white">
+      <h2 class="heading-3">Newsletter Sign Up</h2>
+      <div class="input w-max mx-auto mt-2" style="--mw: 400px">
+        <input type="email" name="" id="" class="input-field border-white color-white">
+      </div>
+      <div class="input w-max mx-auto mt-2" style="--mw: 400px">
+        <button class="btn btn-primary--light">Submit</button>
+      </div>
+    </div>
+
+
+    {% if linklists[section.settings.footer-nav] %}
+      <ul class="footer-nav py-2 ls-none text-center color-white-transparent">
+        <li class="d-ib">
+          <span class="px-h py-h caption">&copy; Copyright {{ "now" | date: "%Y" }} {{ shop.name }}</span>
+        </li>
+        {% for link in linklists[section.settings.footer-nav].links %}
+          {% if linklists[section.settings.footer-nav].levels == 1 %}
+            <li class="d-ib">
+              <a href="{{ link.url }}" class="button-opacity px-h py-h caption" title="{{ link.title | escape }}">{{ link.title | escape }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Footer",
+    "tag": "footer",
+    "class": "footer",
+    "settings" : [
+      {
+        "type": "link_list",
+        "id": "footer-nav",
+        "label": "Footer Menu"
+      }
+    ]
+  }
+{% endschema %}

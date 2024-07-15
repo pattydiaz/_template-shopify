@@ -1,0 +1,46 @@
+{
+  "sections": {
+    "main": {
+      "type": "section-hero",
+      "blocks": {
+        "heading_7WNc8R": {
+          "type": "heading",
+          "settings": {
+            "heading-spacing-top": "none",
+            "heading-spacing-bottom": "none",
+            "heading": "Collections"
+          }
+        }
+      },
+      "block_order": [
+        "heading_7WNc8R"
+      ],
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": true,
+        "section-size": "none",
+        "container-size": "md",
+        "text-color": "dark",
+        "text-alignment": "center",
+        "animation": false,
+        "img-pos-y": 50,
+        "img-pos-x": 50,
+        "img-overlay": 0
+      }
+    },
+    "section_collections_9AbXkm": {
+      "type": "section-collections",
+      "settings": {
+        "spacing-top": "md",
+        "spacing-bottom": "md",
+        "spacing-header": false,
+        "container-size": "xl"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_collections_9AbXkm"
+  ]
+}

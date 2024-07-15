@@ -1,0 +1,213 @@
+{% liquid
+  assign spacing-top = section.settings.spacing-top
+  if spacing-top == true
+    assign spacing-top = section.settings.spacing-size-top | prepend: ' gap-tm--'
+  else
+    assign spacing-top = ''
+  endif
+
+  assign spacing-bottom = section.settings.spacing-bottom
+  if spacing-bottom == true
+    assign spacing-bottom = section.settings.spacing-size-bottom | prepend: ' gap-bm--'
+  else
+    assign spacing-bottom = ''
+  endif
+
+  assign container-size = section.settings.container-size | prepend: 'container-'
+
+  assign animations = section.settings.animations
+  if animations == true and request.design_mode == false
+    assign animations = ' animated animated-item animate-up-in'
+  endif
+%}
+
+<div class="accordion-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="container {{ container-size }}{{ animations }}">
+
+    {% for block in section.blocks %}
+      {% case block.type %}
+
+        {% when 'panel' %}
+
+        {% liquid
+          assign accordion-title = block.settings.accordion-title
+          assign accordion-content = block.settings.accordion-content
+          assign contents-columns = section.settings.contents-col
+          if contents-columns == true
+            assign contents-columns = ' contents-columns'
+          else
+            assign contents-columns = ''
+          endif
+        %}
+
+        <div class="accordion-item border-y-brown" style="--border-width: 1px;">
+          <button class="accordion-header heading-4 button-opacity py-2 color-brown" aria-label="{{ accordion-title }}">{{ accordion-title }}</button>
+          <div class="accordion-content">
+            <div class="contents{{ contents-columns }} pb-2">{{ accordion-content }}</div>
+          </div>
+        </div>
+
+      {% endcase %}
+    {% endfor %}
+
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Accordion",
+    "class": "accordion section",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-top",
+        "default": false,
+        "label": "Section Spacing Top"
+      },
+      {
+        "type": "select",
+        "id": "spacing-size-top",
+        "default": "lg",
+        "label": "Spacing Size Top",
+        "options": [
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-bottom",
+        "default": false,
+        "label": "Section Spacing Bottom"
+      }, {
+        "type": "select",
+        "id": "spacing-size-bottom",
+        "default": "lg",
+        "label": "Spacing Size Bottom",
+        "options": [
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      }, {
+        "type": "header",
+        "content": "Global Options"
+      }, {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container-size",
+        "default": "xx",
+        "options": [
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }, {
+            "label": "Maximum",
+            "value": "max"
+          }
+        ]
+      }, {
+        "type": "checkbox",
+        "id": "animation",
+        "default": false,
+        "label": "Text Animation"
+      }, {
+        "type": "checkbox",
+        "id": "contents-col",
+        "default": true,
+        "label": "Force List Columns"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "panel",
+        "name": "Panel",
+        "settings": [
+          {
+            "type": "text",
+            "label": "Accordion Panel Title",
+            "id": "accordion-title",
+            "default": "Lorem Ipsum"
+          }, {
+            "type": "richtext",
+            "label": "Accordion Panel Content",
+            "id": "accordion-content",
+            "default": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est amet dolore libero asperiores porro. Placeat id rerum sunt accusamus fugit vitae, doloribus praesentium consequatur, quisquam, earum nobis harum numquam magni?</p><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A recusandae saepe quas dolore iure quos sint culpa modi ullam odio. Ratione nulla cumque placeat, rem earum est ipsa aliquid eaque.</p>"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Accordion",
+        "blocks": [
+          {
+            "type": "panel"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

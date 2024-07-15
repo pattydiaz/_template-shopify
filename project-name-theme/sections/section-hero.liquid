@@ -1,0 +1,738 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+
+assign section-size = section.settings.section-size
+if section-size != 'none'
+  assign section-size = section-size | prepend: ' section-'
+else 
+  assign section-size = ''
+endif
+
+assign container-size = section.settings.container-size | prepend: ' container-'
+
+assign text-color = section.settings.text-color
+if text-color contains 'dark'
+  assign text-color = ' color-black'
+elsif text-color contains 'light'
+  assign text-color = ' color-white'
+else
+  assign text-color = ''
+endif
+
+assign text-alignment = section.settings.text-alignment | prepend: ' text-'
+
+assign bg-img = section.settings.bg-img
+
+assign img-pos-y = section.settings.img-pos-y | append: '%'
+assign img-pos-x = section.settings.img-pos-x | append: '%'
+
+assign img-opacity = section.settings.img-overlay
+
+%}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="hero-wrap{{ section-size }}{{ spacing-top }}{{ spacing-bottom }}">
+  
+  {% if bg-img != blank %}
+    <div class="hero-bg bg-cover bg--overlay" style="--position: {{ img-pos-x }} {{ img-pos-y }};--opacity: {{ img-opacity }};">
+      {% render 'component-image', img: bg-img, class: 'img-cover', size: '1500x' %}
+    </div>
+  {% endif %}
+
+  {% if section.blocks %}
+    <div class="hero-text container{{ container-size }}{{ text-alignment }}{{ text-color }}">
+
+      {% if section.settings.animation == true and request.design_mode == false %}
+        <div class="animated animated-group animate-up-in">
+        {% endif %}
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+
+            {%- when 'subheading' -%}
+            {% liquid
+              assign subheading = block.settings.subheading
+              assign subheading-spacing-top = block.settings.subheading-spacing-top | prepend: ' mt-'
+              assign subheading-spacing-bottom = block.settings.subheading-spacing-bottom | prepend: ' mb-'
+            %}  
+            <h3 class="subheading{{ subheading-spacing-top }}{{ subheading-spacing-bottom }}">{{ subheading }}</h3>
+
+
+            {%- when 'heading' -%}
+            {% liquid
+              assign heading = block.settings.heading
+              assign heading-spacing-top = block.settings.heading-spacing-top | prepend: ' mt-'
+              assign heading-spacing-bottom = block.settings.heading-spacing-bottom | prepend: ' mb-'
+            %}
+            <h1 class="heading-1{{ heading-spacing-top }}{{ heading-spacing-bottom }}">{{ heading }}</h1>
+
+
+            {%- when 'blurb' -%}
+            {% liquid
+              assign blurb = block.settings.blurb
+              assign blurb-spacing-top = block.settings.blurb-spacing-top | prepend: ' mt-'
+              assign blurb-spacing-bottom = block.settings.blurb-spacing-bottom | prepend: ' mb-'
+              assign blurb-width = block.settings.blurb-width | prepend: '--mw:' | append: 'px;'
+            %}
+            <div class="blurb buddy w-max{% if text-alignment contains 'center' %} mx-auto{% endif %}{{ blurb-spacing-top }}{{ blurb-spacing-bottom }}" style="{{ blurb-width }}">{{ blurb }}</div>
+
+
+            {%- when 'button' -%}
+            {% liquid
+              assign button-spacing-top = block.settings.button-spacing-top | prepend: ' mt-'
+              assign button-spacing-bottom = block.settings.button-spacing-bottom | prepend: ' mb-'
+              assign button-type = block.settings.button-type
+              assign button-theme = block.settings.button-theme
+              assign button-url = block.settings.button-url
+              assign button-text = block.settings.button-text
+            %}
+            <div class="cta{{ button-spacing-top }}{{ button-spacing-bottom }}">
+              <a href="{{ button-url }}" class="btn btn-{{ button-type }}--{{ button-theme }}" title="{{ button-text }}">{{ button-text }}</a>
+            </div>
+
+
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {% if section.settings.animation == true and request.design_mode == false %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+
+{% schema %}
+  {
+    "name": "Hero",
+    "tag": "section",
+    "class": "hero section",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Spacing Options",
+        "info": "Spacing only works if Section Size is set to 'none'"
+      },
+      {
+        "type": "select",
+        "id": "spacing-top",
+        "default": "md",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing-bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing-header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "select",
+        "id": "section-size",
+        "label": "Section Size",
+        "default": "none",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          }, {
+            "value": "full",
+            "label": "Full Screen"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container-size",
+        "default": "md",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }, {
+            "label": "Maximum",
+            "value": "max"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text-color",
+        "label": "Text Color",
+        "default": "dark",
+        "options": [
+          {
+            "label": "Dark",
+            "value": "dark"
+          },
+          {
+            "label": "Light",
+            "value": "light"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text-alignment",
+        "label": "Text Alignment",
+        "default": "center",
+        "options": [
+          {
+            "label": "Left",
+            "value": "left"
+          },
+          {
+            "label": "Center",
+            "value": "center"
+          },
+          {
+            "label": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "animation",
+        "default": false,
+        "label": "Text Animation"
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg-img",
+        "label": "Background Image"
+      },
+      {
+        "type": "range",
+        "id": "img-pos-y",
+        "label": "Image Position (Top/Bottom)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      {
+        "type": "range",
+        "id": "img-pos-x",
+        "label": "Image Position (Left/Right)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      {
+        "type": "range",
+        "id": "img-overlay",
+        "label": "Image Overlay Opacity",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "default": 0
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"heading-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"heading-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Lorem Ipsum",
+            "label": "Heading"
+          }
+        ]
+      },
+      {
+        "type": "subheading",
+        "name": "Subheading",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"subheading-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"subheading-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "subheading",
+            "default": "Lorem Ipsum",
+            "label": "Subheading"
+          }
+        ]
+      },
+      {
+        "type": "blurb",
+        "name": "Text Blurb",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"blurb-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"blurb-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "blurb-width",
+            "default": 400,
+            "label": "Text Blurb Width",
+            "step": 10,
+            "min": 200,
+            "max": 600,
+            "unit": "px"
+          }, 
+          {
+            "type": "textarea",
+            "id": "blurb",
+            "default": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?",
+            "label": "Text Blurb"
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "name": "Button",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"button-spacing-top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"button-spacing-bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"button-type",
+            "label": "Button Type",
+            "default": "primary",
+            "options": [
+              {
+                "label":"Primary",
+                "value": "primary"
+              },
+              {
+                "label":"Secondary",
+                "value": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"button-theme",
+            "label": "Button Theme",
+            "default": "dark",
+            "options": [
+              {
+                "label":"Dark",
+                "value": "dark"
+              },
+              {
+                "label":"Light",
+                "value": "light"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "button-text",
+            "default": "Lorem Ipsum CTA",
+            "label": "Button Text"
+          }, {
+            "type": "url",
+            "id": "button-url",
+            "label": "Button Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Hero",
+        "blocks": [
+          {
+            "type": "subheading"
+          }, {
+            "type": "heading"
+          }, {
+            "type": "button"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

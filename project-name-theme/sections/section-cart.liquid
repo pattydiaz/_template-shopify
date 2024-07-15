@@ -1,0 +1,308 @@
+{% liquid
+
+assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
+assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
+assign spacing-header = section.settings.spacing-header
+assign container-size = section.settings.container-size | prepend: ' container-'
+
+%}
+
+{% if spacing-header == true %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="cart-wrap{{ spacing-top }}{{ spacing-bottom }}">
+  <div class="container{{ container-size }}">
+
+  {%- if cart != empty -%}
+
+    <form action="{{ routes.cart_url }}" class="cart-form" method="post" id="cart">
+
+      <div class="cart-header">
+        <ul class="cart-row ls-none d-none d-flex-t py-2">
+          <li class="cart-row-item subheading w-40 px-1">{{ 'sections.cart.headings.product' | t }}</li>
+          <li class="cart-row-item subheading w-20 px-1 text-right">{{ 'sections.cart.headings.price' | t }}</li>
+          <li class="cart-row-item subheading w-15 px-1 text-right">{{ 'sections.cart.headings.quantity' | t }}</li>
+          <li class="cart-row-item subheading w-15 px-1 text-right">{{ 'sections.cart.headings.total' | t }}</li>
+          <li class="cart-row-item subheading w-10 px-1 text-right"></li>
+        </ul>
+      </div>
+      
+      <div class="cart-body">
+        {%- for item in cart.items -%}
+          <ul class="cart-row ls-none d-flex-wrap py-2" id="CartItem-{{ item.index | plus: 1 }}">
+
+            <li class="cart-row-item w-30 wt-15 px-1 w-max" style="--mw: 180px;">
+              <a href="{{ item.url }}" class="d-block w-100 button">
+                <div class="ratio-1x1">
+                  {% if item.image %}
+                    {% render 'component-image', img: item.image, class: 'img-contain', size: '300x' %}
+                  {% else %}
+                    <span class="caption text-center">No image available.</span>
+                  {% endif %}
+                </div>
+              </a>
+            </li>
+
+            <li class="cart-row-item w-70 wt-30 px-1">
+              <a href="{{ item.url }}" class="button-opacity body-lg d-ib">{{ item.product.title }}</a>
+              {%- if item.product.has_only_default_variant == false -%}
+                <div class="variant text-italic">
+                  {%- if item.product.has_only_default_variant == false -%}
+                    {%- for option in item.options_with_values -%}
+                      <div class="variant-option">
+                        <span class="variant-option-name">{{ option.name }}: </span>
+                        <span class="variant-option-value">{{ option.value }}</span>
+                      </div>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </div>
+                  
+                {% unless item.selling_plan_allocation == nil %}
+                  <p class="subscription"><small>{{ item.selling_plan_allocation.selling_plan.name }}</small></p>
+                {% endunless %}
+              {%- endif -%}
+
+              <ul class="discounts ls-none" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                {%- for discount in item.discounts -%}
+                  <li class="discounts-item caption">{{ discount.title }}</li>
+                {%- endfor -%}
+              </ul>
+            </li>
+
+            <li class="cart-row-item w-25 wt-15 px-1 text-right">
+              <div class="d-up-md-none heading-4 py-2">{{ 'sections.cart.headings.price' | t }}</div>
+              <div class="price">
+                {%- if item.original_price != item.final_price -%}
+                  <span class="price-discount">
+                    <span class="price-discount-old">{{- item.original_price | money -}}</span>
+                    <span class="price-discount-new">{{ item.final_price | money }}</span>
+                  </span>
+                {%- else -%}
+                  <span class="price-original">{{ item.original_price | money }}</span>
+                {%- endif -%}
+              </div>
+            </li>
+
+            <li class="cart-row-item w-25 wt-15 px-1 text-right">
+              <div class="d-up-md-none heading-4 py-2">{{ 'sections.cart.headings.quantity' | t }}</div>
+              <div class="input w-max ml-auto" style="--mw: 70px;">
+                <input class="input-number" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}" id="Quantity-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
+              </div>
+              <button class="btn btn-underline caption text-uppercase text-bold mt-1 pb-h" onclick="this.form.submit();">
+                <small>Update</small>
+              </button>
+            </li>
+
+            <li class="cart-row-item w-25 wt-15 px-1 text-right">
+              <div class="d-up-md-none heading-4 py-2">{{ 'sections.cart.headings.total' | t }}</div>
+              <div class="price">
+                {%- if item.original_line_price != item.final_line_price -%}
+                  <span class="price-discount">
+                    <span class="price-discount-old">{{- item.original_line_price | money -}}</span>
+                    <span class="price-discount-new">{{ item.final_line_price | money }}</span>
+                  </span>
+                {%- else -%}
+                  <span class="price-original">{{ item.original_line_price | money }}</span>
+                {%- endif -%}
+              </div>
+            </li>
+
+            <li class="cart-row-item w-25 wt-10 px-1 text-right">
+              <div id="Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}" class="remove">
+                <a href="{{ item.url_to_remove }}" class="remove-btn button-opacity icon-xs" title="{{ 'sections.cart.remove_title' | t: title: item.title }}">
+                  {% render 'icon-remove' %}
+                </a>
+              </div>
+            </li>
+
+          </ul>
+        {%- endfor -%}
+      </div>
+
+    </form>
+
+    <div class="cart-footer">
+
+      <div class="total text-right mt-2">
+        <span class="total-title heading-4 mr-h">{{ 'sections.cart.subtotal' | t }}</span>
+        <span class="total-value heading-4">{{ cart.total_price | money }}</span>
+      </div>
+      
+      {%- if cart.cart_level_discount_applications.size > 0 -%}
+        <div class="discount text-right mt-1">
+          <ul class="discounts ls-none">
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <li class="discounts-item caption">{{ discount.title }} (-{{ discount.total_allocated_amount | money }})</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      <div class="taxes caption text-right mt-1">
+        {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+          {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+        {%- elsif cart.taxes_included -%}
+          {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+        {%- elsif shop.shipping_policy.body != blank -%}
+          {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+        {%- else -%}
+          {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+        {%- endif -%}
+      </div>
+
+      <div class="buttons text-right mt-3">
+        <button type="submit" id="checkout" class="btn btn-primary" name="checkout"{% if cart == empty %} disabled{% endif %} form="cart" aria-label="{{ 'sections.cart.checkout' | t }}">{{ 'sections.cart.checkout' | t }}</button>
+
+        {%- if additional_checkout_buttons -%}
+          <div class="buttons-extra mt-1">
+            {{ content_for_additional_checkout_buttons }}
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+
+  {%- else -%}
+
+  <div class="cart-empty text-center">
+    <h2 class="heading-3 mt-5 mb-h">{{ 'sections.cart.empty' | t }}</h2>
+    <p>{{ 'sections.cart.empty_subtext' | t }}</p>
+    <div class="cta mt-2">
+      <a href="/collections" class="btn btn-primary" title="{{ 'sections.cart.empty_button' | t }}">{{ 'sections.cart.empty_button' | t }}</a>
+    </div>
+  </div>
+
+  {%- endif -%}
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "class": "cart section",
+  "limit": 1,
+  "templates": ["cart"],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "spacing-top",
+      "default": "md",
+      "label": "Section Spacing Top",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "spacing-bottom",
+      "default": "md",
+      "label": "Section Spacing Bottom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing-header",
+      "default": true,
+      "label": "Add extra spacing for header"
+    }, {
+      "type": "header",
+      "content": "Content Options"
+    }, {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container-size",
+      "default": "xl",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }, {
+          "label": "Maximum",
+          "value": "max"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
