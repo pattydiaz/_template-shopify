@@ -1,0 +1,276 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+
+  if product and product.collections.size > 0
+    assign recommended_source = product.collections.first.products
+    assign current_product_id = product.id
+  else
+    assign recommended_source = collections.all.products
+    assign current_product_id = nil
+  endif
+
+  assign recommended_heading = section.settings.recommended_heading
+  assign recommended_limit = 50
+  if request.design_mode
+    assign recommended_limit = 3
+  endif
+
+%}
+
+
+{% if recommended_source and recommended_source.size > 0 %}
+
+  <div {{ id }}class="recommended-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+
+    {% if spacing_header %}
+      <div class="gap-hh"></div>
+    {% endif %}
+
+    <div class="recommended-container container{{ container_size }}">
+      
+      {% if recommended_heading %}
+        <h2 class="heading-3 {{ text_alignment }} mb-3">{{ recommended_heading }}</h2>
+      {% endif %}
+      
+      {% if recommended_source and recommended_source.size > 2 %}
+      <div class="slider-mobile">
+        <div class="swiper mx-nq mx-0-upt px-4 px-0-upt">
+      {% endif %}
+
+          <ul class="recommended-products d-flex-t ls-none{% if recommended_source and recommended_source.size > 2 %} swiper-wrapper{% endif %} mx-n1-upt mx-n2-upd">
+    
+            {% for related_product in recommended_source limit: recommended_limit %}
+              {% if current_product_id == nil or related_product.id != current_product_id %}
+                <li class="recommended-product w-100 wt-33 px-1 px-2-upd{% if recommended_source and recommended_source.size > 2 %} swiper-slide{% endif %}">
+                  {% render 'card-product', product: related_product %}
+                </li>
+              {% endif %}
+            {% endfor %}
+    
+          </ul>
+
+      {% if recommended_source and recommended_source.size > 2 %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+{% endif %}
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const container = document.querySelector('.recommended-products');
+    if (!container) return;
+
+    const items = Array.from(container.children);
+
+    // Shuffle products
+    items.sort(() => Math.random() - 0.5);
+
+    // Keep only 3
+    container.innerHTML = '';
+    items.slice(0, 3).forEach(item => container.appendChild(item));
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Recommended Products",
+  "tag": "section",
+  "class": "recommended section",
+  "limit": 1,
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section ID Options"
+    },
+    {
+      "type": "text",
+      "id": "id",
+      "label": "Section ID",
+      "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+    },
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "spacing_top",
+      "default": "md",
+      "label": "Section Spacing Top",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "spacing_bottom",
+      "default": "md",
+      "label": "Section Spacing Bottom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing_header",
+      "default": false,
+      "label": "Add extra spacing for header"
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container_size",
+      "default": "xx",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, 
+        {
+          "label": "X-Large",
+          "value": "xl"
+        }, 
+        {
+          "label": "XX-Large",
+          "value": "xx"
+        }, 
+        {
+          "label": "Maximum",
+          "value": "max"
+        },
+        {
+          "label": "Extra",
+          "value": "xtr"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Recommended Products Options"
+    },
+    {
+      "type": "text",
+      "id": "recommended_heading",
+      "label": "Heading",
+      "default": "Recommended Products"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recommended Products"
+    }
+  ]
+}
+{% endschema %}

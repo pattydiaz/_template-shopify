@@ -1,0 +1,14 @@
+@use "variables" as *;
+@use "breakpoints" as *;
+@use "fonts" as *;
+
+@mixin heading-1($important: null) {}
+@mixin heading-2($important: null) {}
+@mixin heading-3($important: null) {}
+@mixin heading-4($important: null) {}
+@mixin heading-5($important: null) {}
+@mixin heading-6($important: null) {}
+@mixin subheading($important: null) {}
+@mixin body($important: null) {}
+@mixin caption($important: null) {}
+@mixin button($important: null) {}

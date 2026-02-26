@@ -1,0 +1,88 @@
+@use "globals" as *;
+@use "mixins" as *;
+@use "variables" as *;
+@use "breakpoints" as *;
+@use "typography" as *;
+
+@mixin text-decoration($important: null, $util: false) {
+  background: linear-gradient(to left, $current 0, $current 33.333%, $transparent 33.333%, $transparent 66.666%, $current 66.666%, $current 100%) $important;
+  background-size: 300% 1px $important;
+  background-position: 100% 100% $important;
+  background-repeat: no-repeat $important;
+  transition: background-position 0s $ease-default;
+  
+  @if $util {
+    
+    &:hover,
+    &:focus {
+      background-position: 0% 100% $important;
+      transition: background-position 0.8s $ease-default;
+    }
+  }
+  
+  @else {
+    @include hover {
+      background-position: 0% 100% $important;
+      transition: background-position 0.8s $ease-default;
+    }
+  }
+}
+
+@mixin btn-default($important: null) {
+  position: relative $important;
+  display: inline-block $important;
+  text-decoration: none $important;
+  text-align: center $important;
+  cursor: pointer $important;
+  pointer-events: all $important;
+  white-space: nowrap $important;
+}
+
+@mixin btn-primary($important: null, $util: false) {
+  @include btn-default($important: $important);
+  padding: $spacing $spacing*2 $important;
+  background-color: $black $important;
+  border: 1px solid $white $important;
+  color: $white $important;
+
+  @if $util {
+    &:hover,
+    &:focus {
+
+    }
+  }
+  
+  @else {
+    @include hover {
+
+    }
+  }
+
+}
+
+@mixin btn-secondary($important: null, $util: false) {
+  @include btn-default($important: $important);
+  padding: $spacing $spacing*2 $important;
+  background-color: $white $important;
+  border: 1px solid $black $important;
+  color: $black $important;
+
+  @if $util {
+    &:hover,
+    &:focus {
+
+    }
+  }
+  
+  @else {
+    @include hover {
+
+    }
+  }
+}
+
+@mixin btn-disabled {
+  cursor: no-drop;
+  opacity: 0.3;
+  pointer-events: none;
+}

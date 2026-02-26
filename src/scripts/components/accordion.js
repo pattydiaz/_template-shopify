@@ -1,75 +1,107 @@
-var Accordion = {
-  init: function () {
-    Accordion.build();
+const accordions = $$('.accordion-panel');
+
+const Accordion = {
+  init() {
+    this.build();
+    this.scroll();
   },
-  build: function () {
-    Accordion.clicks();
-    Accordion.animate();
+
+  build() {
+    this.animate();
   },
-  clicks: function() {
-    var accordion_header = $('.accordion-header');
 
-    accordion_header.each(function () {
-      var ah = $(this);
-      var ac = ah.next(".accordion-content");
+  setHeight(content, open) {
+    content.el.style.maxHeight = open
+      ? content.el.scrollHeight + 'px'
+      : null;
+  },
 
-      Accordion.toggle(ah, ac);
+  open(panel, button, content, mode = 'active') {
+    panel.el.classList.add(mode);
+    button.el.classList.add(mode);
+    content.el.classList.add(mode);
+    this.setHeight(content, true);
+  },
 
-      ah.on("click", function (e) {
-        e.preventDefault();
+  close(panel, button, content) {
+    ['open', 'active'].forEach(cls => {
+      panel.el.classList.remove(cls);
+      button.el.classList.remove(cls);
+      content.el.classList.remove(cls);
+    });
 
-        if($('.accordion-header.active').length > 0) {
+    this.setHeight(content, false);
+  },
 
-          if(ah.parents('.accordion').length > 0) {
-            ah.parents('.accordion').find('.accordion-header').not(ah).removeClass('active')
-            ah.parents('.accordion').find('.accordion-content').not(ac).removeClass('active').attr('style','');
-          } else {
-            ah.parents('.section').find('.accordion-header').not(ah).removeClass('active')
-            ah.parents('.section').find('.accordion-content').not(ac).removeClass('active').attr('style','');
-          }
+  animate() {
+    accordions.forEach(panelEl => {
+      const panel = $(panelEl);
+      const button = panel.find('.accordion-btn');
+      const content = button.next();
 
+      if (!button.el || !content.el) return;
+
+      const isOpen = () =>
+        button.el.classList.contains('open') ||
+        button.el.classList.contains('active');
+
+      const isActive = () =>
+        button.el.classList.contains('active') &&
+        content.el.classList.contains('active');
+
+      // Initial open state
+      if (isOpen()) {
+        panel.addClass('open');
+        this.setHeight(content, true);
+      }
+
+      // Resize: keep height in sync
+      w.on('resize', () => {
+        if (isOpen() || isActive()) {
+          this.setHeight(content, true);
         }
-
-        ah.toggleClass("active");
-        Accordion.toggle(ah, ac);
-
       });
 
-      w.on("resize", function () {
-        Accordion.toggle(ah, ac);
+      // Click toggle
+      button.on('click', () => {
+        if (isOpen()) {
+          this.close(panel, button, content);
+        } else {
+          this.open(panel, button, content, 'active');
+        }
       });
 
     });
   },
-  toggle: function (h, c) {
-    c.attr('style','');
-    var ch = c.get(0).scrollHeight;
 
-    h.hasClass("active") 
-      ? c.addClass("active").css({ height: ch }) 
-      : c.removeClass("active").attr('style','');
-  },
-  animate: function() {
-    var accordion_animated = $('.accordion-animated');
+  scroll() {
+    if (body.el && body.el.classList.contains('mobile')) return;
+    
+    const animatedAccordions = $$('.accordion-animated');
 
-    accordion_animated.each(function(){
-      var $this = $(this);
-      var ah = $this.find('.accordion-header:first-of-type');
-      var ac = ah.next('.accordion-content');
+    animatedAccordions.forEach(acc => {
+      if (!$(acc).isVisible()) return;
+
+      const firstButton = acc.querySelector('.accordion-btn');
+      if (!firstButton) return;
+
+      const firstContent = firstButton.nextElementSibling;
+      if (!firstContent) return;
 
       ScrollTrigger.create({
-        // markers: true,
-        trigger: $this,
-        start: '0 50%',
+        trigger: acc,
+        start: 'top 50%',
+        once: true,
+
         onEnter: () => {
-          if(!ah.siblings().hasClass('active')) {
-            ah.addClass("active");
-            ac.addClass("active");
-            Accordion.toggle(ah, ac);
-          }
+          // Respect user interaction
+          if (acc.querySelector('.accordion-btn.active')) return;
+
+          const panel = $(firstButton).closest('.accordion-panel');
+
+          this.open( panel, $(firstButton), $(firstContent), 'active');
         }
       });
-
     });
   }
 };

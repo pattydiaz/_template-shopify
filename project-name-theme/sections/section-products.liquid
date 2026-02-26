@@ -1,267 +1,252 @@
 {% liquid
 
-assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
-assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
-assign spacing-header = section.settings.spacing-header
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
 
-assign container-size = section.settings.container-size | prepend: ' container-'
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
 
-assign collection-handle = section.settings.products-list
-if collection-handle != blank
-  assign collection = collections[collection-handle]
-endif
-
-assign products-width-mobile = section.settings.products-width-mobile | prepend: 'w-'
-assign products-width-desktop = section.settings.products-width-desktop | prepend: 'wd-'
+  assign collection_current = collection.handle
+  assign collection_exclude = section.settings.collection_exclude | map: 'handle' | join: ', '
 
 %}
 
-{% if spacing-header == true %}
-  <div class="gap-hh"></div>
-{% endif %}
 
-<div class="products-wrap{{ spacing-top }}{{ spacing-bottom }}">
-  <div class="container{{ container-size }}">
+<div {{ id }}class="products-wrapper{{ spacing_top }}{{ spacing_bottom }}">
 
-    {% if collection != null %}
-      
-      {% assign limit = section.settings.products-limit %}
-      {% paginate collection.products by limit %}
-        <ul class="d-flex-wrap ls-none">
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+    
+  <div class="products-container container{{ container_size }}">
+    <div id="products" class="products-columns">
+
+      {% if collections.size > 0 %}
+        <aside id="products-nav" class="products-nav accordion-panel mb-4">
+          <button class="products-nav-button btn btn-primary accordion-btn d-none-upt w-100" aria-label="Filter">Filter</button>
+          <div id="products-filters" class="products-nav-filters products-filters accordion-content">
+            <ul id="Collections" class="products-filters-list ls-none p-2">
+
+              <li class="products-filters-item mb-q">
+                <a href="{{ collections['all'].url }}" class="btn-filter-item category all{% if collection_current == 'all' or collection_current contains 'all-' %} active{% endif %}" title="All"><span>All</span></a>
+              </li>
+              {% for collection in collections %}
+                {% unless collection_exclude contains collection.handle %}
+                  <li class="products-filters-item mb-q">
+                    <a href="{{ collection.url }}" class="btn-filter-item category{% if collection_current == collection.handle %} active{% endif %}" title="{{ collection.title }}"><span>{{ collection.title }}</span></a>
+                  </li>
+                {% endunless %}
+              {% endfor %}
+
+            </ul>
+          </div>
+        </aside>
+      {% endif %}
+
+      <div id="products-results" class="products-results">
+        {% assign product_limit = 1000 %}
+        {% paginate collection.products by product_limit %}
+
+          <ul class="products-results-list ls-none d-flex-wrap m-n1-upt m-n2-upd h-min" style="--mh: 600px;">
+
+            {% assign products = collection.products | sort: 'title' %}
+            {% for product in products %}
+              <li class="products-results-item w-100 wt-50 wd-33 pb-2 px-1 p-1-upt p-2-upd mb-1">
+                {% render 'card-product', product: product %}
+              </li>
+            {% else %}
+              <li class="w-100 text-center">
+                <h3 class="gap-y--lg">Sorry, nothing here</h3>
+              </li>
+            {% endfor %}
+
+          </ul>
           
-          {% assign products = collection.products | sort: 'title-ascending' %}
-          {% for product in products %}
-  
-            <li class="{{ products-width-mobile }} {{ products-width-desktop }} px-1 py-2 text-center">
-              <a href="{{ product.url }}" class="button-opacity d-block" title="{{ product.title }}">
-                <div class="ratio-1x1{% if product.featured_image == blank or request.design_mode == true %} bg-black{% else %} bg-white{% endif %}">
-                  {% render 'component-image' img: product.featured_image size: '150x'  %}
-                </div>
-                <div class="mt-1">{{ product.title }}</div>
-              </a>
-            </li>
-  
-          {% endfor %}
-        </ul>
-  
-      {% endpaginate %}
-      
-    {% endif %}
+          {% if paginate.pages > 1 %}
+            <div class="loadmore text-center pt-4">
+              <input class="d-none" type="hidden" value="{{ paginate.next.url }}" data-next-link>
+              <input class="d-none" type="hidden" value="{{ paginate.pages }}" data-all-pages>
+              <input class="d-none" type="hidden" value="{{ paginate.current_page }}" data-this-page>
+              <input class="d-none" type="hidden" value="{{ collection.url }}" data-coll-url>
+              <button id="loadmore" class="btn btn-primary" aria-label="Load More">Load More</button>
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
 
+    </div>
   </div>
+
 </div>
 
-
 {% schema %}
-{
-  "name": "Products",
-  "tag":"section",
-  "class": "products section",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Spacing Options"
+  {
+    "name": "Products",
+    "tag": "section",
+    "class": "products section",
+    "limit": 1,
+    "enabled_on": {
+      "templates": ["collection"]
     },
-    {
-      "type": "select",
-      "id": "spacing-top",
-      "default": "md",
-      "label": "Section Spacing Top",
-      "options": [
-        {
-          "label": "None",
-          "value": "none"
-        },
-        {
-          "label": "X-Small",
-          "value": "xs"
-        },
-        {
-          "label": "Small",
-          "value": "sm"
-        },
-        {
-          "label": "Medium",
-          "value": "md"
-        },
-        {
-          "label": "Large",
-          "value": "lg"
-        }, {
-          "label": "X-Large",
-          "value": "xl"
-        }, {
-          "label": "XX-Large",
-          "value": "xx"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "spacing-bottom",
-      "default": "md",
-      "label": "Section Spacing Bottom",
-      "options": [
-        {
-          "label": "None",
-          "value": "none"
-        },
-        {
-          "label": "X-Small",
-          "value": "xs"
-        },
-        {
-          "label": "Small",
-          "value": "sm"
-        },
-        {
-          "label": "Medium",
-          "value": "md"
-        },
-        {
-          "label": "Large",
-          "value": "lg"
-        }, {
-          "label": "X-Large",
-          "value": "xl"
-        }, {
-          "label": "XX-Large",
-          "value": "xx"
-        }
-      ]
-    },
-    {
-      "type": "checkbox",
-      "id": "spacing-header",
-      "default": false,
-      "label": "Add extra spacing for header"
-    },
-    {
-      "type": "header",
-      "content": "Content Options"
-    },
-    {
-      "type": "select",
-      "label": "Container Size",
-      "id": "container-size",
-      "default": "xx",
-      "options": [
-        {
-          "label": "None",
-          "value": "none"
-        },
-        {
-          "label": "X-Small",
-          "value": "xs"
-        },
-        {
-          "label": "Small",
-          "value": "sm"
-        },
-        {
-          "label": "Medium",
-          "value": "md"
-        },
-        {
-          "label": "Large",
-          "value": "lg"
-        }, {
-          "label": "X-Large",
-          "value": "xl"
-        }, {
-          "label": "XX-Large",
-          "value": "xx"
-        }, {
-          "label": "Maximum",
-          "value": "max"
-        }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Products Options"
-    },
-    {
-      "type": "collection",
-      "label": "Products List",
-      "id": "products-list"
-    },
-    {
-      "type": "number",
-      "label": "Products Limit",
-      "id": "products-limit",
-      "default": 1000,
-      "placeholder": "Limit of 1000"
-    },
-    {
-      "type": "select",
-      "label": "Product Width (Mobile)",
-      "id": "products-width-mobile",
-      "default": "50",
-      "options": [
-        {
-          "label": "100%",
-          "value": "100"
-        },
-        {
-          "label": "50%",
-          "value": "50"
-        },
-        {
-          "label": "33.3%",
-          "value": "33"
-        },
-        {
-          "label": "25%",
-          "value": "25"
-        },
-        {
-          "label": "20%",
-          "value": "20"
-        },
-        {
-          "label": "10%",
-          "value": "10"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "label": "Product Width (Desktop)",
-      "id": "products-width-desktop",
-      "default": "25",
-      "options": [
-        {
-          "label": "100%",
-          "value": "100"
-        },
-        {
-          "label": "50%",
-          "value": "50"
-        },
-        {
-          "label": "33.3%",
-          "value": "33"
-        },
-        {
-          "label": "25%",
-          "value": "25"
-        },
-        {
-          "label": "20%",
-          "value": "20"
-        },
-        {
-          "label": "10%",
-          "value": "10"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Products"
-    }
-  ]
-}
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section ID Options"
+      },
+      {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "default": "md",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing_header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container_size",
+        "default": "xx",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, 
+          {
+            "label": "X-Large",
+            "value": "xl"
+          }, 
+          {
+            "label": "XX-Large",
+            "value": "xx"
+          }, 
+          {
+            "label": "Maximum",
+            "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Collection Options"
+      },
+      {
+        "type": "collection_list",
+        "id": "collection_exclude",
+        "label": "Excluded Collection",
+        "info": "⚠️ Choose collections that should be excluded from filtering"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Products"
+      }
+    ]
+  }
 {% endschema %}

@@ -1,0 +1,76 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
+.shopify-pc {
+  $self: &; 
+
+  &__banner {
+
+    &__body {
+      h2 {
+        @include heading-3($important: !important);
+      }
+
+      p { 
+        @include body($important: !important); 
+
+        a {
+          &:hover,&:focus {
+            color: $black-transparent;
+          }
+        }
+      }
+    }
+
+    &__btns {
+      @include bp-down(sm) {
+        flex-direction: column !important;
+      }
+    }
+
+    &__btn-manage-prefs {
+      &:hover,&:focus {
+        color: $black-transparent !important;
+      }
+    }
+
+    &__btn-accept,
+    &__btn-decline {
+      @include btn-primary($important:!important, $util: true);
+    }
+  }
+
+  &__prefs {
+
+    header {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+
+      h2 {
+        margin-bottom: $spacing*2 !important;
+        @include heading-3($important: !important);
+      }
+    }
+
+    &__header-actions {
+
+      button {
+        @include btn-primary($important:!important, $util: true);
+      }
+    }
+
+    &__intro {
+
+      &-main {
+        h3 { 
+          @include heading-4(!important); 
+        }
+        
+      }
+    }
+  }
+
+}
+
+/*! purgecss end ignore */

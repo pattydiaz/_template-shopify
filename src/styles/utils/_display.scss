@@ -1,36 +1,47 @@
+@use "../shared" as *;
+
 .d {
-  &-none { display: none; }
-  &-block { display: block; }
-  &-inline { display: inline; }
-  &-ib { display: inline-block; }
+  &-none   { display: none; content-visibility: hidden; }
+  &-block  { display: block; content-visibility: visible; }
+  &-inline { display: inline; content-visibility: visible; }
+  &-ib     { display: inline-block; content-visibility: visible; }
   &-ib-middle {
     display: inline-block;
     vertical-align: middle;
-  }
-}
-
-@each $name, $breakpoint in $breakpoints {
-  .d-down-#{$name}-none {
-    @include bp-down($breakpoint - 0.02) {
-      display: none;
-    }
+    content-visibility: visible;
   }
 
-  .d-down-#{$name}-block {
-    @include bp-down($breakpoint - 0.02) {
-      display: block;
-    }
-  }
+  $displays: (
+    none: (display: none, content-visibility: hidden),
+    block: (display: block, content-visibility: visible),
+    inline: (display: inline, content-visibility: visible),
+    ib: (display: inline-block, content-visibility: visible)
+  );
 
-  .d-up-#{$name}-none {
-    @include bp-up($breakpoint) {
-      display: none;
-    }
-  }
+  $breakpoints: (
+    md: 768px,
+    lg: 1024px
+  );
 
-  .d-up-#{$name}-block {
-    @include bp-up($breakpoint) {
-      display: block;
+  $bp-aliases: (
+    md: t,
+    lg: d
+  );
+
+  // Responsive classes with content-visibility
+  @each $key, $props in $displays {
+    $display: map-get($props, display);
+    $cv: map-get($props, content-visibility);
+
+    @each $bp, $bp-width in $breakpoints {
+      $alias: map-get($bp-aliases, $bp);
+
+      @include bp-up($bp) {
+        &-#{$key}-up#{$alias} {
+          display: $display;
+          content-visibility: $cv;
+        }
+      }
     }
   }
 }

@@ -1,27 +1,77 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
 .slider {
   $self: &;
 
-  &-pagination {}
+  &-pagination {
+
+    .swiper-pagination-bullet {
+      --swiper-pagination-bullet-horizontal-gap: 3px;
+      --swiper-pagination-bullet-size: 10px;
+      --swiper-pagination-bullet-inactive-color: #{$transparent};
+      --swiper-pagination-color: #{$global-color};
+      --swiper-pagination-bullet-inactive-opacity: 1;
+      border: 2px solid $global-color;
+
+      @include bp-up(lg) {
+        --swiper-pagination-bullet-horizontal-gap: 5px;
+      }
+    }
+  }
+
+  &-fraction {}
 
   &-btn {
 
-    &#{$self}-prev {}
-    &#{$self}-next {}
+    &-prev {}
+    &-next {}
 
     &.swiper-button-lock {
-      @include hide;
+      display: none;
+    }
+  }
+
+  &-thumbs {
+    .thumb {
+      button {
+        border: 2px solid $transparent;
+      } 
+      
+      &.active {
+        button {
+          border: 2px solid $global-color;
+        }
+      }
     }
   }
 
   &-mobile { 
-    @include bp-up(md) {
-      overflow: visible;
+    .swiper {
+
+      @include bp-up(md) {
+        overflow: visible;
+      }
     }
 
     .swiper-wrapper {
       @include bp-up(md) {
+        width: auto !important;
         transform: none !important;
       }
     }
   }
+
+  &-nav {
+    z-index: 5;
+    pointer-events: none;
+    
+    #{$self}-btn {
+      min-width: 20px;
+      pointer-events: all;
+    }
+  }
 }
+
+/*! purgecss end ignore */

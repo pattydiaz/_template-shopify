@@ -1,0 +1,74 @@
+{% liquid
+
+  assign count = 0
+  for block in section.blocks
+    case block.type
+      when 'announcement'
+      assign count = count | plus: 1
+    endcase
+  endfor
+
+%}
+
+
+<div class="announcement-wrapper{% if count < 1 %} announcement--hidden{% endif %}">
+  <div class="announcement-container">
+
+    <div class="slider-default">
+      <div class="swiper{% if count > 1 %} autoplay{% endif %}" data-loop="true">
+        <div class="swiper-wrapper">
+    
+          {% for block in section.blocks %}
+            {% case block.type %}
+            
+    
+              {% when 'announcement' %}
+              {% liquid
+                assign announcement_text = block.settings.announcement_text
+              %}
+              <div class="announcement-slide swiper-slide text-center">
+                {% if announcement_text != blank %}
+                  <div class="blurb">{{ announcement_text }}</div>
+                {% endif %}
+              </div>
+    
+            
+            {% endcase %}
+          {% endfor %}
+    
+        </div>
+        {% if count > 1 %}
+          <div class="slider-nav float--cover d-flex d-flex--align-center d-flex--justify-between">
+            <button class="slider-prev slider-btn button-opacity border-current"><</button>
+            <button class="slider-next slider-btn button-opacity border-current">></button>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+{% schema %}
+  {
+    "name": "Announcement Banner",
+    "class": "announcement",
+    "tag": "div",
+    "blocks": [
+      {
+        "type": "announcement",
+        "name": "Announcement",
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "announcement_text",
+            "label": "Announcement Text",
+            "default": "Lorem Ipsum"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

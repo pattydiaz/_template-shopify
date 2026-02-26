@@ -1,3 +1,22 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
+@mixin container-spacing($important: null) {
+  padding-left: $spacing*1.5 $important;
+  padding-right: $spacing*1.5 $important;
+
+  @include bp-up(md) {
+    padding-left: $spacing*3 $important;
+    padding-right: $spacing*3 $important;
+  }
+
+  @include bp-up(xx) {
+    padding-left: $spacing*5 $important;
+    padding-right: $spacing*5 $important;
+  }
+}
+
 .container {
   position: relative;
   width: 100%;
@@ -6,18 +25,7 @@
   z-index: 1;
   
   &:not([class*="px-"]) {
-    padding-left: $spacing*1.5;
-    padding-right: $spacing*1.5;
-
-    @include bp-up(md) {
-      padding-left: $spacing*3;
-      padding-right: $spacing*3;
-    }
-
-    @include bp-up(xx) {
-      padding-left: $spacing*5;
-      padding-right: $spacing*5;
-    }
+    @include container-spacing;
   }
   
   @each $name, $breakpoint in $breakpoints {
@@ -34,3 +42,5 @@
     }
   }
 }
+
+/*! purgecss end ignore */

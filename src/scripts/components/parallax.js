@@ -1,37 +1,47 @@
-var Parallax = {
-  init: function() {
-    Parallax.build();
+const Parallax = {
+  init() {
+    this.build();
   },
-  build: function() {
-    Parallax.animate();
+
+  build() {
+    this.animate();
   },
-  animate: function() {
-    var parallax = $('.parallax');
 
-    parallax.each(function(){
-      var $this = $(this);
-      var item = $this.hasClass('parallax-item') ? $this : $this.find('.parallax-item');
+  animate() {
+    const parallaxEls = $$('.parallax');
 
-      // options
-      var percent = $this.data('percent') ? $this.data('percent') : 20;
-      var scrub = $this.data('scrub') ? $this.data('scrub') : true;
-      var offset = $this.data('offset') ? $this.data('offset') : 0;
+    parallaxEls.forEach(el => {
+      const $el = $(el);
 
-      gsap.set(item,{
-        yPercent: $this.hasClass('no-offset') ? offset : percent
-      });
+      const $item = $el.el.classList.contains('parallax-item')
+        ? $el
+        : $el.find('.parallax-item');
 
-      gsap.to(item, {
+      if (!$item.el) return;
+
+      const dataset = $el.el.dataset;
+      const percent = dataset.percent ? parseFloat(dataset.percent) : 20;
+      const scrub = dataset.scrub !== undefined ? dataset.scrub === "true" : true;
+      const offset = dataset.offset ? parseFloat(dataset.offset) : 0;
+
+      const initialY = $el.el.classList.contains('no-offset')
+        ? offset
+        : percent;
+
+      gsap.set($item.el, { yPercent: initialY });
+
+      gsap.to($item.el, {
         yPercent: percent * -1,
         ease: 'none',
         scrollTrigger: {
           // markers: true,
-          trigger: item,
+          trigger: $item.el,
           start: '-50% 100%',
-          end: '100% 0',
+          end: '150% 0',
           scrub: scrub
         }
       });
+
     });
   }
 };

@@ -4,7 +4,5 @@
       "type": "section-cart"
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main"]
 }

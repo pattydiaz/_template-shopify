@@ -1,0 +1,187 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+
+%}
+
+
+<div {{ id }}class="apps-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+    
+  <div class="apps-container container{{ container_size }}">
+    <div class="apps-text color-{{ text_color }}">
+      {% content_for "blocks" %}
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Apps Wrapper",
+  "tag": "section",
+  "class": "apps section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section ID Options"
+    },
+      {
+      "type": "text",
+      "id": "id",
+      "label": "Section ID",
+      "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+    },
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "spacing_top",
+      "default": "md",
+      "label": "Section Spacing Top",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "spacing_bottom",
+      "default": "md",
+      "label": "Section Spacing Bottom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing_header",
+      "default": false,
+      "label": "Add extra spacing for header"
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    }, 
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container_size",
+      "default": "lg",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, 
+        {
+          "label": "X-Large",
+          "value": "xl"
+        }, 
+        {
+          "label": "XX-Large",
+          "value": "xx"
+        }, 
+        {
+          "label": "Maximum",
+          "value": "max"
+        },
+        {
+          "label": "Extra",
+          "value": "xtr"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Apps Wrapper"
+    }
+  ]
+}
+{% endschema %}

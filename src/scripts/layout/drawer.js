@@ -1,105 +1,95 @@
-var drawer = $('.drawer');
+const Drawer = {
+  els: {},
 
-var Drawer = {
-  init: function() {
-    Drawer.build();
+  init() {
+    this.build();
   },
-  build: function() {
-    if(drawer.is(':visible')) {
-      
-      Drawer.listeners();
 
-      document.querySelectorAll('form[action="/cart/add"]').forEach((form) => {
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          
-          $(e.submitter).addClass('loading');
+  build() {
+    if (document.body.classList.contains('cart')) return;
 
-          await fetch(window.Shopify.routes.root + 'cart/add', {
-            method: 'post',
-            body: new FormData(form)
-          });
+    this.cache();
+    this.bind();
+  },
 
-          const res = await fetch("/cart.js");
-          const cart = await res.json();
-          Drawer.count(cart.item_count);
+  cache() {
+    this.els.root = $('#cart-drawer');
+    this.els.wrapper = this.els.root.find('.drawer-wrapper');
+    this.els.overlay = this.els.root.find('.drawer-overlay');
+    this.els.body = $('#drawer-body');
+    this.els.close = $$('[data-drawer-close]');
+  },
 
-          await Drawer.update();
-          setTimeout(() => {
-            Drawer.open();
-            $(e.submitter).removeClass('loading');
-          }, 10);
+  bind() {
+    this.els.close.forEach(el => {
+      $(el).on('click', () => this.close());
+    });
+  },
 
+  open() {
+    if (document.body.classList.contains('cart')) return;
+
+    Scrolling.lock();
+    this.els.root.el.setAttribute('aria-hidden', 'false');
+
+    gsap.set(this.els.wrapper.el, { x: '120%' });
+    gsap.set(this.els.overlay.el, { opacity: 0 });
+
+    gsap.to(this.els.wrapper.el, { x: '0%', duration: 0.35, ease: 'power3.out' });
+    gsap.to(this.els.overlay.el, { opacity: 1, duration: 0.25, ease: 'power1.out' });
+  },
+
+  close() {
+    gsap.to(this.els.wrapper.el, {
+      x: '120%',
+      duration: 0.2,
+      ease: 'power2.in',
+      onComplete: () => {
+        gsap.to(this.els.overlay.el, {
+          opacity: 0,
+          duration: 0.15,
+          onComplete: () => {
+            this.els.root.el.setAttribute('aria-hidden', 'true');
+            Scrolling.unlock();
+          }
         });
+      }
+    });
+  },
+
+  sync(cart) {
+    if (document.body.classList.contains('cart')) return;
+
+    const isEmpty = cart.item_count === 0;
+
+    this.els.root.el.classList.toggle('drawer--empty', isEmpty);
+
+    this.els.root.el
+      .querySelectorAll('[name="checkout"]')
+      .forEach(btn => {
+        btn.disabled = isEmpty;
+        btn.classList.toggle('disabled', isEmpty);
       });
 
-      $('a[href="/cart"]:not(.drawer a[href="/cart"])').each(function(){
-        $(this).on('click',function(e){
-          e.preventDefault();
-          Drawer.open();
-        })
-      })
-
+    const emptyMsg = this.els.root.el.querySelector('.drawer-empty');
+    if (emptyMsg) {
+      emptyMsg.classList.toggle('d-none', !isEmpty);
     }
   },
-  open: function() {
-    Scrolling.lock();
-    drawer.addClass('drawer--active').addClass('drawer--animate');
-  },
-  close: function() {
-    Scrolling.unlock();
-    $(document).find('.drawer').removeClass('drawer--animate');
-    setTimeout(() => {
-      $(document).find('.drawer').removeClass('drawer--active');
-    }, 200);
-  },
-  count: function(count) {
-    $('.count').each(function(){
-      $(this).text(count)
-      count == 0 ? $(this).addClass('count--hide') : $(this).removeClass('count--hide');
-    })
-  },
-  update: async function() {
-    const res = await fetch("/?div_id=drawer");
-    const text = await res.text();
-    const html = document.createElement("div");
-    html.innerHTML = text;
 
-    const newBox = html.querySelector(".drawer").innerHTML;
-    document.querySelector(".drawer").innerHTML = newBox;
+  async refresh() {
+    const res = await fetch('/?sections=layout-drawer');
+    const json = await res.json();
 
-    Drawer.listeners();
-  },
-  listeners: function() {
+    const html = json['layout-drawer'];
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const body = doc.querySelector('#drawer-body');
 
-    document.querySelectorAll('.drawer input[type="number"]').forEach((el) => {
-      el.addEventListener('input', async () => {
-        var item = el.parentElement.parentElement.parentElement;
-        var key = item.getAttribute('data-line-item-key');
-        var quantity = Number(el.value);
+    if (body && this.els.body.el) {
+      this.els.body.el.innerHTML = body.innerHTML;
 
-        const res = await fetch("/cart/update.js", {
-          method: "post",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ updates: { [key]: quantity } }),
-        });
-        const cart = await res.json();
-    
-        Drawer.count(cart.item_count);
-        Drawer.update();
-
-      });
-    });
-
-    $('.drawer-container').on('click',function(e){
-      e.stopPropagation();
-    });
-
-    $('.drawer-close, .drawer').on('click',function(){
-      Drawer.close();
-    })
+      Cart.build(true);
+      CartAdd.init();
+    }
   }
-}
+};

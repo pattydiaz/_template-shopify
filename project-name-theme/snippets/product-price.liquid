@@ -1,0 +1,12 @@
+{% liquid
+
+  assign product_variant = product.selected_or_first_available_variant
+  
+%}
+
+<span class="price{% if product_variant.compare_at_price > product_variant.price %} price--sale{% endif %}{% unless product_variant.available %} price--disabled{% endunless %}">
+  <span class="price__current">{{ product_variant.price | money }}</span>
+  {% if product_variant.compare_at_price > product_variant.price %}
+    <span class="price__compare" style="text-decoration: line-through;">{{ product_variant.compare_at_price | money }}</span>
+  {% endif %}
+</span>

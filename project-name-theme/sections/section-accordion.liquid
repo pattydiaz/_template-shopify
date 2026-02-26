@@ -1,80 +1,144 @@
 {% liquid
-  assign spacing-top = section.settings.spacing-top
-  if spacing-top == true
-    assign spacing-top = section.settings.spacing-size-top | prepend: ' gap-tm--'
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
   else
-    assign spacing-top = ''
+    assign id = ''
   endif
 
-  assign spacing-bottom = section.settings.spacing-bottom
-  if spacing-bottom == true
-    assign spacing-bottom = section.settings.spacing-size-bottom | prepend: ' gap-bm--'
-  else
-    assign spacing-bottom = ''
-  endif
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
 
-  assign container-size = section.settings.container-size | prepend: 'container-'
+  assign accordion_animate = section.settings.accordion_animate
+  assign accordion_counter = 0
 
-  assign animations = section.settings.animations
-  if animations == true and request.design_mode == false
-    assign animations = ' animated animated-item animate-up-in'
-  endif
 %}
 
-<div class="accordion-wrap{{ spacing-top }}{{ spacing-bottom }}">
-  <div class="container {{ container-size }}{{ animations }}">
+<div {{ id }}class="accordion-wrapper{{ spacing_top }}{{ spacing_bottom }}">
 
-    {% for block in section.blocks %}
-      {% case block.type %}
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+    
+  <div class="accordion-container{% if accordion_animate == true %} accordion-animated{% endif %} container{{ container_size }}">
+    {% if section.blocks %}
+      <ul class="accordion-list ls-none">
+  
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
 
-        {% when 'panel' %}
 
-        {% liquid
-          assign accordion-title = block.settings.accordion-title
-          assign accordion-content = block.settings.accordion-content
-          assign contents-columns = section.settings.contents-col
-          if contents-columns == true
-            assign contents-columns = ' contents-columns'
-          else
-            assign contents-columns = ''
-          endif
-        %}
+            {%- when 'accordion_row' -%}
+            {% liquid
+              assign accordion_counter = accordion_counter | plus: 1
+              assign accordion_heading = block.settings.accordion_heading
+              assign accordion_blurb = block.settings.accordion_blurb
 
-        <div class="accordion-item border-y-brown" style="--border-width: 1px;">
-          <button class="accordion-header heading-4 button-opacity py-2 color-brown" aria-label="{{ accordion-title }}">{{ accordion-title }}</button>
-          <div class="accordion-content">
-            <div class="contents{{ contents-columns }} pb-2">{{ accordion-content }}</div>
-          </div>
-        </div>
+              assign accordion_page_handle = block.settings.accordion_page
+              assign accordion_page = pages[accordion_page_handle]
 
-      {% endcase %}
-    {% endfor %}
+              assign show_template_warning = false
 
+              if accordion_page != blank
+                if accordion_page.template_suffix == 'ghost'
+                  if accordion_page.content != blank
+                    assign accordion_blurb = accordion_page.content
+                  endif
+                else
+                  assign show_template_warning = true
+                endif
+              endif
+            %}
+            <li class="accordion-item accordion-panel border-bottom-current py-2">
+              <button class="accordion-btn d-flex d-flex--align-center d-flex--justify-between text-bold text-uppercase{% if request.design_mode %} active{% else %}{% if accordion_counter == 1 and accordion_animate == false %} open{% endif %}{% endif %}">{{ accordion_heading }}<div class="icon-xs"><span><i class="icon-plus"></i></span></div></button>
+              <div class="accordion-content{% if request.design_mode %} active{% else %}{% if accordion_counter == 1 and accordion_animate == false %} open{% endif %}{% endif %}">
+                <div class="accordion-content-container contents blurb pt-1{% if accordion_page != blank %} has-page{% endif %}">
+                  {{ accordion_blurb }}
+                  {% if show_template_warning and request.design_mode %}
+                    <p>⚠️ The selected page must use the <strong>Ghost</strong> template.</p>
+                  {% endif %}
+                </div>
+              </div>
+            </li>
+
+
+          {%- endcase -%}
+        {%- endfor -%}
+        
+      </ul>
+    {% endif %}
   </div>
+
 </div>
 
 {% schema %}
   {
     "name": "Accordion",
-    "class": "accordion section",
     "tag": "section",
+    "class": "accordion section",
     "settings": [
+      {
+        "type": "header",
+        "content": "Section ID Options"
+      },
+        {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
       {
         "type": "header",
         "content": "Spacing Options"
       },
       {
-        "type": "checkbox",
-        "id": "spacing-top",
-        "default": false,
-        "label": "Section Spacing Top"
+        "type": "select",
+        "id": "spacing_top",
+        "default": "md",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
       },
       {
         "type": "select",
-        "id": "spacing-size-top",
-        "default": "lg",
-        "label": "Spacing Size Top",
+        "id": "spacing_bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
         "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
           {
             "label": "X-Small",
             "value": "xs"
@@ -101,47 +165,24 @@
       },
       {
         "type": "checkbox",
-        "id": "spacing-bottom",
+        "id": "spacing_header",
         "default": false,
-        "label": "Section Spacing Bottom"
-      }, {
-        "type": "select",
-        "id": "spacing-size-bottom",
-        "default": "lg",
-        "label": "Spacing Size Bottom",
-        "options": [
-          {
-            "label": "X-Small",
-            "value": "xs"
-          },
-          {
-            "label": "Small",
-            "value": "sm"
-          },
-          {
-            "label": "Medium",
-            "value": "md"
-          },
-          {
-            "label": "Large",
-            "value": "lg"
-          }, {
-            "label": "X-Large",
-            "value": "xl"
-          }, {
-            "label": "XX-Large",
-            "value": "xx"
-          }
-        ]
-      }, {
+        "label": "Add extra spacing for header"
+      },
+      {
         "type": "header",
-        "content": "Global Options"
-      }, {
+        "content": "Content Options"
+      },
+      {
         "type": "select",
         "label": "Container Size",
-        "id": "container-size",
-        "default": "xx",
+        "id": "container_size",
+        "default": "xl",
         "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
           {
             "label": "X-Small",
             "value": "xs"
@@ -157,44 +198,63 @@
           {
             "label": "Large",
             "value": "lg"
-          }, {
+          }, 
+          {
             "label": "X-Large",
             "value": "xl"
-          }, {
+          }, 
+          {
             "label": "XX-Large",
             "value": "xx"
-          }, {
+          }, 
+          {
             "label": "Maximum",
             "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
           }
         ]
-      }, {
+      },
+      {
+        "type": "header",
+        "content": "Animation Options"
+      },
+      {
         "type": "checkbox",
-        "id": "animation",
-        "default": false,
-        "label": "Text Animation"
-      }, {
-        "type": "checkbox",
-        "id": "contents-col",
-        "default": true,
-        "label": "Force List Columns"
+        "id": "accordion_animate",
+        "label": "Animate Fist Accordion Row",
+        "default": true
       }
     ],
     "blocks": [
       {
-        "type": "panel",
-        "name": "Panel",
+        "type": "accordion_row",
+        "name": "Accordion Row",
         "settings": [
           {
             "type": "text",
-            "label": "Accordion Panel Title",
-            "id": "accordion-title",
+            "id": "accordion_heading",
+            "label": "Heading",
             "default": "Lorem Ipsum"
-          }, {
+          },
+          {
             "type": "richtext",
-            "label": "Accordion Panel Content",
-            "id": "accordion-content",
-            "default": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est amet dolore libero asperiores porro. Placeat id rerum sunt accusamus fugit vitae, doloribus praesentium consequatur, quisquam, earum nobis harum numquam magni?</p><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A recusandae saepe quas dolore iure quos sint culpa modi ullam odio. Ratione nulla cumque placeat, rem earum est ipsa aliquid eaque.</p>"
+            "id": "accordion_blurb",
+            "label": "Text Blurb",
+            "default": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Adipisci nobis nam cumque ullam modi aliquam minima eum consequuntur quos. Rem libero magni quaerat neque pariatur consectetur mollitia quo aliquam rerum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse minima incidunt ad exercitationem fugiat, nesciunt magni sed laboriosam maiores distinctio magnam omnis tenetur dicta animi veritatis eum itaque quaerat dignissimos?</p>"
+          },
+          {
+            "type": "header",
+            "content":"Advanced Options",
+            "info": "⚠️ This action replaces the text blurb. Use 'Page Content' for enhanced formatting options."
+          },
+          {
+            "type": "page",
+            "id": "accordion_page",
+            "label": "Page Content",
+            "info": "⚠️ Make sure any page selected is utilizing the 'Ghost' template."
           }
         ]
       }
@@ -204,7 +264,13 @@
         "name": "Accordion",
         "blocks": [
           {
-            "type": "panel"
+            "type": "accordion_row"
+          },
+          {
+            "type": "accordion_row"
+          },
+          {
+            "type": "accordion_row"
           }
         ]
       }

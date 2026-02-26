@@ -1,3 +1,7 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
 :root {
   @each $name, $color in $colors {
     --#{$name}: #{$color};
@@ -13,3 +17,5 @@
     background-color: #{$color};
   }
 }
+
+/*! purgecss end ignore */

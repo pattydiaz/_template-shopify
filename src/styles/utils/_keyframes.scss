@@ -1,4 +1,18 @@
+@use "../shared" as *;
+
 @keyframes spin {
-  0% {transform: rotate(0) translate3d(0,0,0);}
-  100% {transform: rotate(360deg) translate3d(0,0,0);}
+  from {
+    transform: rotate(0deg) translate3d(0,0,0);
+    transform-origin: 50% 50%;
+  }
+
+  to {
+    transform: rotate(360deg) translate3d(0,0,0);
+    transform-origin: 50% 50%;
+  }
+}
+
+@keyframes transform {
+  0% { transform: var(--transform-start, translate3d(0,0,0)); }
+  100% { transform: var(--transform-end, translate3d(0,-10px,0)); }
 }

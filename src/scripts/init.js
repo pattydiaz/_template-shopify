@@ -1,40 +1,38 @@
 var Project = {
-  init: function() {
+  init() {
+    loaded = true;
+    Scrolling.top();
+    Page.init();
+    Project.build();
+  },
+
+  build() {
     Buttons.init();
     Parallax.init();
-    Inputs.init();
-    // Video.init();
-    // Slider.init();
+    Accordion.init();
+    Slider.init();
     // Newsletter.init();
-    // Accordion.init();
-
     Header.init();
-    // Navigation.init();
+    Navigation.init();
     // Modal.init();
-    // Consent.init();
-    Drawer.init();
-
+    Products.init();
     Product.init();
-  },
-  reinit: function() {
-    lazyload.update();
     Drawer.init();
+    CartAdd.init();
+  },
+
+  reinit() {
+    lazyload.update();
+    Cart.init();
+    Drawer.init();
+    CartAdd.init();
   }
 };
 
+document.addEventListener('DOMContentLoaded', () => {
+  Project.init();
+});
 
-
-$(function() {
-  
-  w.on('load',function(){
-    loaded = true;
-    
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0,0);
-
-    Page.init();
-    Wrapper.init();
-    Project.init();
-
-  });
+document.addEventListener('shopify:section:load', () => {
+  Project.reinit();
 });

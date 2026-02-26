@@ -1,0 +1,15 @@
+{% comment %}
+  Ghost Page Template
+  - Page must remain "Visible" to be selectable
+  - Content never renders on frontend
+  - Safe to reference via page picker
+{% endcomment %}
+
+{% liquid
+  assign _ = page.content
+%}
+
+{% comment %}
+  Intentionally render nothing.
+  page.content is accessed so Shopify does not tree-shake it.
+{% endcomment %}

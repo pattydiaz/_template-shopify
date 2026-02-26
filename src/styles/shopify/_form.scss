@@ -1,0 +1,29 @@
+@use "../shared" as *;
+
+$form-bg: $white;
+$form-color: $black;
+
+/*! purgecss start ignore */
+
+shopify-forms-embed {
+  // --forms-body-font: #{$fs-normal} #{$fw-normal} 17px/1 #{$ff-helvetica};
+  // --forms-heading-font: #{$fs-normal} #{$fw-normal} 32px/1 #{$ff-helvetica};
+  --heading-font-size: 32px;
+  --form-error-color: #{$error};
+  --form-text-color: #{$form-color};
+  --form-placeholder-color: #{$black-transparent};
+  --form-background-color: #{$form-bg};
+  --button-text-color: #{$white};
+  --button-background-color: #{$black};
+  --form-field-border: 0 0 0 0 #20202033;
+  --form-field-border-focused: 0 0 0 0 #29333a;
+  --button-border: 0px solid none;
+  --form-field-border-radius: 0;
+  --form-field-padding: 14px;
+  --button-border-radius: 0;
+  --container-max-w: 100%;
+  --inline-container-max-width: 100%;
+  // --inline-form-alignment: center;
+}
+
+/*! purgecss end ignore */

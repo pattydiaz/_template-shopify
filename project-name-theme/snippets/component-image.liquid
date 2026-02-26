@@ -1,44 +1,62 @@
 {% liquid
-
-  if class == blank
-    assign class = 'img-cover'
-  endif
-
-  if size == blank
-    assign size = '2000x'
-  endif
-
-  if lazy == false
-    assign lazy = false
-  else 
-    assign lazy = true
-  endif
-
-  if lazy == true
-    assign data = 'data-'
-    assign lazy_class = ' lazy'
-  elsif lazy == false 
-    assign data = ''
-    assign lazy_class = ''
-  endif
+  assign class = class | default: 'img-cover'
+  assign img_class = img_class | default: ''
+  assign attr = attr | default: 'data'
+  assign size_width = size | default: 2000 | plus: 0
+  assign lazy = lazy | default: true, allow_false: true
+  assign critical = critical | default: false, allow_false: true
+  assign pixel = 'data:image/gif;base64,R0lGODlhAQABAAAAACw='
 %}
 
-{% if img != blank %}
-  <img {{ data }}srcset="
-    {%- if img.width >= 150 -%}{{ img | img_url: '150x' }} 150w,{%- endif -%}
-    {%- if img.width >= 375 -%}{{ img | img_url: '375x' }} 375w,{%- endif -%}
-    {%- if img.width >= 750 -%}{{ img | img_url: '750x' }} 750w,{%- endif -%}
-    {%- if img.width >= 1100 -%}{{ img | img_url: '1100x' }} 1100w,{%- endif -%}
-    {%- if img.width >= 1500 -%}{{ img | img_url: '1500x' }} 1500w,{%- endif -%}
-    {%- if img.width >= 1780 -%}{{ img | img_url: '1780x' }} 1780w,{%- endif -%}
-    {%- if img.width >= 2000 -%}{{ img | img_url: '2000x' }} 2000w,{%- endif -%}
-    {{ img | img_url: 'master' }} {{ img.width }}w" 
-    class="{{ class }}{{ lazy_class }}" 
-    sizes="" 
-    {{ data }}src="{{ img | img_url: size }}" 
-    loading="lazy" 
-    alt="{{ img.alt | escape }}" 
-    width="{{ img.width }}" 
-    height="{{ img.width | divided_by: img.aspect_ratio }}"
+{% if request.design_mode %}
+  {% assign critical = true %}
+{% endif %}
+
+{% if critical %}
+  {% assign lazy_class = '' %}
+  {% assign attr_prefix = '' %}
+  {% assign loading = 'eager' %}
+  {% assign fetchpriority = 'high' %}
+  {% assign render_width = size_width | at_most: img.width %}
+  {% assign src_value = img | image_url: width: render_width %}
+  {% capture srcset_value %}{{ img | image_url: width: img.width }} {{ img.width }}w{% endcapture %}
+{% else %}
+  {% if lazy == true or lazy == 'true' %}
+    {% assign lazy_class = ' lazy' %}
+    {% assign attr_prefix = attr | append: '-' %}
+    {% assign loading = 'lazy' %}
+  {% else %}
+    {% assign lazy_class = ' lazy-ignore' %}
+    {% assign attr_prefix = '' %}
+    {% assign loading = 'eager' %}
+  {% endif %}
+  {% assign fetchpriority = 'auto' %}
+  {% assign render_width = size_width | at_most: img.width %}
+  {% assign src_value = pixel %}
+
+  {% capture srcset_value -%}
+{% if img.width >= 150 -%}{{ img | image_url: width: 150 }} 150w,{% endif -%}
+{% if img.width >= 375 -%}{{ img | image_url: width: 375 }} 375w,{% endif -%}
+{% if img.width >= 750 -%}{{ img | image_url: width: 750 }} 750w,{% endif -%}
+{% if img.width >= 1100 -%}{{ img | image_url: width: 1100 }} 1100w,{% endif -%}
+{% if img.width >= 1500 -%}{{ img | image_url: width: 1500 }} 1500w,{% endif -%}
+{% if img.width >= 1780 -%}{{ img | image_url: width: 1780 }} 1780w,{% endif -%}
+{% if img.width >= 2000 -%}{{ img | image_url: width: 2000 }} 2000w,{% endif -%}
+{{ img | image_url }} {{ img.width }}w
+{%- endcapture %}
+{% endif %}
+
+{% if img %}
+  <img
+    src="{{ src_value }}"
+    {{ attr_prefix }}src="{{ img | image_url: width: render_width }}"
+    {{ attr_prefix }}srcset="{{ srcset_value | strip | replace: '\n','' }}"
+    class="{{ class }} {{ img_class }}{{ lazy_class }}"
+    decoding="async"
+    loading="{{ loading }}"
+    fetchpriority="{{ fetchpriority }}"
+    alt="{{ img.alt | escape }}"
+    width="{{ render_width }}"
+    height="{{ render_width | divided_by: img.aspect_ratio }}"
   >
 {% endif %}

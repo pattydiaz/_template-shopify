@@ -1,117 +1,126 @@
 {% liquid
 
-assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
-assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
-assign spacing-header = section.settings.spacing-header
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
 
-assign container-size = section.settings.container-size | prepend: ' container-'
-
-assign img = section.settings.img
-assign img-ratio = section.settings.img-ratio
-assign img-position-x = section.settings.img-position-x
-assign img-position-y = section.settings.img-position-y
-assign img-position = img-position-x | prepend: '--position:' | append: '% ' | append: img-position-y | append: '%;'
-
-assign split-swap = section.settings.split-swap
-if split-swap == true
-  assign split-swap = ' d-flex-swap'
-else 
-  assign split-swap = ''
-endif
-
-assign split-spacing-tablet = section.settings.split-spacing-tablet | prepend: '--column-spacing:' | append: 'px;'
-assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend: '--column-spacing:' | append: 'px;'
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
 
 %}
 
-{% if spacing-header == true %}
-  <div class="gap-hh"></div>
-{% endif %}
 
-<div class="hero-wrap{{ spacing-top }}{{ spacing-bottom }}">
-  <div class="container{{ container-size }} d-flex-d d-flex--center{{ split-swap }}{% if request.design_mode == false %} animated animated-group animate-up-in{% endif %}">
+<div {{ id }}class="intro-wrapper{{ spacing_top }}{{ spacing_bottom }}">
 
-    <div class="column" style="{{ split-spacing-tablet }} {{ split-spacing-desktop }}">
-      <div class="{{ img-ratio }}{% if img == blank or request.design_mode == true %} bg-black{% endif %}" style="{{ img-position }}">
-        {% render 'component-image', img: img, class: 'img-cover', size: '1500x' %}
-      </div>
-    </div>
-
-    <div class="column d-flex-d d-flex--center" style="{{ split-spacing-tablet }} {{ split-spacing-desktop }}">
-      <div class="column-container d-ib">
-        {% if section.blocks %}
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
     
-          {%- for block in section.blocks -%}
-            {%- case block.type -%}
+  <div class="intro-container container{{ container_size }}">
+    {% if section.blocks %}
+      <div class="intro-text {{ text_alignment }}">
   
-  
-              {%- when 'subheading' -%}
-              {% liquid
-                assign subheading = block.settings.subheading
-                assign subheading-spacing-top = block.settings.subheading-spacing-top | prepend: ' mt-'
-                assign subheading-spacing-bottom = block.settings.subheading-spacing-bottom | prepend: ' mb-'
-              %}  
-              <h3 class="subheading{{ subheading-spacing-top }}{{ subheading-spacing-bottom }}">{{ subheading }}</h3>
-  
-  
-              {%- when 'heading' -%}
-              {% liquid
-                assign heading = block.settings.heading
-                assign heading-spacing-top = block.settings.heading-spacing-top | prepend: ' mt-'
-                assign heading-spacing-bottom = block.settings.heading-spacing-bottom | prepend: ' mb-'
-                assign heading-type = block.settings.heading-type | prepend: 'heading-'
-              %}
-              <h1 class="{{ heading-type }}{{ heading-spacing-top }}{{ heading-spacing-bottom }}">{{ heading }}</h1>
-  
-  
-              {%- when 'blurb' -%}
-              {% liquid
-                assign blurb = block.settings.blurb
-                assign blurb-spacing-top = block.settings.blurb-spacing-top | prepend: ' mt-'
-                assign blurb-spacing-bottom = block.settings.blurb-spacing-bottom | prepend: ' mb-'
-                assign blurb-width = block.settings.blurb-width | prepend: '--mw:' | append: 'px;'
-              %}
-              <div class="blurb buddy w-max{% if text-alignment contains 'center' %} mx-auto{% endif %}{{ blurb-spacing-top }}{{ blurb-spacing-bottom }}" style="{{ blurb-width }}">{{ blurb }}</div>
-  
-  
-              {%- when 'button' -%}
-              {% liquid
-                assign button-spacing-top = block.settings.button-spacing-top | prepend: ' mt-'
-                assign button-spacing-bottom = block.settings.button-spacing-bottom | prepend: ' mb-'
-                assign button-type = block.settings.button-type
-                assign button-theme = block.settings.button-theme
-                assign button-url = block.settings.button-url
-                assign button-text = block.settings.button-text
-              %}
-              <div class="cta{{ button-spacing-top }}{{ button-spacing-bottom }}">
-                <a href="{{ button-url }}" class="btn btn-{{ button-type }}--{{ button-theme }}" title="{{ button-text }}">{{ button-text }}</a>
-              </div>
-  
-  
-            {%- endcase -%}
-          {%- endfor -%}
-  
-        {% endif %}
-      </div>
-    </div>
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
 
+
+            {%- when 'subheading' -%}
+            {% liquid
+              assign subheading = block.settings.subheading
+              assign subheading_spacing_top = block.settings.subheading_spacing_top | prepend: ' mt-'
+              assign subheading_spacing_bottom = block.settings.subheading_spacing_bottom | prepend: ' mb-'
+            %}  
+            <h3 class="heading-4{{ subheading_spacing_top }}{{ subheading_spacing_bottom }}">{{ subheading }}</h3>
+
+
+            {%- when 'heading' -%}
+            {% liquid
+              assign heading = block.settings.heading
+              assign heading_spacing_top = block.settings.heading_spacing_top | prepend: ' mt-'
+              assign heading_spacing_bottom = block.settings.heading_spacing_bottom | prepend: ' mb-'
+            %}
+            <h2 class="heading-2{{ heading_spacing_top }}{{ heading_spacing_bottom }}">{{ heading }}</h2>
+
+
+            {%- when 'blurb' -%}
+            {% liquid
+              assign blurb = block.settings.blurb
+              assign blurb_spacing_top = block.settings.blurb_spacing_top | prepend: ' mt-'
+              assign blurb_spacing_bottom = block.settings.blurb_spacing_bottom | prepend: ' mb-'
+              assign blurb_width_mobile = block.settings.blurb_width_mobile | prepend: '--mw:' | append: 'px;'
+              assign blurb_width_desktop = block.settings.blurb_width_desktop | prepend: '--mw-upd:' | append: 'px;'
+            %}
+            <div class="blurb contents w-100 w-max{% if text_alignment contains 'center' %} mx-auto{% endif %}{{ blurb_spacing_top }}{{ blurb_spacing_bottom }}" style="{{ blurb_width_mobile }} {{ blurb_width_desktop }}">{{ blurb }}</div>
+
+
+            {%- when 'button' -%}
+            {% liquid
+              assign button_spacing_top = block.settings.button_spacing_top | prepend: ' mt-'
+              assign button_spacing_bottom = block.settings.button_spacing_bottom | prepend: ' mb-'
+              assign button_url = block.settings.button_url
+              assign button_text = block.settings.button_text
+            %}
+            <div class="cta{{ button_spacing_top }}{{ button_spacing_bottom }}">
+              <a href="{{ button_url }}" class="btn btn-primary" title="{{ button_text }}"{% if button_url contains 'http://' or button_url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ button_text }}</a>
+            </div>
+
+
+            {%- when 'graphic' -%}
+            {% liquid
+              assign graphic = block.settings.graphic
+              assign graphic_spacing_top = block.settings.graphic_spacing_top | prepend: ' mt-'
+              assign graphic_spacing_bottom = block.settings.graphic_spacing_bottom | prepend: ' mb-'
+              assign graphic_ratio = block.settings.graphic_ratio | prepend: ' ratio-'
+              assign graphic_fit = block.settings.graphic_fit | prepend: 'img-'
+              assign graphic_width_mobile = block.settings.graphic_width_mobile | prepend: '--mw:' | append: 'px;'
+              assign graphic_width_desktop = block.settings.graphic_width_desktop | prepend: '--mw-upt:' | append: 'px;'
+            %}
+            <div class="intro-graphic w-100 w-max{% if text_alignment contains 'center' %} mx-auto{% endif %}{{ graphic_spacing_top }}{{ graphic_spacing_bottom }}" style="{{ graphic_width_mobile }} {{ graphic_width_desktop }}">
+              <div class="ratio{{ graphic_ratio }} bg-black">
+                {% render 'component-image', img: graphic, class: graphic_fit, lazy: true %}
+              </div>
+            </div>
+
+
+          {%- endcase -%}
+        {%- endfor -%}
+        
+      </div>
+    {% endif %}
   </div>
+
 </div>
 
 {% schema %}
   {
-    "name": "Split",
+    "name": "Intro Text",
     "tag": "section",
-    "class": "split section",
+    "class": "intro section",
     "settings": [
       {
         "type": "header",
-        "content": "Spacing Options",
-        "info": "Spacing only works if Section Size is set to 'none'"
+        "content": "Section ID Options"
+      },
+        {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options"
       },
       {
         "type": "select",
-        "id": "spacing-top",
+        "id": "spacing_top",
         "default": "md",
         "label": "Section Spacing Top",
         "options": [
@@ -145,7 +154,7 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
       },
       {
         "type": "select",
-        "id": "spacing-bottom",
+        "id": "spacing_bottom",
         "default": "md",
         "label": "Section Spacing Bottom",
         "options": [
@@ -179,7 +188,7 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
       },
       {
         "type": "checkbox",
-        "id": "spacing-header",
+        "id": "spacing_header",
         "default": false,
         "label": "Add extra spacing for header"
       },
@@ -189,9 +198,9 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
       },
       {
         "type": "select",
-        "id": "container-size",
-        "default": "md",
         "label": "Container Size",
+        "id": "container_size",
+        "default": "xl",
         "options": [
           {
             "label": "None",
@@ -212,160 +221,44 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
           {
             "label": "Large",
             "value": "lg"
-          }, {
+          }, 
+          {
             "label": "X-Large",
             "value": "xl"
-          }, {
+          }, 
+          {
             "label": "XX-Large",
             "value": "xx"
-          }, {
+          }, 
+          {
             "label": "Maximum",
             "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
           }
         ]
-      },
-      {
-        "type": "header",
-        "content": "Image Options"
-      },
-      {
-        "type": "image_picker",
-        "id": "img",
-        "label": "Image"
       },
       {
         "type": "select",
-        "id": "img-ratio",
-        "default": "ratio-1x1",
-        "label": "Image Ratio",
+        "id": "text_alignment",
+        "label": "Text Alignment",
+        "default": "center",
         "options": [
           {
-            "label":"Ratio 1x1",
-            "value": "ratio-1x1"
+            "label": "Left",
+            "value": "left"
           },
           {
-            "label": "Ratio 2x1",
-            "value": "ratio-2x1"
+            "label": "Center",
+            "value": "center"
           },
           {
-            "label": "Ratio 1x2",
-            "value": "ratio-1x2"
-          },
-          {
-            "label": "Ratio 4x3",
-            "value": "ratio-4x3"
-          },
-          {
-            "label": "Ratio 3x4",
-            "value": "ratio-3x4"
-          },
-          {
-            "label": "Ratio 5x4",
-            "value": "ratio-5x4"
-          },
-          {
-            "label": "Ratio 4x5",
-            "value": "ratio-4x5"
-          },
-          {
-            "label": "Ratio 5x7",
-            "value": "ratio-5x7"
-          },
-          {
-            "label": "Ratio 7x5",
-            "value": "ratio-7x5"
-          },
-          {
-            "label":" Ratio 16x9",
-            "value": "ratio-16x9"
-          },
-          {
-            "label":" Ratio 9x16",
-            "value": "ratio-9x16"
-          },
-          {
-            "label":"R atio 16x10",
-            "value": "ratio-16x10"
-          },
-          {
-            "label":"R atio 10x16",
-            "value": "ratio-10x16"
-          },
-          {
-            "label":" Ratio 21x9",
-            "value": "ratio-21x9"
-          },
-          {
-            "label":" Ratio 9x21",
-            "value": "ratio-9x21"
-          },
-          {
-            "label":" Ratio 18x6",
-            "value": "ratio-18x6"
-          },
-          {
-            "label":" Ratio 6x18",
-            "value": "ratio-6x18"
-          },
-          {
-            "label":" Ratio 10x1",
-            "value": "ratio-10x1"
-          },
-          {
-            "label":" Ratio 1x10",
-            "value": "ratio-1x10"
+            "label": "Right",
+            "value": "right"
           }
         ]
-      },
-      {
-        "type": "range",
-        "id": "img-position-x",
-        "default": 50,
-        "label": "Image Position (L/R)",
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "unit": "%"
-      },
-      {
-        "type": "range",
-        "id": "img-position-y",
-        "default": 50,
-        "label": "Image Position (T/B)",
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "unit": "%"
-      },
-      {
-        "type": "header",
-        "content": "Split Options"
-      },
-      {
-        "type": "checkbox",
-        "id": "split-swap",
-        "default": false,
-        "label": "Swap the column order"
-      },
-      {
-        "type": "range",
-        "id": "split-spacing-tablet",
-        "default": 20,
-        "label": "Spacing L/R (Tablet)",
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "unit": "px"
-      },
-      {
-        "type": "range",
-        "id": "split-spacing-desktop",
-        "default": 30,
-        "label": "Spacing L/R (Desktop)",
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "unit": "px"
       }
     ],
     "blocks": [
@@ -376,7 +269,7 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
         "settings": [
           {
             "type": "select",
-            "id":"heading-spacing-top",
+            "id":"heading_spacing_top",
             "label": "Spacing Top",
             "default": "none",
             "options": [
@@ -412,7 +305,7 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
           },
           {
             "type": "select",
-            "id":"heading-spacing-bottom",
+            "id":"heading_spacing_bottom",
             "label": "Spacing Bottom",
             "default": "none",
             "options": [
@@ -443,38 +336,6 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
               {
                 "label": "40px",
                 "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id": "heading-type",
-            "label": "Heading Type",
-            "default": "2",
-            "options": [
-              {
-                "label": "Heading 1",
-                "value": "1"
-              },
-              {
-                "label": "Heading 2",
-                "value": "2"
-              },
-              {
-                "label": "Heading 3",
-                "value": "3"
-              },
-              {
-                "label": "Heading 4",
-                "value": "4"
-              },
-              {
-                "label": "Heading 5",
-                "value": "5"
-              },
-              {
-                "label": "Heading 6",
-                "value": "6"
               }
             ]
           },
@@ -493,7 +354,7 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
         "settings": [
           {
             "type": "select",
-            "id":"subheading-spacing-top",
+            "id":"subheading_spacing_top",
             "label": "Spacing Top",
             "default": "none",
             "options": [
@@ -529,9 +390,9 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
           },
           {
             "type": "select",
-            "id":"subheading-spacing-bottom",
+            "id":"subheading_spacing_bottom",
             "label": "Spacing Bottom",
-            "default": "none",
+            "default": "1",
             "options": [
               {
                 "label": "None",
@@ -578,9 +439,9 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
         "settings": [
           {
             "type": "select",
-            "id":"blurb-spacing-top",
+            "id":"blurb_spacing_top",
             "label": "Spacing Top",
-            "default": "none",
+            "default": "q",
             "options": [
               {
                 "label": "None",
@@ -614,7 +475,7 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
           },
           {
             "type": "select",
-            "id":"blurb-spacing-bottom",
+            "id":"blurb_spacing_bottom",
             "label": "Spacing Bottom",
             "default": "none",
             "options": [
@@ -650,18 +511,28 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
           },
           {
             "type": "range",
-            "id": "blurb-width",
-            "default": 400,
-            "label": "Text Blurb Width",
+            "id": "blurb_width_mobile",
+            "default": 650,
+            "label": "Text Blurb Width (Mobile)",
             "step": 10,
             "min": 200,
-            "max": 600,
+            "max": 1200,
             "unit": "px"
           }, 
           {
-            "type": "textarea",
+            "type": "range",
+            "id": "blurb_width_desktop",
+            "default": 650,
+            "label": "Text Blurb Width (Desktop)",
+            "step": 10,
+            "min": 200,
+            "max": 1200,
+            "unit": "px"
+          }, 
+          {
+            "type": "richtext",
             "id": "blurb",
-            "default": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?",
+            "default": "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas?</p>",
             "label": "Text Blurb"
           }
         ]
@@ -673,7 +544,96 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
         "settings": [
           {
             "type": "select",
-            "id":"button-spacing-top",
+            "id":"button_spacing_top",
+            "label": "Spacing Top",
+            "default": "3",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"button_spacing_bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "button_text",
+            "default": "Lorem Ipsum CTA",
+            "label": "Button Text"
+          }, {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button Link"
+          }
+        ]
+      },
+      {
+        "type": "graphic",
+        "name": "Graphic",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"graphic_spacing_top",
             "label": "Spacing Top",
             "default": "none",
             "options": [
@@ -709,7 +669,7 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
           },
           {
             "type": "select",
-            "id":"button-spacing-bottom",
+            "id":"graphic_spacing_bottom",
             "label": "Spacing Bottom",
             "default": "none",
             "options": [
@@ -744,57 +704,149 @@ assign split-spacing-desktop = section.settings.split-spacing-desktop | prepend:
             ]
           },
           {
+            "type": "range",
+            "id": "graphic_width_mobile",
+            "default": 100,
+            "label": "Graphic Width (Mobile)",
+            "step": 10,
+            "min": 50,
+            "max": 1000,
+            "unit": "px"
+          }, 
+          {
+            "type": "range",
+            "id": "graphic_width_desktop",
+            "default": 100,
+            "label": "Graphic Width (Desktop)",
+            "step": 10,
+            "min": 50,
+            "max": 1000,
+            "unit": "px"
+          },
+          {
             "type": "select",
-            "id":"button-type",
-            "label": "Button Type",
-            "default": "primary",
+            "id": "graphic_ratio",
+            "default": "1x1",
+            "label": "Graphic Aspect Ratio",
             "options": [
-              {
-                "label":"Primary",
-                "value": "primary"
+              { 
+                "value": "1x1", 
+                "label": "Aspect Ratio 1:1" 
               },
-              {
-                "label":"Secondary",
-                "value": "secondary"
-              }
+              { 
+                "value": "2x1", 
+                "label": "Aspect Ratio 2:1" 
+              },
+              { 
+                "value": "1x2", 
+                "label": "Aspect Ratio 1:2" 
+              },
+              { 
+                "value": "3x1", 
+                "label": "Aspect Ratio 3:1" 
+              },
+              { 
+                "value": "1x3", 
+                "label": "Aspect Ratio 1:3" 
+              },
+              { 
+                "value": "4x3", 
+                "label": "Aspect Ratio 4:3" 
+              },
+              { 
+                "value": "3x4", 
+                "label": "Aspect Ratio 3:4" 
+              },
+              { 
+                "value": "5x4", 
+                "label": "Aspect Ratio 5:4" 
+              },
+              { 
+                "value": "4x5", 
+                "label": "Aspect Ratio 4:5" 
+              },
+              { 
+                "value": "5x7", 
+                "label": "Aspect Ratio 5:7" 
+              },
+              { 
+                "value": "7x5", 
+                "label": "Aspect Ratio 7:5" 
+              },
+              { 
+                "value": "16x9", 
+                "label": "Aspect Ratio 16:9" 
+              },
+              { 
+                "value": "9x16", 
+                "label": "Aspect Ratio 9:16" 
+              },
+              { 
+                "value": "16x10", 
+                "label": "Aspect Ratio 16:10" 
+              },
+              { 
+                "value": "10x16", 
+                "label": "Aspect Ratio 10:16" 
+              },
+              { 
+                "value": "21x9", 
+                "label": "Aspect Ratio 21:9" 
+              },
+              { 
+                "value": "9x21", 
+                "label": "Aspect Ratio 9:21" 
+              },
+              { 
+                "value": "18x6", 
+                "label": "Aspect Ratio 18:6" 
+              },
+              { 
+                "value": "6x18", 
+                "label": "Aspect Ratio 6:18" 
+              },
+              { 
+                "value": "10x1", 
+                "label": "Aspect Ratio 10:1" 
+              },
+              { 
+                "value": "1x10", 
+                "label": "Aspect Ratio 1:10"
+               }
             ]
           },
           {
             "type": "select",
-            "id":"button-theme",
-            "label": "Button Theme",
-            "default": "dark",
+            "id": "graphic_fit",
+            "default": "contain",
+            "label": "Graphic Image Fit",
             "options": [
-              {
-                "label":"Dark",
-                "value": "dark"
+              { 
+                "value": "contain", 
+                "label": "Contain"
               },
-              {
-                "label":"Light",
-                "value": "light"
+              { 
+                "value": "cover", 
+                "label": "Cover" 
               }
             ]
           },
           {
-            "type": "text",
-            "id": "button-text",
-            "default": "Lorem Ipsum CTA",
-            "label": "Button Text"
-          }, {
-            "type": "url",
-            "id": "button-url",
-            "label": "Button Link"
+            "type": "image_picker",
+            "id": "graphic",
+            "label": "Graphic Image"
           }
         ]
       }
     ],
     "presets": [
       {
-        "name": "Split",
+        "name": "Intro Text",
         "blocks": [
           {
             "type": "heading"
-          }, {
+          },
+          {
             "type": "blurb"
           }
         ]

@@ -1,54 +1,104 @@
-var Scrolling = {
-  init: function() {
-    Scrolling.build();
+const Scrolling = {
+  init() {
+    this.build();
   },
-  build: function() {
-    Scrolling.animate();
-    Scrolling.fix();
-  },
-  animate: function() {
-    var animated = $('.animated');
 
-    animated.each(function(){
-      var $this = $(this);
-      var delay = $this.data('delay') !== undefined ? $this.data('delay') : 0;
-      var offset = $this.data('offset') !== undefined ? $this.data('offset') : 0;
+  build() {
+    this.animate();
+    this.hash();
+    this.fix();
+  },
+
+  scrollTo(targetEl, duration = 1) {
+    if (!targetEl) return;
+
+    const startY = window.scrollY;
+    const endY = targetEl.getBoundingClientRect().top + window.scrollY;
+
+    gsap.to({ y: startY }, {
+      y: endY,
+      duration,
+      ease: 'power1.inOut',
+      onUpdate() {
+        window.scrollTo(0, this.targets()[0].y);
+      }
+    });
+  },
+
+  animate() {
+    $$('.animated').forEach(el => {
+      const $el = $(el);
+
+      const delay = parseInt($el.attr('data-delay')) || 0;
+      const offset = $el.attr('data-offset') || 0;
+      const isReverse = el.classList.contains('animated-reverse');
+      const height = el.offsetHeight;
+
+      let enterTimeout, leaveTimeout;
 
       ScrollTrigger.create({
-        // markers: true,
-        trigger: $this,
-        start: offset+' 60%',
-        end: "+="+$this.outerHeight(),
+        trigger: el,
+        start: `${offset} 60%`,
+        end: `+=${height}`,
+
         onEnter: () => {
-          $this.hasClass('animated-reverse') 
-            ? setTimeout(() => { $this.addClass('active-reverse'); }, delay)
-            : setTimeout(() => { $this.addClass('active'); }, delay);
+          enterTimeout = setTimeout(() => {
+            $el.addClass(isReverse ? 'active-reverse' : 'active');
+          }, delay);
         },
+
         onLeaveBack: () => {
-          if($this.hasClass('animated-reverse'))
-            setTimeout(() => { $this.removeClass('active-reverse'); }, delay);
+          if (isReverse) {
+            if (enterTimeout) clearTimeout(enterTimeout);
+            leaveTimeout = setTimeout(() => {
+              $el.removeClass('active-reverse');
+            }, delay);
+          }
         }
       });
     });
   },
-  lock: function(delay) {
-    var timeout = delay;
-    if(timeout == undefined) timeout = 0;
 
-    setTimeout(() => {
-      $('html, body').css('overflow','hidden');
-    }, timeout);
-  },
-  unlock: function() {
-    $('html, body').css('overflow','');
-  },
-  fix: function() {
-    if (!navigator.userAgent.match(/(Android)/)) {
-      $("body *").filter(function () {
-        if ($(this).css("overflow") == "scroll" || $(this).css("overflow-x") == "scroll" || $(this).css("overflow-y") == "scroll" || $(this).css("overflow") == "overlay" || $(this).css("overflow-x") == "overlay" || $(this).css("overflow-y") == "overlay") {
-          $(this).attr("style", "-webkit-overflow-scrolling: touch !important;");
-        }
+  hash() {
+    const anchor = window.location.hash;
+    if (!anchor) return;
+
+    const $target = $(anchor);
+    if ($target.el) {
+      requestAnimationFrame(() => {
+        this.scrollTo($target.el, 1);
       });
     }
+  },
+
+  lock() {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  },
+
+  unlock() {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  },
+
+  top() {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', () => {
+      window.scrollTo(0, 0)
+      ScrollTrigger.refresh(true);
+    });
+  },
+
+  fix() {
+    if (/Android/.test(navigator.userAgent)) return;
+
+    $$('[style*="overflow"], [style*="scroll"], [style*="overlay"]').forEach(el => {
+      const style = getComputedStyle(el);
+      const overflow = style.overflow + style.overflowX + style.overflowY;
+
+      if (/(scroll|overlay)/.test(overflow)) {
+        el.style.webkitOverflowScrolling = 'touch';
+      }
+    });
   }
 };

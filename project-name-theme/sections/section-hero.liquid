@@ -1,111 +1,103 @@
 {% liquid
 
-assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
-assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
-assign spacing-header = section.settings.spacing-header
+  assign section_size = section.settings.section_size | prepend: ' section-'
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_position = section.settings.text_position
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
 
-assign section-size = section.settings.section-size
-if section-size != 'none'
-  assign section-size = section-size | prepend: ' section-'
-else 
-  assign section-size = ''
-endif
-
-assign container-size = section.settings.container-size | prepend: ' container-'
-
-assign text-color = section.settings.text-color
-if text-color contains 'dark'
-  assign text-color = ' color-black'
-elsif text-color contains 'light'
-  assign text-color = ' color-white'
-else
-  assign text-color = ''
-endif
-
-assign text-alignment = section.settings.text-alignment | prepend: ' text-'
-
-assign bg-img = section.settings.bg-img
-
-assign img-pos-y = section.settings.img-pos-y | append: '%'
-assign img-pos-x = section.settings.img-pos-x | append: '%'
-
-assign img-opacity = section.settings.img-overlay
+  assign hero_fixed = section.settings.hero_fixed
 
 %}
 
-{% if spacing-header == true %}
+{% if spacing_header == true and section_size contains 'none' %}
   <div class="gap-hh"></div>
 {% endif %}
 
-<div class="hero-wrap{{ section-size }}{{ spacing-top }}{{ spacing-bottom }}">
+<div class="hero-wrapper{% if section_size contains 'none' %}{{ spacing_top }}{{ spacing_bottom }}{% else %}{{ section_size }}{% endif %}{% unless section_size contains 'none' or hero_fixed == false %} hero-animate{% endunless %}">
+
+  {% unless section_size contains 'none' or hero_fixed == false %}
+    <div class="hero-fixed">
+  {% endunless %}
   
-  {% if bg-img != blank %}
-    <div class="hero-bg bg-cover bg--overlay" style="--position: {{ img-pos-x }} {{ img-pos-y }};--opacity: {{ img-opacity }};">
-      {% render 'component-image', img: bg-img, class: 'img-cover', size: '1500x' %}
-    </div>
-  {% endif %}
+      {% render 'component-background', class: 'hero-bg', bg_settings: section.settings, critical: true %}
+    
+      <div class="hero-container container{{ container_size }}">
+        {% if section.blocks %}
+          <div class="hero-text {{ text_position }} {{ text_alignment }}">
+      
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+    
+    
+                {%- when 'subheading' -%}
+                {% liquid
+                  assign subheading = block.settings.subheading
+                  assign subheading_spacing_top = block.settings.subheading_spacing_top | prepend: ' mt-'
+                  assign subheading_spacing_bottom = block.settings.subheading_spacing_bottom | prepend: ' mb-'
+                %}  
+                <h3 class="subheading-1{{ subheading_spacing_top }}{{ subheading_spacing_bottom }}">{{ subheading }}</h3>
+    
+    
+                {%- when 'heading' -%}
+                {% liquid
+                  assign heading = block.settings.heading
+                  assign heading_spacing_top = block.settings.heading_spacing_top | prepend: ' mt-'
+                  assign heading_spacing_bottom = block.settings.heading_spacing_bottom | prepend: ' mb-'
+                  assign heading_hide = block.settings.heading_hide
+                %}
+                <h1 class="{% if heading_hide %}sr-only{% else %}hero-heading heading-1{{ heading_spacing_top }}{{ heading_spacing_bottom }}{% endif %}">{{ heading }}</h1>
+    
+    
+                {%- when 'blurb' -%}
+                {% liquid
+                  assign blurb = block.settings.blurb
+                  assign blurb_spacing_top = block.settings.blurb_spacing_top | prepend: ' mt-'
+                  assign blurb_spacing_bottom = block.settings.blurb_spacing_bottom | prepend: ' mb-'
+                  assign blurb_width_mobile = block.settings.blurb_width_mobile | prepend: '--mw:' | append: 'px;'
+                  assign blurb_width_desktop = block.settings.blurb_width_desktop | prepend: '--mw-upd:' | append: 'px;'
+                %}
+                <div class="contents w-100 w-max{% if text_alignment contains 'center' %} mx-auto{% endif %}{{ blurb_spacing_top }}{{ blurb_spacing_bottom }}" style="{{ blurb_width_mobile }} {{ blurb_width_desktop }}">{{ blurb }}</div>
+    
+    
+                {%- when 'button' -%}
+                {% liquid
+                  assign button_spacing_top = block.settings.button_spacing_top | prepend: ' mt-'
+                  assign button_spacing_bottom = block.settings.button_spacing_bottom | prepend: ' mb-'
+                  assign button_url = block.settings.button_url
+                  assign button_text = block.settings.button_text
+                %}
+                <div class="cta{{ button_spacing_top }}{{ button_spacing_bottom }}">
+                  <a href="{{ button_url }}" class="btn btn-primary" title="{{ button_text }}"{% if button_url contains 'http://' or button_url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ button_text }}</a>
+                </div>
 
-  {% if section.blocks %}
-    <div class="hero-text container{{ container-size }}{{ text-alignment }}{{ text-color }}">
 
-      {% if section.settings.animation == true and request.design_mode == false %}
-        <div class="animated animated-group animate-up-in">
+                {%- when 'logo' -%}
+                {% liquid
+                  assign logo = block.settings.logo
+                  assign logo_spacing_top = block.settings.logo_spacing_top | prepend: ' mt-'
+                  assign logo_spacing_bottom = block.settings.logo_spacing_bottom | prepend: ' mb-'
+                  assign logo_width_mobile = block.settings.logo_width_mobile | prepend: '--mw:' | append: 'px;'
+                  assign logo_width_desktop = block.settings.logo_width_desktop | prepend: '--mw-upd:' | append: 'px;'
+                %}
+                <div class="hero-heading hero-logo w-100 w-max{% if text_alignment contains 'center' %} mx-auto{% endif %}{{ logo_spacing_top }}{{ logo_spacing_bottom }}" style="{{ logo_width_mobile }} {{ logo_width_desktop }}">
+                  {% render 'component-image', img: logo, class: 'img-contain', size: 150, critical: true %}
+                </div>
+    
+    
+              {%- endcase -%}
+            {%- endfor -%}
+            
+          </div>
         {% endif %}
+      </div>
 
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-
-
-            {%- when 'subheading' -%}
-            {% liquid
-              assign subheading = block.settings.subheading
-              assign subheading-spacing-top = block.settings.subheading-spacing-top | prepend: ' mt-'
-              assign subheading-spacing-bottom = block.settings.subheading-spacing-bottom | prepend: ' mb-'
-            %}  
-            <h3 class="subheading{{ subheading-spacing-top }}{{ subheading-spacing-bottom }}">{{ subheading }}</h3>
-
-
-            {%- when 'heading' -%}
-            {% liquid
-              assign heading = block.settings.heading
-              assign heading-spacing-top = block.settings.heading-spacing-top | prepend: ' mt-'
-              assign heading-spacing-bottom = block.settings.heading-spacing-bottom | prepend: ' mb-'
-            %}
-            <h1 class="heading-1{{ heading-spacing-top }}{{ heading-spacing-bottom }}">{{ heading }}</h1>
-
-
-            {%- when 'blurb' -%}
-            {% liquid
-              assign blurb = block.settings.blurb
-              assign blurb-spacing-top = block.settings.blurb-spacing-top | prepend: ' mt-'
-              assign blurb-spacing-bottom = block.settings.blurb-spacing-bottom | prepend: ' mb-'
-              assign blurb-width = block.settings.blurb-width | prepend: '--mw:' | append: 'px;'
-            %}
-            <div class="blurb buddy w-max{% if text-alignment contains 'center' %} mx-auto{% endif %}{{ blurb-spacing-top }}{{ blurb-spacing-bottom }}" style="{{ blurb-width }}">{{ blurb }}</div>
-
-
-            {%- when 'button' -%}
-            {% liquid
-              assign button-spacing-top = block.settings.button-spacing-top | prepend: ' mt-'
-              assign button-spacing-bottom = block.settings.button-spacing-bottom | prepend: ' mb-'
-              assign button-type = block.settings.button-type
-              assign button-theme = block.settings.button-theme
-              assign button-url = block.settings.button-url
-              assign button-text = block.settings.button-text
-            %}
-            <div class="cta{{ button-spacing-top }}{{ button-spacing-bottom }}">
-              <a href="{{ button-url }}" class="btn btn-{{ button-type }}--{{ button-theme }}" title="{{ button-text }}">{{ button-text }}</a>
-            </div>
-
-
-          {%- endcase -%}
-        {%- endfor -%}
-
-        {% if section.settings.animation == true and request.design_mode == false %}
-        </div>
-      {% endif %}
+  {% unless section_size contains 'none' or hero_fixed == false %}
     </div>
-  {% endif %}
+  {% endunless %}
 
 </div>
 
@@ -118,12 +110,40 @@ assign img-opacity = section.settings.img-overlay
     "settings": [
       {
         "type": "header",
-        "content": "Spacing Options",
-        "info": "Spacing only works if Section Size is set to 'none'"
+        "content": "Section Options"
       },
       {
         "type": "select",
-        "id": "spacing-top",
+        "id": "section_size",
+        "label": "Section Size",
+        "default": "none",
+        "options": [
+          {
+            "value": "100",
+            "label": "Fullscreen"
+          }, 
+          {
+            "value": "75",
+            "label": "Three-quarters"
+          },
+          {
+            "value": "50",
+            "label": "Half"
+          },
+          {
+            "value": "none",
+            "label": "None"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options",
+        "info": "⚠️ Spacing only works if Section Size is set to 'None'"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
         "default": "md",
         "label": "Section Spacing Top",
         "options": [
@@ -157,7 +177,7 @@ assign img-opacity = section.settings.img-overlay
       },
       {
         "type": "select",
-        "id": "spacing-bottom",
+        "id": "spacing_bottom",
         "default": "md",
         "label": "Section Spacing Bottom",
         "options": [
@@ -191,24 +211,9 @@ assign img-opacity = section.settings.img-overlay
       },
       {
         "type": "checkbox",
-        "id": "spacing-header",
+        "id": "spacing_header",
         "default": false,
         "label": "Add extra spacing for header"
-      },
-      {
-        "type": "select",
-        "id": "section-size",
-        "label": "Section Size",
-        "default": "none",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          }, {
-            "value": "full",
-            "label": "Full Screen"
-          }
-        ]
       },
       {
         "type": "header",
@@ -217,8 +222,8 @@ assign img-opacity = section.settings.img-overlay
       {
         "type": "select",
         "label": "Container Size",
-        "id": "container-size",
-        "default": "md",
+        "id": "container_size",
+        "default": "lg",
         "options": [
           {
             "label": "None",
@@ -239,37 +244,49 @@ assign img-opacity = section.settings.img-overlay
           {
             "label": "Large",
             "value": "lg"
-          }, {
+          }, 
+          {
             "label": "X-Large",
             "value": "xl"
-          }, {
+          }, 
+          {
             "label": "XX-Large",
             "value": "xx"
-          }, {
+          }, 
+          {
             "label": "Maximum",
             "value": "max"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "text-color",
-        "label": "Text Color",
-        "default": "dark",
-        "options": [
-          {
-            "label": "Dark",
-            "value": "dark"
           },
           {
-            "label": "Light",
-            "value": "light"
+            "label": "Extra",
+            "value": "xtr"
           }
         ]
       },
       {
         "type": "select",
-        "id": "text-alignment",
+        "id": "text_position",
+        "label": "Text Position",
+        "default": "middle",
+        "info": "⚠️ Text Position only works if Section Size is NOT set to 'None'",
+        "options": [
+          {
+            "label": "Top",
+            "value": "top"
+          },
+          {
+            "label": "Middle",
+            "value": "middle"
+          },
+          {
+            "label": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
         "label": "Text Alignment",
         "default": "center",
         "options": [
@@ -288,23 +305,23 @@ assign img-opacity = section.settings.img-overlay
         ]
       },
       {
-        "type": "checkbox",
-        "id": "animation",
-        "default": false,
-        "label": "Text Animation"
-      },
-      {
         "type": "header",
         "content": "Background Options"
       },
       {
         "type": "image_picker",
-        "id": "bg-img",
+        "id": "bg_img",
         "label": "Background Image"
       },
       {
+        "type": "video",
+        "id": "bg_video",
+        "label": "Background Video",
+        "info": "⚠️ Image is required as a fallback for video"
+      },
+      {
         "type": "range",
-        "id": "img-pos-y",
+        "id": "bg_position_y",
         "label": "Image Position (Top/Bottom)",
         "default": 50,
         "step": 1,
@@ -314,7 +331,7 @@ assign img-opacity = section.settings.img-overlay
       },
       {
         "type": "range",
-        "id": "img-pos-x",
+        "id": "bg_position_x",
         "label": "Image Position (Left/Right)",
         "default": 50,
         "step": 1,
@@ -324,12 +341,22 @@ assign img-opacity = section.settings.img-overlay
       },
       {
         "type": "range",
-        "id": "img-overlay",
+        "id": "bg_overlay",
         "label": "Image Overlay Opacity",
         "min": 0,
         "max": 1,
         "step": 0.1,
         "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Scroll Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "hero_fixed",
+        "label": "Fixed Background",
+        "info": "⚠️ Fixed Background only works if Section Size is NOT set to 'None'"
       }
     ],
     "blocks": [
@@ -340,7 +367,7 @@ assign img-opacity = section.settings.img-overlay
         "settings": [
           {
             "type": "select",
-            "id":"heading-spacing-top",
+            "id":"heading_spacing_top",
             "label": "Spacing Top",
             "default": "none",
             "options": [
@@ -376,7 +403,7 @@ assign img-opacity = section.settings.img-overlay
           },
           {
             "type": "select",
-            "id":"heading-spacing-bottom",
+            "id":"heading_spacing_bottom",
             "label": "Spacing Bottom",
             "default": "none",
             "options": [
@@ -415,6 +442,12 @@ assign img-opacity = section.settings.img-overlay
             "id": "heading",
             "default": "Lorem Ipsum",
             "label": "Heading"
+          },
+          {
+            "type": "checkbox",
+            "id": "heading_hide",
+            "label": "Hide Heading",
+            "info": "⚠️ Selecting this option ensures the heading is visible exclusively to screen readers. This is recommended when adding a logo."
           }
         ]
       },
@@ -425,7 +458,7 @@ assign img-opacity = section.settings.img-overlay
         "settings": [
           {
             "type": "select",
-            "id":"subheading-spacing-top",
+            "id":"subheading_spacing_top",
             "label": "Spacing Top",
             "default": "none",
             "options": [
@@ -461,7 +494,7 @@ assign img-opacity = section.settings.img-overlay
           },
           {
             "type": "select",
-            "id":"subheading-spacing-bottom",
+            "id":"subheading_spacing_bottom",
             "label": "Spacing Bottom",
             "default": "none",
             "options": [
@@ -510,7 +543,7 @@ assign img-opacity = section.settings.img-overlay
         "settings": [
           {
             "type": "select",
-            "id":"blurb-spacing-top",
+            "id":"blurb_spacing_top",
             "label": "Spacing Top",
             "default": "none",
             "options": [
@@ -546,7 +579,7 @@ assign img-opacity = section.settings.img-overlay
           },
           {
             "type": "select",
-            "id":"blurb-spacing-bottom",
+            "id":"blurb_spacing_bottom",
             "label": "Spacing Bottom",
             "default": "none",
             "options": [
@@ -582,18 +615,28 @@ assign img-opacity = section.settings.img-overlay
           },
           {
             "type": "range",
-            "id": "blurb-width",
-            "default": 400,
-            "label": "Text Blurb Width",
+            "id": "blurb_width_mobile",
+            "default": 760,
+            "label": "Text Blurb Width (Mobile)",
             "step": 10,
             "min": 200,
-            "max": 600,
+            "max": 1200,
             "unit": "px"
           }, 
           {
-            "type": "textarea",
+            "type": "range",
+            "id": "blurb_width_desktop",
+            "default": 760,
+            "label": "Text Blurb Width (Desktop)",
+            "step": 10,
+            "min": 200,
+            "max": 1200,
+            "unit": "px"
+          }, 
+          {
+            "type": "richtext",
             "id": "blurb",
-            "default": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?",
+            "default": "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?</p>",
             "label": "Text Blurb"
           }
         ]
@@ -605,7 +648,7 @@ assign img-opacity = section.settings.img-overlay
         "settings": [
           {
             "type": "select",
-            "id":"button-spacing-top",
+            "id":"button_spacing_top",
             "label": "Spacing Top",
             "default": "none",
             "options": [
@@ -641,7 +684,7 @@ assign img-opacity = section.settings.img-overlay
           },
           {
             "type": "select",
-            "id":"button-spacing-bottom",
+            "id":"button_spacing_bottom",
             "label": "Spacing Bottom",
             "default": "none",
             "options": [
@@ -676,46 +719,119 @@ assign img-opacity = section.settings.img-overlay
             ]
           },
           {
-            "type": "select",
-            "id":"button-type",
-            "label": "Button Type",
-            "default": "primary",
-            "options": [
-              {
-                "label":"Primary",
-                "value": "primary"
-              },
-              {
-                "label":"Secondary",
-                "value": "secondary"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id":"button-theme",
-            "label": "Button Theme",
-            "default": "dark",
-            "options": [
-              {
-                "label":"Dark",
-                "value": "dark"
-              },
-              {
-                "label":"Light",
-                "value": "light"
-              }
-            ]
-          },
-          {
             "type": "text",
-            "id": "button-text",
+            "id": "button_text",
             "default": "Lorem Ipsum CTA",
             "label": "Button Text"
-          }, {
+          }, 
+          {
             "type": "url",
-            "id": "button-url",
+            "id": "button_url",
             "label": "Button Link"
+          }
+        ]
+      },
+      {
+        "type": "logo",
+        "name": "Logo",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id":"logo_spacing_top",
+            "label": "Spacing Top",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id":"logo_spacing_bottom",
+            "label": "Spacing Bottom",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "5px",
+                "value": "h"
+              },
+              {
+                "label": "10px",
+                "value": "1"
+              },
+              {
+                "label": "15px",
+                "value": "q"
+              },
+              {
+                "label": "20px",
+                "value": "2"
+              },
+              {
+                "label": "30px",
+                "value": "3"
+              },
+              {
+                "label": "40px",
+                "value": "4"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "logo_width_mobile",
+            "default": 600,
+            "label": "Logo Width (Mobile)",
+            "step": 10,
+            "min": 200,
+            "max": 1200,
+            "unit": "px"
+          }, 
+          {
+            "type": "range",
+            "id": "logo_width_desktop",
+            "default": 1200,
+            "label": "Logo Width (Desktop)",
+            "step": 10,
+            "min": 200,
+            "max": 1200,
+            "unit": "px"
+          }, 
+          {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo Image"
           }
         ]
       }
@@ -725,11 +841,7 @@ assign img-opacity = section.settings.img-overlay
         "name": "Hero",
         "blocks": [
           {
-            "type": "subheading"
-          }, {
             "type": "heading"
-          }, {
-            "type": "button"
           }
         ]
       }

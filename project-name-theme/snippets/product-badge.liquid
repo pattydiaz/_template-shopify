@@ -1,0 +1,21 @@
+{% liquid
+
+  assign product_variant = product.selected_or_first_available_variant
+  assign product_tags = product.tags | join: ',' | downcase
+  assign product_badge_text = ""
+
+%}
+
+{% if product_variant.available %}
+  {% if product_variant.compare_at_price > product_variant.price or product_tags contains 'sale' %}
+    {% assign product_badge_text = "Sale" %}
+  {% endif %}
+{% else %}
+  {% assign product_badge_text = "Unavailable" %}
+  {% if product_variant.inventory_management == "shopify" and product_variant.inventory_quantity == 0 %}
+    {% assign product_badge_text = "Sold Out" %}
+  {% endif %}
+{% endif %}
+{% if product_badge_text != "" %}
+  <span class="product-badge ml-h py-h px-1 border-radius bg-black color-white">{{ product_badge_text }}</span>
+{% endif %}

@@ -1,19 +1,34 @@
 /**
  * 
- * BuddySystem.jquery.js
+ * buddysystem.js
  * https://github.com/adamjgrant/Buddy-System
  * 
  */
 
-(function() {
-  (function($) {
-    return $.fn.buddySystem = function() {
-      return this.each(function() {
-        var $clean;
-        $clean = $(this).html().replace(/\s+/g, " ").replace(/^\s|\s$/g, "");
-        return $(this).html($clean.replace(new RegExp('((?:[^ ]* ){' + (($clean.match(/\s/g) || []).length - 1) + '}[^ ]*) '), "$1&nbsp;"));
-      });
-    };
-  })(jQuery);
+var buddySystem = function(objects) {
+  var objectArray = [],
+      newStrings  = [];
 
-}).call(this);
+  objectArray = (objects.length ? objects : objectArray.concat(objects)); // Make sure this is an array.
+  Array.prototype.map.call(objectArray, function(object) {
+    var newString = String(object.innerHTML);
+
+    // Remove whitespaces
+    newString = newString.replace(/\s+/g, " ").replace(/^\s|\s$/g, "");
+    if (newString) {
+      newStrings.push(
+        object.innerHTML = newString.replace(
+          new RegExp(
+            '((?:[^ ]* ){'
+            + ((newString.match(/\s/g) || 0).length - 1)
+            + '}[^ ]*) '
+          )
+          , "$1&nbsp;"
+        )
+      )
+    }
+    else {
+      newStrings.push(void 0);
+    }
+  })
+};

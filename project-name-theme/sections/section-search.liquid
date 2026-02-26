@@ -1,0 +1,225 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+
+  assign search_heading = section.settings.search_heading
+
+%}
+
+
+<div {{ id }}class="search-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+    
+  <div class="search-container container{{ container_size }}">
+
+    <div class="search-heading text-center gap-bm--sm">
+      <h1 class="">{{ search_heading }}</h1>
+    </div>
+
+    <form action="/search" method="get" class="search-form d-flex gap-bm--md w-max mx-auto" style="--mw: 800px;">
+      <input type="hidden" name="type" value="product">
+      <input type="text" class="input-field" name="q" placeholder="Search Products">
+      <div class="cta">
+        <button type="submit" class="btn btn-primary h-full" aria-label="Search">Search</button>
+      </div>
+    </form>
+
+    {% if search.results_count > 0 %}
+      <p class="mb-2">{{ search.results_count }} results for "{{ search.terms }}"</p>
+      <ul class="search-results ls-none d-flex-wrap m-n1-upt m-n2-upd h-min">
+        {% for item in search.results %}
+          <li class=" w-100 wt-50 wd-33 pb-2 px-1 p-1-upt p-2-upd mb-1">
+            {% if item.object_type == 'product' %}
+              {% render 'card-product', product: item %}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% elsif search.terms %}
+      <div class="search-empty text-center">
+        <p>No results found for "{{ search.terms }}".</p>
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "Search",
+    "tag": "section",
+    "class": "search section",
+    "limit": 1,
+    "enabled_on": {
+      "templates": ["search"]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section ID Options"
+      },
+      {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "default": "sm",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing_header",
+        "default": true,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container_size",
+        "default": "xx",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, 
+          {
+            "label": "X-Large",
+            "value": "xl"
+          }, 
+          {
+            "label": "XX-Large",
+            "value": "xx"
+          }, 
+          {
+            "label": "Maximum",
+            "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Search Heading Options"
+      },
+      {
+        "type": "text",
+        "id": "search_heading",
+        "label": "Heading",
+        "default": "Search Results"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Search"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,22 +1,25 @@
-var Wrapper = {
-  init: function() {
-    Wrapper.build();
+const Wrapper = {
+  init() {
+    this.build();
   },
-  build: function() {
-    Wrapper.height();
 
-    w.on('resize',function(){
-      Wrapper.height();
-    });
+  build() {
+    this.height();
+    window.addEventListener('resize', () => this.height(), { passive: true });
   },
-  height: function(){
-    if(wrapper.is(':visible')) {
-      
-      wrapper.css('min-height','')
-      wrapper.attr("data-height", wrapper.innerHeight());
-  
-      var nh = (wh - $('footer').innerHeight());
-      if (wh > wrapper.data('height')) wrapper.css('min-height', nh);
+
+  height() {
+    if (!wrapper.isVisible()) return;
+
+    wrapper.el.style.minHeight = '';
+    wrapper.el.dataset.height = wrapper.el.offsetHeight;
+
+    const wh = window.innerHeight;
+    const footerHeight = footer.el ? footer.el.offsetHeight : 0;
+    const nh = wh - footerHeight;
+
+    if (wh > wrapper.el.offsetHeight) {
+      wrapper.el.style.minHeight = `${nh}px`;
     }
   }
 };

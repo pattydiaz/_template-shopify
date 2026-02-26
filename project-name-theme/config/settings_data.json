@@ -30,20 +30,13 @@
           "footer-nav": "footer"
         }
       },
-      "layout-nav": {
-        "type": "layout-nav",
-        "settings": {
-        }
-      },
-      "layout-drawer": {
-        "type": "layout-drawer",
+      "layout-announcement": {
+        "type": "layout-announcement",
         "settings": {
         }
       }
     },
-    "content_for_index": [
-
-    ]
+    "content_for_index": []
   },
   "presets": {
   }

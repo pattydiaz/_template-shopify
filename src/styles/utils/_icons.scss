@@ -1,17 +1,13 @@
+@use "../shared" as *;
+
 .icon {
   $self: &;
   position: relative;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  min-width: 48px;
-  min-height: 48px;
-
-  img,
-  svg {
-    // @include center;
-    width: 100%;
-  }
+  min-width: 42px;
+  min-height: 42px;
 
   &-xs {
     @extend #{$self};
@@ -30,8 +26,8 @@
     img,
     svg,
     span {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
     }
   }
 
@@ -41,8 +37,8 @@
     img,
     svg,
     span {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
     }
   }
 
@@ -52,8 +48,8 @@
     img,
     svg,
     span {
-      width: 150px;
-      height: 150px;
+      width: 100px;
+      height: 100px;
     }
   }
 
@@ -63,8 +59,8 @@
     img,
     svg,
     span {
-      width: 200px;
-      height: 200px;
+      width: 150px;
+      height: 150px;
     }
   }
 
@@ -141,19 +137,4 @@
     &:after { bottom: -6.5px; }
   }
   
-  &-cart {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    @include mask('icon-cart.svg');
-    background-color: currentColor;
-  }
-  
-  &-account {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    @include mask('icon-account.svg');
-    background-color: currentColor;
-  }
 }

@@ -1,3 +1,5 @@
+@use "../shared" as *;
+
 @for $i from 1 through 10 {
   .h-#{$i*10} {
     height: $i*10vh;
@@ -35,6 +37,14 @@ $heights: (
   height: var(--height);
 }
 
+.h-full {
+  height: 100%;
+}
+
 .h-max {
-  max-width: var(--mh, 560px);
+  max-height: var(--mh, 560px);
+}
+
+.h-min {
+  min-height: var(--mh, 560px);
 }

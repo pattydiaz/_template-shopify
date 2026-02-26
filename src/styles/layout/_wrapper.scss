@@ -1,9 +1,12 @@
+@use "../shared" as *;
+
 #wrapper {
   position: relative;
   width: 100%;
   min-height: 500px;
+  padding-top: var(--ah, 0px);
   overflow: hidden;
-  z-index: 5;
+  // z-index: 5;
   
   @include bp-up(md) {
     min-height: 690px;

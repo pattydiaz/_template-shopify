@@ -1,91 +1,94 @@
+@use "../shared" as *;
+
+$section-sizes: (
+  100: (svh: 100, min: 567, min-md: 760),
+   75: (svh: 75,  min: 550, min-md: 700),
+   50: (svh: 50,  min: 400, min-md: 600),
+);
+
+@mixin section-size($svh, $min, $min-md, $self) {
+  height: calc(#{$svh}svh - var(--ah, 0px));
+  min-height: #{$min}px;
+
+  @include bp-up(md) {
+    min-height: #{$min-md}px;
+  }
+
+  &:not(.section) {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+  }
+
+  .container {
+    height: 100%;
+    width: 100%;
+  }
+
+  .bg-cover,
+  .bg-inline,
+  div[class*="-text"] {
+    min-height: #{$min}px;
+
+    @include bp-up(md) {
+      min-height: #{$min-md}px;
+    }
+  }
+
+  div[class*="-wrapper"] {
+    @extend #{$self}-#{$svh};
+  }
+
+  div[class*="-fixed"] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: #{$svh}svh;
+    min-height: calc(#{$min}px + var(--ah, 0px));
+
+    @include bp-up(md) {
+      min-height: calc(#{$min-md}px + var(--ah, 0px));
+    }
+  }
+}
+
+/*! purgecss start ignore */
+
 .section {
-	$self: &;
-	position: relative;
+  $self: &;
+
+  position: relative;
   width: 100%;
-  
+  z-index: 1;
+
   div[class*="-text"] {
     position: relative;
     height: 100%;
     width: 100%;
-		z-index: 1;
+    z-index: 1;
     display: flex;
-    justify-content: center;
     flex-direction: column;
 
-    &.text-center {
-      align-items: center;
-    }
+    &.text-center { align-items: center; }
+    &.text-left { align-items: flex-start; }
+    &.text-right { align-items: flex-end; }
 
-    &.text-left {
-      align-items: flex-start;
-    }
+    &.middle { justify-content: center; }
+    &.top { justify-content: flex-start; }
+    &.bottom { justify-content: flex-end; }
+  }
 
-    &.text-right {
-      align-items: flex-end;
+  @each $key, $data in $section-sizes {
+    &-#{$key} {
+      @include section-size(
+        map-get($data, svh),
+        map-get($data, min),
+        map-get($data, min-md),
+        $self
+      );
     }
   }
-  
-  &-full {
-    height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
-		min-height: 500px;
-    
-		@include bp-up(md) {
-      min-height: 690px;
-		}
-
-    > .container {
-      height: 100%;
-      width: 100%;
-    }
-    
-    .bg-cover,
-    .bg-inline {
-      min-height: 500px;
-
-      @include bp-up(md) {
-        min-height: 690px;
-      }
-    }
-
-    div[class*="-text"] {
-      min-height: 500px;
-
-      @include bp-up(md) {
-        min-height: 690px;
-      }
-    }
-
-    div[class*="-wrapper"] {
-      @extend #{$self}-full;
-    }
-	}
-
-	&-default {
-    padding-top: $spacing*10;
-		padding-bottom: $spacing*10;
-    
-    @include bp-up(sm) {
-      padding-top: $spacing*15;
-      padding-bottom: $spacing*15;
-    }
-		
-		&--top {
-			padding-top: $spacing*10;
-      
-      @include bp-up(sm) {
-        padding-top: $spacing*15;
-      }
-
-		}
-
-		&--bottom {
-			padding-bottom: $spacing*10;
-      
-      @include bp-up(sm) {
-        padding-bottom: $spacing*15;
-      }
-    }
-  
-	}
 }
+
+/*! purgecss end ignore */

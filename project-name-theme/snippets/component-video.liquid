@@ -1,3 +1,69 @@
-{% if url != blank %}
-  <iframe src="{{ url }}" width="640" height="338" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+{% liquid
+  assign class = class | default: 'img-cover'
+
+  assign lazy = lazy | default: true
+  assign width = width | default: 2000
+  assign height = height | default: 2000
+  assign poster = poster | default: ''
+
+  assign autoplay = autoplay | default: true
+  assign muted = muted | default: true
+  assign playsinline = playsinline | default: true
+  assign loop = loop | default: true
+  assign controls = controls | default: false
+
+  if request.design_mode
+    assign lazy = false
+  endif
+
+  assign autoplay_attr = ''
+  if autoplay
+    assign autoplay_attr = ' autoplay'
+  endif
+
+  assign muted_attr = ''
+  if muted
+    assign muted_attr = ' muted'
+  endif
+
+  assign playsinline_attr = ''
+  if playsinline
+    assign playsinline_attr = ' playsinline'
+  endif
+
+  assign loop_attr = ''
+  if loop
+    assign loop_attr = ' loop'
+  endif
+
+  assign controls_attr = ''
+  if controls
+    assign controls_attr = ' controls'
+  endif
+
+  if lazy
+    assign data = 'data-'
+    assign lazy_class = ' lazy'
+  else
+    assign data = ''
+    assign lazy_class = ''
+  endif
+%}
+
+{% if video %}
+  <video
+    width="{{ width }}"
+    height="{{ height }}"
+    class="{{ class }}{{ lazy_class }}"
+    {{ autoplay_attr }}{{ muted_attr }}{{ playsinline_attr }}{{ loop_attr }}{{ controls_attr }}
+    {{ data }}poster="{{ poster }}"
+    preload="none"
+  >
+    {% for source in video.sources %}
+      <source
+        {{ data }}src="{{ source.url }}"
+        type="{{ source.mime_type }}"
+      >
+    {% endfor %}
+  </video>
 {% endif %}

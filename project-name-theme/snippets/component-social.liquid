@@ -1,43 +1,80 @@
-<ul class="social ls-none d-flex">
+{% liquid
+
+  if class == blank
+    assign class = ''
+  else 
+    assign class = class | append: ' '
+  endif
+
+  if color == blank
+    assign color = 'current'
+  else
+    assign color = color
+  endif
+
+%}
+
+<ul class="{{ class }}social ls-none mx-nh">
   {%- if settings.social_instagram_link != blank -%}
-    <li>
-      <a href="{{ settings.social_instagram_link }}" class="d-ib button-scale" title="{{ 'general.social.links.instagram' | t }}" target="_blank" rel="nofollow">
-        <i class="icon-sm">{% render 'icon-social-instagram' %}</i>
+    <li class="d-ib">
+      <a href="{{ settings.social_instagram_link }}" class="button-scale icon-sm color-{{ color }}" title="Instagram" target="_blank" rel="nofollow">
+        <span><i class="social-icon instagram"></i></span>
       </a>
     </li>
   {%- endif -%}
   {%- if settings.social_facebook_link != blank -%}
-    <li>
-      <a href="{{ settings.social_facebook_link }}" class="d-ib button-scale" title="{{ 'general.social.links.facebook' | t }}" target="_blank" rel="nofollow">
-        <i class="icon-sm">{% render 'icon-social-facebook' %}</i>
+    <li class="d-ib">
+      <a href="{{ settings.social_facebook_link }}" class="button-scale icon-sm color-{{ color }}" title="Facebook" target="_blank" rel="nofollow">
+        <span><i class="social-icon facebook"></i></span>
       </a>
     </li>
   {%- endif -%}
   {%- if settings.social_twitter_link != blank -%}
-    <li>
-      <a href="{{ settings.social_twitter_link }}" class="d-ib button-scale" title="{{ 'general.social.links.twitter' | t }}" target="_blank" rel="nofollow">
-        <i class="icon-sm">{% render 'icon-social-twitter' %}</i>
+    <li class="d-ib">
+      <a href="{{ settings.social_twitter_link }}" class="button-scale icon-sm color-{{ color }}" title="Twitter" target="_blank" rel="nofollow">
+        <span><i class="social-icon twitter"></i></span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_x_link != blank -%}
+    <li class="d-ib">
+      <a href="{{ settings.social_x_link }}" class="button-scale icon-sm color-{{ color }}" title="X" target="_blank" rel="nofollow">
+        <span><i class="social-icon x"></i></span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_tiktok_link != blank -%}
+    <li class="d-ib">
+      <a href="{{ settings.social_tiktok_link }}" class="button-scale icon-sm color-{{ color }}" title="TikTok" target="_blank" rel="nofollow">
+        <span><i class="social-icon tiktok"></i></span>
       </a>
     </li>
   {%- endif -%}
   {%- if settings.social_linkedin_link != blank -%}
-    <li>
-      <a href="{{ settings.social_linkedin_link }}" class="d-ib button-scale" title="{{ 'general.social.links.linkedin' | t }}" target="_blank" rel="nofollow">
-        <i class="icon-sm">{% render 'icon-social-linkedin' %}</i>
+    <li class="d-ib">
+      <a href="{{ settings.social_linkedin_link }}" class="button-scale icon-sm color-{{ color }}" title="Linkedin" target="_blank" rel="nofollow">
+        <span><i class="social-icon linkedin"></i></span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_pinterest_link != blank -%}
+    <li class="d-ib">
+      <a href="{{ settings.social_pinterest_link }}" class="button-scale icon-sm color-{{ color }}" title="Pinterest" target="_blank" rel="nofollow">
+        <span><i class="social-icon pinterest"></i></span>
       </a>
     </li>
   {%- endif -%}
   {%- if settings.social_youtube_link != blank -%}
-    <li>
-      <a href="{{ settings.social_youtube_link }}" class="d-ib button-scale" title="{{ 'general.social.links.youtube' | t }}" target="_blank" rel="nofollow">
-        <i class="icon-sm">{% render 'icon-social-youtube' %}</i>
+    <li class="d-ib">
+      <a href="{{ settings.social_youtube_link }}" class="button-scale icon-sm color-{{ color }}" title="youtube" target="_blank" rel="nofollow">
+        <span><i class="social-icon youtube"></i></span>
       </a>
     </li>
   {%- endif -%}
   {%- if settings.social_vimeo_link != blank -%}
-    <li>
-      <a href="{{ settings.social_vimeo_link }}" class="d-ib button-scale" title="{{ 'general.social.links.vimeo' | t }}" target="_blank" rel="nofollow">
-        <i class="icon-sm">{% render 'icon-social-vimeo' %}</i>
+    <li class="d-ib">
+      <a href="{{ settings.social_vimeo_link }}" class="button-scale icon-sm color-{{ color }}" title="vimeo" target="_blank" rel="nofollow">
+        <span><i class="social-icon vimeo"></i></span>
       </a>
     </li>
   {%- endif -%}

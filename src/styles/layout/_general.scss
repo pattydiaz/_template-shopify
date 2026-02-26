@@ -1,6 +1,8 @@
+@use "../shared" as *;
+
 ::selection {
-  background: $black;
-  color: $white;
+  background: $global-accent;
+  color: $global-bg;
 }
 
 html,
@@ -9,14 +11,14 @@ body {
 }
 
 html {
-  background-color: $black;
+  background-color: $global-accent;
 }
 
 body {
   position: relative !important;
+  background-color: $global-bg;
+  color: $global-color;
   @include body;
-  background-color: $white;
-  color: $black;
 }
 
 body.stop-transitions * {
@@ -26,15 +28,12 @@ body.stop-transitions * {
 #page {
   position: relative;
   opacity: 0;
-
-  &.no-animate {
-    opacity: 1 !important;
-  }
+  min-height: 100svh;
 }
 
 a:not(a[class]){
   cursor: pointer;
-  color: currentColor;
+  color: $current;
   
   .contents & {
     @include text-decoration;

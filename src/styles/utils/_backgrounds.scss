@@ -1,13 +1,20 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
 .bg {
   $self: &;
 
   &-cover {
-    @include cover(absolute,  !important);
+    @include cover($position: absolute,  $important: !important);
     pointer-events: none;
-    z-index: 0;
 
     img {
       object-position: var(--position, 50% 50%);
+    }
+
+    &--half {
+      height: 50% !important;
     }
   }
 
@@ -15,6 +22,13 @@
     @extend #{$self}-cover;
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: var(--position, 50% 50%);
+  }
+
+  &-repeat {
+    @extend #{$self}-cover;
+    background-size: var(--size, auto);
+    background-repeat: repeat;
     background-position: var(--position, 50% 50%);
   }
 
@@ -31,3 +45,5 @@
     }
   }
 }
+
+/*! purgecss end ignore */

@@ -1,53 +1,33 @@
+@use "../shared" as *;
+
 .header {
   $self: &;
+  
   position: fixed;
-  top: 0;
+  top: var(--ah, 0px);
   left: 0;
   width: 100%;
   height: auto;
   z-index: 100;
-  background-color: $transparent;
-  transition: background-color 0.5s $ease-default;
+  transition: top 0.45s $ease-default;
 
   &--scroll {
-    background-color: $white-transparent;
-    transition-delay: 0.5s;
+    top: 0;
+
+    + .announcement {
+      transform: translate3d(0,-100%,0);
+    }
   }
 
-  &-icons {
-
-    .count {
-      position: absolute;
-      top: 8px;
-      right: 5px;
-      height: 15px;
-      width: 15px;
-      @include flex-center;
-      background-color: $black;
-      color: $white;
-      border-radius: 100%;
-      letter-spacing: 0;
-      font-size: 10px;
-      font-weight: $fw-bold;
-
-      &--hide {
-        display: none;
-      }
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: {
+      left: $spacing*1.5;
+      right: $spacing*1.5;
+      top: $spacing*2;
+      bottom: $spacing*2;
     }
-
-    .logged {
-      position: absolute;
-      bottom: 12px;
-      right: 14px;
-      width: 6px;
-      height: 6px;
-      background-color: #aeff34;
-      border-radius: 100%;
-
-      &--hide {
-        display: none;
-      }
-    }
-
   }
 }

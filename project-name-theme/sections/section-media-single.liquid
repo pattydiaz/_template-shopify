@@ -1,0 +1,308 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+
+  assign media_image = section.settings.media_image
+  assign media_video = section.settings.media_video
+  assign media_ratio = section.settings.media_ratio
+
+%}
+
+
+<div {{ id }}class="media-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+    
+  <div class="media-container container{{ container_size }}">
+    <div class="ratio ratio-{{ media_ratio }} bg-black">
+
+      {% unless request.design_mode %}
+        <div class="parallax parallax-item parallax-zoom" data-percent="-25">
+      {% endunless %}
+
+          {% if media_image and media_video %}
+            <div class="video-cover">
+              {% render 'component-video', video: media_video, poster: media_image, lazy: true %}
+            </div>
+          {% endif %}
+          {% render 'component-image', img: media_image, lazy: true %}
+
+      {% unless request.design_mode %}
+        </div>
+      {% endunless %}
+
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "Media (Single)",
+    "tag": "section",
+    "class": "media section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section ID Options"
+      },
+        {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "default": "sm",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "default": "sm",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing_header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container_size",
+        "default": "xl",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, 
+          {
+            "label": "X-Large",
+            "value": "xl"
+          }, 
+          {
+            "label": "XX-Large",
+            "value": "xx"
+          }, 
+          {
+            "label": "Maximum",
+            "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Media Options"
+      },
+      {
+        "type": "image_picker",
+        "id": "media_image",
+        "label": "Image"
+      },
+      {
+        "type": "video",
+        "id": "media_video",
+        "label": "Video",
+        "info": "⚠️ Image is required as a fallback for video"
+      },
+      {
+        "type": "select",
+        "id": "media_ratio",
+        "default": "16x9",
+        "label": "Media Aspect Ratio",
+        "options": [
+          { 
+            "value": "1x1", 
+            "label": "Aspect Ratio 1:1" 
+          },
+          { 
+            "value": "2x1", 
+            "label": "Aspect Ratio 2:1" 
+          },
+          { 
+            "value": "1x2", 
+            "label": "Aspect Ratio 1:2" 
+          },
+          { 
+            "value": "3x1", 
+            "label": "Aspect Ratio 3:1" 
+          },
+          { 
+            "value": "1x3", 
+            "label": "Aspect Ratio 1:3" 
+          },
+          { 
+            "value": "4x3", 
+            "label": "Aspect Ratio 4:3" 
+          },
+          { 
+            "value": "3x4", 
+            "label": "Aspect Ratio 3:4" 
+          },
+          { 
+            "value": "5x4", 
+            "label": "Aspect Ratio 5:4" 
+          },
+          { 
+            "value": "4x5", 
+            "label": "Aspect Ratio 4:5" 
+          },
+          { 
+            "value": "5x7", 
+            "label": "Aspect Ratio 5:7" 
+          },
+          { 
+            "value": "7x5", 
+            "label": "Aspect Ratio 7:5" 
+          },
+          { 
+            "value": "16x9", 
+            "label": "Aspect Ratio 16:9" 
+          },
+          { 
+            "value": "9x16", 
+            "label": "Aspect Ratio 9:16" 
+          },
+          { 
+            "value": "16x10", 
+            "label": "Aspect Ratio 16:10" 
+          },
+          { 
+            "value": "10x16", 
+            "label": "Aspect Ratio 10:16" 
+          },
+          { 
+            "value": "21x9", 
+            "label": "Aspect Ratio 21:9" 
+          },
+          { 
+            "value": "9x21", 
+            "label": "Aspect Ratio 9:21" 
+          },
+          { 
+            "value": "18x6", 
+            "label": "Aspect Ratio 18:6" 
+          },
+          { 
+            "value": "6x18", 
+            "label": "Aspect Ratio 6:18" 
+          },
+          { 
+            "value": "10x1", 
+            "label": "Aspect Ratio 10:1" 
+          },
+          { 
+            "value": "1x10", 
+            "label": "Aspect Ratio 1:10"
+            }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Media (Single)"
+      }
+    ]
+  }
+{% endschema %}

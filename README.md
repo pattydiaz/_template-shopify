@@ -83,7 +83,7 @@ grunt prod
 If it's your first time setting up the theme make sure to upload the theme to the store.
 
 ```
-shopify theme push --unpublished
+shopify theme push -u
 ```
 
 Otherwise, make sure you're pulling any data that was added on the live site without deleting any new files.

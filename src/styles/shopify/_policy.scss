@@ -1,0 +1,50 @@
+@use "../shared" as *;
+@use "../utils/gap" as *;
+@use "../utils/container" as *;
+@use "../components/contents" as *;
+
+/*! purgecss start ignore */
+
+.shopify-policy {
+
+  &__container {
+    max-width: (map-get($breakpoints, 'lg') - 0.02);
+    margin-left: auto;
+    margin-right: auto;
+
+    @include container-spacing;
+    padding-top: calc(var(--hh, 80px) + var(--ah, 0px));
+
+    @include bp-up(md) {
+      max-width: (map-get($breakpoints, 'lg') - 0.02 + 30);
+    }
+
+    @include bp-up(xx) {
+      max-width: (map-get($breakpoints, 'lg') - 0.02 + 50);
+    }
+  }
+
+  &__title,
+  &__body {
+    padding-top: calc(#{map-get($gaps,'md')} / 2.5);
+
+    @include bp-up(md) {
+      padding-top: map-get($gaps,'md');
+    }
+  }
+
+  &__title {
+    h1 { @include heading-1;}
+  }
+  
+  &__body {
+    padding-bottom: calc(#{map-get($gaps,'md')} / 2.5);
+    @include contents;
+
+    @include bp-up(md) {
+      padding-bottom: map-get($gaps,'md');
+    }
+  }
+}
+
+/*! purgecss end ignore */

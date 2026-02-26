@@ -1,56 +1,73 @@
-var Buttons = {
-  init: function () {
-    Buttons.build();
+const Buttons = {
+  init() {
+    this.build();
   },
-  build: function () {
-    Buttons.anchor();
+
+  build() {
+    this.anchor();
   },
-  anchor: function () {
-    var anchorBtn = $(".anchor");
-    var anchorBtnNext = $(".anchor-next");
-    
-    anchorBtn.each(function () {
-      var id = $(this).attr('href');
-      
-      $(this).on("click", function (e) {
-        e.preventDefault();
-        
-        gsap.to(smoother,{
-          scrollTop: smoother.offset($(id)[0],'0 0'),
-          duration: 2,
-          ease: 'back.out'
-        })
+
+  anchor() {
+    // Smooth scroll using GSAP, wrapper-friendly
+    const scrollToTarget = (targetEl) => {
+      const startY = window.scrollY;
+      const endY = targetEl.getBoundingClientRect().top + window.scrollY;
+
+      gsap.to({ y: startY }, {
+        y: endY,
+        duration: 1,
+        ease: 'power1.inOut',
+        onUpdate() {
+          window.scrollTo(0, this.targets()[0].y);
+        }
       });
+    };
+
+    // Handle anchors (#target)
+    const handleAnchorClick = ($anchor, e) => {
+      const id = $anchor.attr('href');
+      if (!id || id === '#' || $anchor.el.classList.contains('skip-to-content')) return;
+
+      e.preventDefault();
+
+      const $target = $(id);
+      if ($target.el) scrollToTarget($target.el);
+    };
+
+    // Handle 'next section' buttons
+    const handleNextClick = ($btn, e) => {
+      e.preventDefault();
+
+      const $section = $($btn.el.closest('section'));
+      const $next = $section.el ? $( $section.el.nextElementSibling ) : null;
+
+      if ($next && $next.el) scrollToTarget($next.el);
+    };
+
+    // EVENT DELEGATION (single listener)
+    document.addEventListener('click', function (e) {
+      const anchorEl = e.target.closest('a[href^="#"]:not(.skip-to-content), .anchor');
+      if (anchorEl) {
+        return handleAnchorClick($(anchorEl), e);
+      }
+
+      const nextEl = e.target.closest('.anchor-next');
+      if (nextEl) {
+        return handleNextClick($(nextEl), e);
+      }
     });
-
-    anchorBtnNext.each(function() {
-      var id = $(this).parents('section').next();
-
-      $(this).on("click", function (e) {
-        e.preventDefault();
-
-        gsap.to(smoother,{
-          scrollTop: smoother.offset($(id)[0],'0 0'),
-          duration: 2,
-          ease: 'power1.inOut'
-        })
-      });
-    })
   },
-  doubleclick: function (el) {
-    //if already clicked return TRUE to indicate this click is not allowed
-    if (el.data("isclicked")) return true;
 
-    //mark as clicked for 1 second
-    el.data("isclicked", true);
-    setTimeout(function () {
-      el.removeData("isclicked");
-    }, 1000);
-
-    //return FALSE to indicate this click was allowed
+  // Prevent double click
+  doubleclick(el) {
+    if (el.dataset.isclicked) return true;
+    el.dataset.isclicked = true;
+    setTimeout(() => delete el.dataset.isclicked, 1000);
     return false;
   },
-  trigger: function(el) {
-    setTimeout(function(){ el.trigger('click'); }, 0);
+
+  // Trigger element click async
+  trigger(el) {
+    setTimeout(() => el.click(), 0);
   }
 };

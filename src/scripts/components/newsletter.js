@@ -1,24 +1,29 @@
-var Newsletter = {
-  init: function () {
-    Newsletter.build();
-  },
-  build: function() {
-    Newsletter.form($('#mc-form-newsletter'));
-  },
-  form: function (el) {
-    if (el.is(":visible")) {
+const Newsletter = {
 
-      el.ajaxChimp({
-        callback: callbackFunction,
-      });
+  init() {
+    this.build();
+  },
 
-      function callbackFunction(resp) {
-        if (resp.result === "success") {
-          el.next().removeClass('d-none');
-          el.remove();
+  build() {
+    $$('.newsletter').forEach(formEl => this.form($(formEl)));
+  },
+
+  form(el) {
+    if (!el.isVisible()) return;
+
+    ajaxChimp(el.el, {
+      language: 'en',
+      callback: resp => {
+        if (resp.result === 'success') {
+          const successMsg = el.next();
+          if (successMsg.el && successMsg.el.classList.contains('newsletter-success')) {
+            successMsg.removeClass('d-none');
+          }
+          el.el.remove();
         }
       }
+    });
 
-    }
   }
+
 };

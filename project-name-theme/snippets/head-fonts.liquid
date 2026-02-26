@@ -1,0 +1,13 @@
+{%- if settings.typekit != blank -%}
+  <link href="{{ settings.typekit }}" rel="preload" as="style" onload="this.rel='stylesheet'">
+{%- endif -%}
+
+{%- if settings.google_fonts != blank -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{{ settings.google_fonts }}" rel="stylesheet">
+{%- endif -%}
+
+{% comment %} 
+<link href="{{ 'font.woff2' | asset_url }}" rel="preload" as="font" type="font/woff2" crossorigin="anonymous"/>
+{% endcomment %}

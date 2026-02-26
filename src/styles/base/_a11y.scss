@@ -1,5 +1,8 @@
 // Hiding class, making content visible only to screen readers but not visually
 // https://css-tricks.com/inclusively-hidden/
+
+/*! purgecss start ignore */
+
 .sr-only:not(:focus):not(:active) {
   position: absolute;
   width: 1px;
@@ -35,3 +38,5 @@
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
 }}
+
+/*! purgecss end ignore */

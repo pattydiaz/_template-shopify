@@ -1,3 +1,5 @@
+@use "../shared" as *;
+
 @each $name, $breakpoint in $breakpoints {
 
   .break-up-#{$name} {

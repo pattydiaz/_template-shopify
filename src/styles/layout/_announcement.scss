@@ -1,4 +1,50 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
 .announcement {
   $self: &;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 10;
+  transform: translate3d(0,0,0);
+  transition: transform 0.25s $ease-in-out;
+
+  body.nav-active & {
+    z-index: 100;
+  }
+
+  &--hidden {
+    display: none;
+    height: 0;
+  }
+
+  &-wrapper {
+    background-color: $global-color;
+    color: $global-bg;
+  }
+
+  &-slide {
+    padding-top: calc($spacing / 1.25);
+    padding-bottom: calc($spacing / 1.25);
+
+    .swiper.autoplay & {
+      padding-left: $spacing*5;
+      padding-right: $spacing*5;
+    }
+
+    .swiper:not(.autoplay) & {
+      padding-left: $spacing*1.5;
+      padding-right: $spacing*1.5;
+    }
+  }
   
+  .swiper-wrapper {
+    align-items: center;
+  }
 }
+
+/*! purgecss end ignore */

@@ -1,0 +1,161 @@
+@use "globals" as *;
+
+// ================
+// Type
+// ================
+
+$fs-normal: normal;
+$fs-italic: italic;
+
+$ff-serif: serif;
+$ff-sans-serif: sans-serif;
+$ff-monospace: monospace;
+$ff-cursive: cursive;
+
+$fw-thin: 100;
+$fw-xlight: 200;
+$fw-light: 300;
+$fw-normal: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+$fw-xbold: 800;
+$fw-black: 900;
+
+// ================
+// Colors
+// ================
+
+$current: currentColor;
+
+$black: #000000;
+$black-transparent: color-adjust($black, $alpha: -0.5);
+$white: #FFFFFF;
+$white-transparent: color-adjust($white, $alpha: -0.5);
+$transparent: transparent;
+$error: red;
+
+// custom
+
+
+
+$colors: (
+  'current' : $current,
+  'black' : $black,
+  'black-transparent' : $black-transparent,
+  'white' : $white,
+  'white-transparent' : $white-transparent,
+  'transparent' : $transparent,
+  'error' : $error,
+
+  // custom
+  
+);
+
+// global
+$global-bg: $white;
+$global-color: $black;
+$global-accent: $black-transparent;
+
+// ================
+// Easing
+// ================
+
+$duration-default: 1s; 
+$ease-default: ease;
+$ease-in-out: ease-in-out;
+$ease-bounce: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+
+// ================
+// Spacing
+// ================
+
+$spacing: 10px;
+$spacing-x: $spacing;
+$spacing-y: $spacing;
+$spacers: (
+  auto: (
+      x: auto,
+      y: auto
+  ),
+  nh: (
+      x: calc(-#{$spacing} / 2),
+      y: calc(-#{$spacing} / 2)
+  ),
+  nq: (
+      x: -($spacing*1.5),
+      y: -($spacing*1.5)
+  ),
+  n1: (
+      x: -$spacing,
+      y: -$spacing
+  ),
+  n2: (
+      x: -($spacing*2),
+      y: -($spacing*2)
+  ),
+  n3: (
+      x: -($spacing*3),
+      y: -($spacing*3)
+  ),
+  n4: (
+      x: -($spacing*4),
+      y: -($spacing*4)
+  ),
+  n5: (
+      x: -($spacing*5),
+      y: -($spacing*5)
+  ),
+  0: (
+      x: 0,
+      y: 0
+    ),
+  h: (
+      x: calc($spacing-x / 2),
+      y: calc($spacing-y / 2)
+    ),
+  q: (
+      x: $spacing-x * 1.5,
+      y: $spacing-y * 1.5
+    ),
+  1: (
+      x: $spacing-x,
+      y: $spacing-y
+    ),
+  2: (
+      x: ($spacing-x * 2),
+      y: ($spacing-y * 2)
+    ),
+  3: (
+      x: ($spacing-x * 3),
+      y: ($spacing-y * 3)
+    ),
+  4: (
+      x: ($spacing-x * 4),
+      y: ($spacing-y * 4)
+    ),
+  5: (
+      x: ($spacing-x * 5),
+      y: ($spacing-y * 5)
+    ),
+  6: (
+      x: ($spacing-x * 6),
+      y: ($spacing-y * 6)
+    ),
+  7: (
+      x: ($spacing-x * 7),
+      y: ($spacing-y * 7)
+    ),
+  8: (
+      x: ($spacing-x * 8),
+      y: ($spacing-y * 8)
+    ),
+  9: (
+      x: ($spacing-x * 9),
+      y: ($spacing-y * 9)
+    ),
+  10: (
+      x: ($spacing-x * 10),
+      y: ($spacing-y * 10)
+    ),
+);

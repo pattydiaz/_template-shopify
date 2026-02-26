@@ -1,0 +1,179 @@
+@use "../shared" as *;
+
+@mixin cart-heading { @include heading-5; }
+@mixin cart-subheading { @include subheading; }
+@mixin cart-body { @include body; }
+
+$cart-bg: $white;
+$cart-color: $black;
+
+/*! purgecss start ignore */
+.cart {
+  $self: &;
+
+ &-table {
+  width: 100%;
+
+  #{$self}-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: $spacing*2;
+    padding-bottom: $spacing*2;
+
+    &-details {
+      display: flex;
+      align-items: flex-start;
+      flex-grow: 1;
+    }
+
+    &-total {
+      padding-left: $spacing;
+    }
+
+    #{$self}-media {
+      width: 100%;
+      max-width: 80px;
+      margin-right: $spacing;
+    }
+
+    #{$self}-remove {
+      display: block;
+      width: 45px;
+      height: 45px;
+      background: url(icon-trash.svg) no-repeat 50% 50%/18px;
+      font-size: 0;
+    }
+
+    #{$self}-input {
+      display: flex;
+      align-items: center;
+      margin-top: $spacing;
+      
+      .qty {
+        display: flex;
+        margin-right: $spacing*1.5;
+        border: 1px solid $current;
+        background-color: $transparent;
+
+        button,input {
+          min-height: 40px;
+          min-width: 42px;
+          max-width: 42px;
+
+          @include cart-body;
+          text-transform: uppercase;
+          color: $cart-color;
+          background-color: $transparent;
+        }
+        
+        input {
+          text-align: center;
+        }
+      }
+    }
+  }
+ }
+
+ & &-table {
+
+  #{$self}-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-top: $spacing*1.5;
+    padding-bottom: $spacing*1.5;
+    margin-top: $spacing*3;
+    margin-bottom: $spacing*4;
+
+    @include cart-subheading;
+    text-align: left;
+    border-bottom: 1px solid $current;
+  }
+
+  #{$self}-item {
+
+    &-total {
+      
+      @include bp-up(md) {
+        width: 80px;
+        text-align: right;
+      }
+      
+      @include bp-up(xl) {
+        width: 120px;
+      }
+    }
+
+    #{$self}-media {
+      @include bp-up(md) {
+        max-width: 100px;
+        margin-right: $spacing*2;
+      }
+    }
+
+    #{$self}-details {
+      @include bp-up(md) {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      #{$self}-description {
+        @include bp-up(md) {
+          width: 60%;
+        }
+      }
+
+      #{$self}-input {
+        @include bp-up(md) {
+          justify-content: center;
+          width: 40%;
+          margin-top: 0;
+          padding-left: $spacing*1.5;
+          padding-right: $spacing*1.5;
+        }
+      }
+
+      #{$self}-title {
+        @include cart-heading;
+      }
+    }
+  }
+
+ }
+
+ &-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+ }
+
+ &-footer {
+  padding-top: $spacing*1.5;
+  padding-bottom: $spacing*1.5;
+  // margin-top: $spacing*1.5;
+
+  text-align: right;
+  border-top: 1px solid $current;
+
+  #{$self}-subtotal {
+    margin-bottom: $spacing;
+    @include cart-heading;
+  }
+
+  p {
+    @include cart-body;
+  }
+  
+  .button-group {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    margin-top: $spacing*1.5;
+  }
+ }
+
+}
+/*! purgecss end ignore */

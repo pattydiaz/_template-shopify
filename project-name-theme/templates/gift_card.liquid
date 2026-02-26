@@ -1,13 +1,14 @@
 {% layout none %}
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ request.locale.iso_code }}">
+  
   <head>
     <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="{{ settings.color_background }}">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=3">
+    <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 
@@ -15,114 +16,93 @@
       <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
     {%- endif -%}
 
-    {%- unless settings.type_header_font.system? -%}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-    {%- endunless -%}
-
     {%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros | strip_html -%}
 
-    <title>{{ 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name }}</title>
+    <title>Here's your {{ formatted_initial_value }} gift card for {{ shop.name }}!</title>
 
-    <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
+    <meta name="description" content="Your gift card">
 
+    {% render 'meta-tags' %}
     {{ content_for_header }}
+    {% render 'head-tracking' %}
+    {% render 'head-fonts' %}
 
-    <link rel="stylesheet" href="https://use.typekit.net/vds4anp.css">
-    
     {{ 'main.css' | asset_url | stylesheet_tag }}
-
   </head>
 
   <body class="gift-card">
+    <a href="#main" class="skip-to-content button">Skip to Content</a>
 
     <div id="page" class="page">
 
       <main id="main" class="main" role="main" tabindex="-1">
-
-        {% section 'header' %}
-
         <div id="wrapper" class="content gift-card-page">
 
-          <section class="hero section section-default-top pb-6">
-            <div class="hero-text text-center">
+
+          <section class="stuff section">
+            <div class="stuff-wrapper gap-tm--xl gap-bm--xl">
               <div class="container container-lg">
-                <h1 class="hero-title heading-3">{{ 'gift_cards.issued.subtext' | t }}</h1>
 
-                <h2 class="hero-subtitle subtitle mt-2">
+                <div class="stuff-heading gap-b--sm text-center">
+                  <h1 class="heading-1">Your gift card</h1>
+
                   {% if settings.currency_code_enabled %}
-                    {{ gift_card.initial_value | money_with_currency }}
+                    {%- assign gift_card_balance = gift_card.balance | money_with_currency -%}
                   {% else %}
-                    {{ gift_card.initial_value | money }}
+                    {%- assign gift_card_balance = gift_card.balance | money -%}
                   {% endif %}
+                  <h2 class="heading-2 mt-2">Remaining {{ gift_card_balance }}</h2>
+                  
+                  {% if gift_card.enabled == false or gift_card.expired %}
+                    <p class="error mt-2 caption color-error">Expired</p>
+                  {% endif %}
+                </div>
 
-                </h2>
 
-                {%- if gift_card.enabled == false or gift_card.expired -%}
-                  <p class="mt-2 caption">{{ 'gift_cards.issued.expired' | t }}</p>
-                {%- endif -%}
+                <div class="stuff-content container-xs mx-auto">
+
+                  <div class="gift-card-img mb-6">
+                    <img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" alt="" class="img-fluid mx-auto" height="{{ 250 | divided_by: 1.5 }}" width="250" loading="lazy">
+                  </div>
+
+                  <div class="gift-card-qr d-flex d-flex--center" data-identifier="{{ gift_card.qr_identifier }}"></div>
+
+                  <div class="gift-card-info">
                 
-                {% if settings.currency_code_enabled %}
-                  {%- assign gift_card_balance = gift_card.balance | money_with_currency -%}
-                {% else %}
-                  {%- assign gift_card_balance = gift_card.balance | money -%}
-                {% endif %}
-                {%- if gift_card.balance != gift_card.initial_value -%}
-                  <p class="mt-2 w-max" style="--mw: 460px;">{{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}</p>
-                {%- endif -%}
+                    <div class="input mt-2">
+                      <input type="text" class="gift-card-number input-field text-center" value="{{ gift_card.code | format_code }}" aria-label="Gift card code" readonly>
+                    </div>
+    
+                    <div class="buttons d-flex-wrap d-flex--center mt-2">
+                      <a href="javascript:void(0);" class="gift-card-copy-link btn btn-primary m-h m-1-upt" title="Copy code">Copy code</a>
+                      <button class="btn btn-primary m-h m-1-upt" onclick="window.print();" aria-label="Print">Print</button>
+                    </div>
+    
+                    {%- if gift_card.pass_url -%}
+                      <a href="{{ gift_card.pass_url }}" class="gift_card-apple-wallet">
+                        <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="Add to Apple Wallet" loading="lazy">
+                      </a>
+                    {%- endif -%}
+    
+    
+                    <div class="gift-card-copy-success caption mt-1 text-center" role="status"></div>
+                    <template>Code copied successfully</template>
+    
+                  </div>
+
+                </div>
 
               </div>
             </div>
           </section>
 
-          <section class="contents section gap-b animated animated-item fade-up-in">
-            <div class="container container-lg text-center">
-
-              <div class="gift-card-img mb-6">
-                <img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" alt="" class="img-fluid mx-auto" height="{{ 400 | divided_by: 1.5 }}" width="400" loading="lazy">
-              </div>
-
-              <div class="gift-card-qr" data-identifier="{{ gift_card.qr_identifier }}"></div>
-
-              <div class="gift-card-info">
-
-                <input
-                  type="text"
-                  class="gift-card-number"
-                  value="{{ gift_card.code | format_code }}"
-                  aria-label="{{ 'gift_cards.issued.gift_card_code' | t }}"
-                  readonly
-                >
-
-                <a href="javascript:void(0);" class="gift-card-copy-link">{{ 'gift_cards.issued.copy_code' | t }}</a>
-
-                <div class="gift-card-copy-success caption mt-1" role="status"></div>
-                <template>
-                  {{ 'gift_cards.issued.copy_code_success' | t }}
-                </template>
-
-                {%- if gift_card.pass_url -%}
-                  <a href="{{ gift_card.pass_url }}" class="gift_card-apple-wallet">
-                    <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" loading="lazy">
-                  </a>
-                {%- endif -%}
-
-                <button class="btn btn-secondary color-green-b" onclick="window.print();">{{ 'gift_cards.issued.print_gift_card' | t }}</button>
-
-              </div>
-
-            </div>
-          </section>
 
         </div>
-
-        {% section 'footer' %}
-
       </main>
-
     </div>
 
+    <script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'main.js' | asset_url }}" defer="defer"></script>
-
   </body>
 </html>
 

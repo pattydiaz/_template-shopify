@@ -1,10 +1,14 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
 .modal {
   $self: &;
 
   @include cover(fixed);
   @include hide;
   transition: opacity .8s ease, visibility .8s ease;
-  background-color: transparentize($black,0.15);
+  background-color: color-adjust($black, $alpha: -0.15);
   z-index: 200;
 
   &--open {
@@ -50,3 +54,5 @@
     right: 20px;
   }
 }
+
+/*! purgecss end ignore */

@@ -1,0 +1,13 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
+.blurb {
+  
+  a {
+    text-decoration: none;
+    @include text-decoration;
+  }
+}
+
+/*! purgecss end ignore */

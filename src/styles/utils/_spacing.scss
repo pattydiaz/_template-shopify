@@ -1,42 +1,94 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
 @mixin spacing() {
-
   @each $prop, $abbrev in (margin: m, padding: p) {
-
     @each $size, $lengths in $spacers {
       $length-x: map-get($lengths, x);
       $length-y: map-get($lengths, y);
 
-      .#{$abbrev}-#{$size} {
-        #{$prop}: $length-y $length-x;
-      }
+      @if not ($prop == padding and ($length-x == auto or $length-y == auto)) {
 
-      .#{$abbrev}t-#{$size} {
-        #{$prop}-top: $length-y;
+        // --- Base ---
+        .#{$abbrev}-#{$size} {
+          #{$prop}: $length-y $length-x;
+        }
+        .#{$abbrev}t-#{$size} { #{$prop}-top: $length-y; }
+        .#{$abbrev}r-#{$size} { #{$prop}-right: $length-x; }
+        .#{$abbrev}b-#{$size} { #{$prop}-bottom: $length-y; }
+        .#{$abbrev}l-#{$size} { #{$prop}-left: $length-x; }
+        .#{$abbrev}x-#{$size} {
+          #{$prop}-left: $length-x;
+          #{$prop}-right: $length-x;
+        }
+        .#{$abbrev}y-#{$size} {
+          #{$prop}-top: $length-y;
+          #{$prop}-bottom: $length-y;
+        }
       }
+    }
+  }
 
-      .#{$abbrev}r-#{$size} {
-        #{$prop}-right: $length-x;
+  // --- Tablet-up ---
+  @each $prop, $abbrev in (margin: m, padding: p) {
+    @each $size, $lengths in $spacers {
+      $length-x: map-get($lengths, x);
+      $length-y: map-get($lengths, y);
+
+      @if not ($prop == padding and ($length-x == auto or $length-y == auto)) {
+        @include bp-up(md) {
+          .#{$abbrev}-#{$size}-upt { #{$prop}: $length-y $length-x !important; }
+          .#{$abbrev}t-#{$size}-upt { #{$prop}-top: $length-y !important; }
+          .#{$abbrev}r-#{$size}-upt { #{$prop}-right: $length-x !important; }
+          .#{$abbrev}b-#{$size}-upt { #{$prop}-bottom: $length-y !important; }
+          .#{$abbrev}l-#{$size}-upt { #{$prop}-left: $length-x !important; }
+          .#{$abbrev}x-#{$size}-upt {
+            #{$prop}-left: $length-x !important;
+            #{$prop}-right: $length-x !important;
+          }
+          .#{$abbrev}y-#{$size}-upt {
+            #{$prop}-top: $length-y !important;
+            #{$prop}-bottom: $length-y !important;
+          }
+        }
       }
+    }
+  }
 
-      .#{$abbrev}b-#{$size} {
-        #{$prop}-bottom: $length-y;
-      }
+  // --- Desktop-up (largest breakpoint last) ---
+  @each $prop, $abbrev in (margin: m, padding: p) {
+    @each $size, $lengths in $spacers {
+      $length-x: map-get($lengths, x);
+      $length-y: map-get($lengths, y);
 
-      .#{$abbrev}l-#{$size} {
-        #{$prop}-left: $length-x;
-      }
-
-      .#{$abbrev}x-#{$size} {
-        #{$prop}-left: $length-x;
-        #{$prop}-right: $length-x;
-      }
-
-      .#{$abbrev}y-#{$size} {
-        #{$prop}-top: $length-y;
-        #{$prop}-bottom: $length-y;
+      @if not ($prop == padding and ($length-x == auto or $length-y == auto)) {
+        @include bp-up(lg) {
+          .#{$abbrev}-#{$size}-upd { #{$prop}: $length-y $length-x !important; }
+          .#{$abbrev}t-#{$size}-upd { #{$prop}-top: $length-y !important; }
+          .#{$abbrev}r-#{$size}-upd { #{$prop}-right: $length-x !important; }
+          .#{$abbrev}b-#{$size}-upd { #{$prop}-bottom: $length-y !important; }
+          .#{$abbrev}l-#{$size}-upd { #{$prop}-left: $length-x !important; }
+          .#{$abbrev}x-#{$size}-upd {
+            #{$prop}-left: $length-x !important;
+            #{$prop}-right: $length-x !important;
+          }
+          .#{$abbrev}y-#{$size}-upd {
+            #{$prop}-top: $length-y !important;
+            #{$prop}-bottom: $length-y !important;
+          }
+        }
       }
     }
   }
 }
 
 @include spacing;
+
+.p-c {
+  padding: var(--padding);
+  &-upt { @include bp-up(md) { padding: var(--padding-upt); }}
+  &-upd { @include bp-up(lg) { padding: var(--padding-upd); }}
+}
+
+/*! purgecss end ignore */

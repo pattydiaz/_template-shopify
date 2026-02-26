@@ -1,3 +1,5 @@
+@use "../shared" as *;
+
 .ls {
   
   &-none {
@@ -10,6 +12,25 @@
   }
 
   &-col {
-    columns: 2;
+    columns: var(--columns, 2);
+    
+    &-upt {
+      @include bp-up(md) {
+        columns: var(--columns, 2);
+      }
+    }
+    
+    &-upd {
+      @include bp-up(lg) {
+        columns: var(--columns, 2);
+      }
+    }
+
+    &-col,
+    &-col-upt,
+    &-col-upd {
+
+      li { break-inside: avoid; }
+    }
   }
 }

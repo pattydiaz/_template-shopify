@@ -1,52 +1,96 @@
-var header = $(".header");
+let header_anim;
+let header_height;
+let announcement_height = 0;
 
-var Header = {
-  init: function () {
-    Header.build();
+const Header = {
+  init() {
+    this.build();
   },
-  build: function () {
-    if (header.is(":visible")) {
-      Header.height();
-      Header.scroll();
+
+  build() {
+    if (header.isVisible()) {
+      this.height();
+      this.scroll();
+      this.cart();
     }
   },
-  height: function () {
-    var hh = header.outerHeight();
-    body.get(0).style.setProperty("--hh", hh + "px");
 
-    w.on("resize", function () {
-      hh = header.outerHeight();
-      body.get(0).style.setProperty("--hh", hh + "px");
+  height() {
+    header_height = header.el.offsetHeight;
+    body.el.style.setProperty("--hh", `${header_height}px`);
+
+    if (announcement.isVisible()) {
+      announcement_height = announcement.el.offsetHeight;
+      body.el.style.setProperty("--ah", `${announcement_height}px`);
+    } else {
+      announcement_height = 0;
+      body.el.style.setProperty("--ah", `0px`);
+    }
+
+    w.on("resize", () => {
+      header_height = header.el.offsetHeight;
+      body.el.style.setProperty("--hh", `${header_height}px`);
+
+      if (announcement.isVisible()) {
+        announcement_height = announcement.el.offsetHeight;
+        body.el.style.setProperty("--ah", `${announcement_height}px`);
+      } else {
+        announcement_height = 0;
+        body.el.style.setProperty("--ah", `0px`);
+      }
+
+      // ScrollTrigger.refresh();
     });
   },
-  scroll: function () {
 
-    var header_anim = gsap.timeline({
+  scroll() {
+    header_anim = gsap.timeline({
       paused: true,
       scrollTrigger: {
+        trigger: body.el,
+        start: "200px 0",
+        end: "100% 0",
         // markers: true,
-        trigger: body,
-        start: '0 0',
-        end: '100% 0',
-        onUpdate: (self) => {
-          self.progress > 0.01 
-            ? header.addClass("header--scroll") 
-            : header.removeClass("header--scroll");
 
-          if (self.progress > 0.01 && self.direction == 1 && !body.hasClass("nav-active"))
+        onUpdate: self => {
+          const scrolledPastHeader = self.scroll() > header_height;
+          const scrollingDown = scrolledPastHeader && self.direction === 1;
+          const scrollingUp = self.direction === -1;
+
+          const navActive = body.el.classList.contains("nav-active");
+          const sidecartActive = body.el.classList.contains("sidecart-active");
+
+          if (self.progress > 0.0001) {
+            header.el.classList.add("header--scroll");
+          } else {
+            header.el.classList.remove("header--scroll");
+          }
+
+          if (scrollingDown && !navActive && !sidecartActive) {
             header_anim.play();
+          }
 
-          if (self.direction == -1 && !body.hasClass("nav-active"))
+          if (scrollingUp || sidecartActive) {
             header_anim.reverse();
+          }
         }
-      },
+      }
     });
 
-    header_anim.to(header, {
-      y: '-100%',
-      duration: 0.2,
-      ease: 'power2.inOut'
+    header_anim.to(header.el, {
+      y: "-150%",
+      duration: 0.4,
+      ease: "power2.inOut"
     });
+  },
 
+  cart() {
+    const btn = $('.nav-cart');
+    if (!btn.el) return;
+
+    btn.on('click', e => {
+      e.preventDefault();
+      Drawer.open();
+    });
   },
 };

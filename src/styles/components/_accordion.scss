@@ -1,37 +1,46 @@
+@use "../shared" as *;
+
 .accordion {
   $self: &;
 
-  &-header {
+  &-panel {
+    position: relative;
+  }
 
-    &[class*="button"] {}
+  &-btn {
+    
+    &:not(.btn-primary) {
+      width: 100%;
+      pointer-events: all;
+      cursor: pointer;
+      background-color: $transparent;
+    }
   }
 
   &-content {
-    height: 0;
+    position: relative;
+    max-height: 0;
     overflow: hidden;
-    transition: height .4s $ease-default;
+    transition: max-height 0.6s $ease-default;
+    z-index: 1;
 
-    >* {
-      @include fade-in(.4s, $ease-default);
+    > * {
+      @include fade-up-in($duration: 0.25s, $timing: $ease-default, $var: 25px);
     }
 
+    &.open,
     &.active {
-      >* {
-        @include end-opacity;
+
+      > * {
+        @include end-transform;
       }
     }
 
-    &.mobile-only {
-      @include bp-up(md) {
-        height: auto !important;
-      }
-
-      >* {
-        @include bp-up(md) {
-          @include end-opacity;
-        }
+    #page.no-animate & {
+      
+      &.active {
+        max-height: 100%;
       }
     }
   }
-
 }

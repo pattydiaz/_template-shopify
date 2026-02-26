@@ -1,0 +1,62 @@
+{% form 'cart', cart, class: 'cart-form' %}
+
+  <table class="cart-table">
+
+    <thead>
+      <tr class="cart-header">
+        <th>Product</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for item in cart.items %}
+        <tr class="cart-item" data-line="{{ forloop.index }}">
+          
+
+          <td class="cart-item-details">
+            <a class="cart-media d-block ratio-1x1 border-radius" href="{{ item.url }}" title="{{ item.product.title }}">
+              {% if item.image %}
+                {% render 'component-image', img: item.image, size: 150, lazy: false %}
+              {% else %}
+                <div class="float--center w-100 caption text-center px-h">No Image Available</div>
+              {% endif %}
+            </a>
+            <div class="cart-details">
+              <div class="cart-description">
+                <a class="cart-title button-opacity" href="{{ item.url }}">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}
+                  <div class="cart-variant variant">
+                    {%- for option in item.options_with_values -%}
+                      <div class="variant-option caption">
+                        <span class="variant-option-name">{{ option.name }}:</span>
+                        <span class="variant-option-value">{{ option.value }}</span>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
+              </div>
+              <div class="cart-input">
+                <div class="qty">
+                  <button class="minus button-scale" aria-label="Decrease quantity">-</button>
+                  <input type="text" class="cart-qty" value="{{ item.quantity }}" pattern="\d*">
+                  <button class="plus button-scale" aria-label="Increase quantity">+</button>
+                </div>
+                <a href="#" class="cart-remove button-opacity">Remove</a>
+              </div>
+            </div>
+          </td>
+
+
+          <td class="cart-item-total">
+            <div class="cart-total caption">{{ item.line_price | money }}</div>
+          </td>
+
+
+        </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+  
+{% endform %}

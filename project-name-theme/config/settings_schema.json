@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "Project Name Theme",
-    "theme_version": "1.0",
+    "theme_version": "1.0.0",
     "theme_author": "Makers & Allies",
     "theme_documentation_url": "https:\/\/help.shopify.com",
     "theme_support_url": "https:\/\/support.shopify.com\/"
@@ -12,7 +12,7 @@
     "settings": [
       {
         "type": "header",
-        "content": "Social accounts"
+        "content": "Social Accounts"
       },
       {
         "type": "text",
@@ -31,6 +31,30 @@
         "id": "social_twitter_link",
         "label": "Twitter",
         "info": "https://twitter.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_x_link",
+        "label": "X",
+        "info": "https://x.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "info": "https://tiktok.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_linkedin_link",
+        "label": "LinkedIn",
+        "info": "https://www.linkedin.com/company/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "info": "https://www.pinterest.com/shopify"
       },
       {
         "type": "text",
@@ -54,6 +78,41 @@
         "id": "favicon",
         "label": "Favicon Image",
         "info": "Will be scaled down to 32 x 32px"
+      }
+    ]
+  },
+  {
+    "name": "Fonts",
+    "settings": [
+      {
+        "type": "text",
+        "id": "typekit",
+        "label": "Typekit"
+      },
+      {
+        "type": "text",
+        "id": "google-fonts",
+        "label": "Google Fonts"
+      }
+    ]
+  },
+  {
+    "name": "Tracking",
+    "settings": [
+      {
+        "type": "text",
+        "id": "google-analytics",
+        "label": "Google Analytics"
+      },
+      {
+        "type": "text",
+        "id": "google-tag-manager",
+        "label": "Google Tag Manager"
+      },
+      {
+        "type": "text",
+        "id": "facebook-pixel",
+        "label": "Facebook Pixel"
       }
     ]
   }

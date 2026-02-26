@@ -1,0 +1,263 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+
+  if request.design_mode
+    assign animate = ''
+  else
+    assign animate = ' animated animated-item animate-up-in'
+  endif
+
+  assign blog_layout = section.settings.blog_layout
+  assign blog_handle = section.settings.blog_handle
+  assign blog_limit = 1000
+  assign blog = blogs[blog_handle]
+
+%}
+
+
+<div {{ id }}class="blog-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+    
+  <div class="blog-container{% unless blog_layout == 'slider' %} container{{ container_size }}{% endunless %}">
+
+    {% if blog != blank and blog.articles_count > 0 %}
+      {% paginate blog.articles by blog_limit %}
+      {% assign blog_posts = blog.articles | sort: 'date' %}
+        
+        {% if blog_layout == 'slider' %}
+        <div class="blog-slider slider-default pos-relative">
+          <div class="swiper" data-center-all="true" data-slides-sm="1.2" data-slides-md="1.3" data-slides-lg="1.5" data-slides-xl="1.7" data-spacing-sm="20" data-spacing-md="20" data-spacing-lg="30">
+        {% endif %}
+            
+            <ul class="blog-list ls-none {% if blog_layout == 'slider' %} swiper-wrapper{% endif %}">
+              {% for article in blog_posts %}
+                <li class="blog-item{% if blog_layout == 'slider' %} swiper-slide{% else %} pb-4{{ animate }}{% endif %}">
+                  <div class="ratio-7x5">
+                    {% render 'component-image', img: article.image, lazy: true %}
+                  </div>
+                  <div class="mt-2">{{ article.title }}</div>
+                  <div class="blurb w-max mt-1">{{ article.excerpt | strip_html }}</div>
+                  <div class="cta mt-2">
+                  <a href="{{ article.url }}" class="btn btn-primary" title="Read More">Read More</a>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+
+        {% if blog_layout == 'slider' %}
+          </div>
+          {% if blog.articles_count > 1 %}
+            <div class="slider-nav slider-nav--top">
+              <button class="slider-prev slider-btn button-transparent">
+                <i class="arrow arrow--left"></i>
+              </button>
+              <button class="slider-next slider-btn button-transparent">
+                <i class="arrow arrow--right"></i>
+              </button>
+            </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+      {% endpaginate %}
+    {% else %}
+      <div class="text-center">No {{ blog_handle | default: 'blog' }} to display</div>
+    {% endif %}
+
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "Blog Feed",
+    "tag": "section",
+    "class": "blog section",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section ID Options"
+      },
+        {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "default": "md",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing_header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container_size",
+        "default": "xl",
+        "info": "⚠️ The container won't function when the 'Slider' layout style is selected.",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, 
+          {
+            "label": "X-Large",
+            "value": "xl"
+          }, 
+          {
+            "label": "XX-Large",
+            "value": "xx"
+          }, 
+          {
+            "label": "Maximum",
+            "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Blog Options"
+      },
+      {
+        "type": "select",
+        "id": "blog_layout",
+        "label": "Layout Style",
+        "default": "list",
+        "options": [
+          {
+            "label":"List",
+            "value": "list"
+          },
+          {
+            "label":"Slider",
+            "value": "slider"
+          }
+        ]
+      },
+      {
+        "type": "blog",
+        "id": "blog_handle",
+        "label": "Blog"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Blog Feed"
+      }
+    ]
+  }
+{% endschema %}

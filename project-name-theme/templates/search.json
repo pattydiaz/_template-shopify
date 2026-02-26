@@ -1,11 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "section-hero",
-      "settings": {}
+      "type": "section-search"
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main"]
 }

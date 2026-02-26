@@ -1,14 +1,69 @@
+@use "sass:meta";
+@use "../shared" as *;
+
+$border-sides: (
+  null: null,
+  top: top,
+  bottom: bottom,
+  left: left,
+  right: right,
+  y: (top, bottom),
+  x: (left, right)
+);
+
 @each $name, $color in $colors {
-  .border-#{$name} {
-    border: var(--border-width, 2px) solid #{$color};
+  @each $key, $value in $border-sides {
+
+    // Build class name safely
+    $class-name: "border";
+
+    @if $key != null {
+      $class-name: "#{$class-name}-#{$key}";
+    }
+
+    $class-name: "#{$class-name}-#{$name}";
+
+    .#{$class-name} {
+
+      @if meta.type-of($value) == "list" {
+        @each $side in $value {
+          border-#{$side}: var(--border-width, 1px) solid #{$color};
+        }
+      } @else if $value != null {
+        border-#{$value}: var(--border-width, 1px) solid #{$color};
+      } @else {
+        border: var(--border-width, 1px) solid #{$color};
+      }
+
+    }
+  }
+}
+
+
+$radius-sizes: (
+  null: 10px,
+  // inner: 5px
+);
+
+@each $mod, $radius in $radius-sizes {
+
+  $class-name: "border-radius";
+
+  @if $mod != null {
+    $class-name: "#{$class-name}-#{$mod}";
   }
 
-  .border-bottom-#{$name} {
-    border-bottom: var(--border-width, 2px) solid #{$color};
-  }
+  .#{$class-name} {
+    border-radius: $radius;
 
-  .border-y-#{$name} {
-    border-top: var(--border-width, 2px) solid #{$color};
-    border-bottom: var(--border-width, 2px) solid #{$color};
+    &-top {
+      border-top-left-radius: $radius;
+      border-top-right-radius: $radius;
+    }
+
+    &-bottom {
+      border-bottom-left-radius: $radius;
+      border-bottom-right-radius: $radius;
+    }
   }
 }

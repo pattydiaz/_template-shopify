@@ -1,0 +1,51 @@
+{% form 'product', product, id: product_form_id, class: 'product-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
+
+  {% if product.variants.size > 1 %}
+    <input type="hidden" name="id" id="variant-id" value="{{ product.variants.first.id }}">
+
+    <div id="variant-options">
+      {% for option in product.options_with_values %}
+        {% assign options_count = option.values | size %}
+        <div class="product-variants variant-group my-2">
+          {% if options_count > 7 %}
+            <label class="product-variants-heading mb-1" for="option-{{ option.name | handleize }}">{{ option.name }}</label>
+            <select class="variant-option" name="options[{{ option.name }}]" id="option-{{ option.name | handleize }}">
+              {% for value in option.values %}
+                <option value="{{ value }}"{% if value.available %}{% if value.selected %} selected{% elsif forloop.first %} selected{% endif %}{% else %} disabled{% endif %}>
+                  {{ value }}{% if value.available == false %} - Not available{% endif %}
+                </option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <div class="product-variants-heading mb-1">{{ option.name }}</div>
+            <fieldset>
+              {% for value in option.values %}
+                <input class="variant-option float--center{% if value.available == false %} disabled{% endif %}" type="radio" name="options[{{ option.name }}]" id="{{ option.name | handleize }}-{{ value | handleize }}" value="{{ value }}"{% if value.available %}{% if value.selected %} checked{% elsif forloop.first %} checked{% endif %}{% else %} disabled{% endif %}>
+                <label class="d-ib border-current p-1 mr-h mt-h" for="{{ option.name | handleize }}-{{ value | handleize }}">{{ value }}</label>
+              {% endfor %}
+            </fieldset>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <input type="hidden" name="id" id="variant-id" value="{{ product.variants.first.id }}">
+  {% endif %}
+  
+  <div class="product-checkout">
+    <div class="qty">
+      <button type="button" class="minus" aria-label="-">-</button>
+      <input type="text" id="ProductQuantity" name="quantity" value="1" pattern="\d*">
+      <button type="button" class="plus" aria-label="+">+</button>
+    </div>
+
+
+    {% if product.available %}
+      <button id="add-to-cart-button" type="submit" name="add" class="btn btn-primary" aria-label="Add to Cart">Add to Cart</button>
+    {% else %}
+      <button class="btn btn-primary disabled" aria-label="Add to Cart" disabled>Add to Cart</button>
+    {% endif %}
+  </div>
+
+{% endform %}

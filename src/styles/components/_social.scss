@@ -1,0 +1,26 @@
+@use "../shared" as *;
+
+/*! purgecss start ignore */
+
+.social {
+
+  &-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: $current;
+
+    &.email { @include mask('images/icon-social-email.svg'); }
+    &.facebook { @include mask('images/icon-social-facebook.svg'); }
+    &.instagram { @include mask('images/icon-social-instagram.svg'); }
+    &.linkedin { @include mask('images/icon-social-linkedin.svg'); }
+    &.pinterest { @include mask('images/icon-social-pinterest.svg'); }
+    &.tiktok { @include mask('images/icon-social-tiktok.svg'); }
+    &.twitter { @include mask('images/icon-social-twitter.svg'); }
+    &.vimeo { @include mask('images/icon-social-vimeo.svg'); }
+    &.x { @include mask('images/icon-social-x.svg'); }
+    &.youtube { @include mask('images/icon-social-youtube.svg'); }
+  }
+}
+
+/*! purgecss end ignore */

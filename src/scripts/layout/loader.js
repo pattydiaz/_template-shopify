@@ -1,31 +1,33 @@
-var loader = $('#loader');
+const Loader = {
+  init() {
+    this.build();
+  },
 
-var Loader = {
-  init: function() {
-    Loader.build();
-  },
-  build: function() {
-    loader.is(':visible') ? Loader.primary() : Loader.fallback();
-  },
-  primary: function(){
+  build() {
     Scrolling.lock();
-    
-    var loader_anim = gsap.timeline();
+    loader.isVisible() ? this.primary() : this.fallback();
   },
-  fallback: function() {
-    Scrolling.lock();
-    Loader.animate();
-  },
-  animate: function(delay) {
-    var time = delay !== undefined ? delay : 0;
 
+  primary() {
+    const loader_anim = gsap.timeline();
+    // Add GSAP steps here if needed
+  },
+
+  fallback() {
+    this.animate();
+  },
+
+  animate(delay = 0) {
     setTimeout(() => {
-
       lazyload = new LazyLoad(lazyloadSettings);
-      body.addClass('loaded');
+
+      document.body.classList.add('loaded');
+      
+      Wrapper.init();
       Scrolling.init();
       Scrolling.unlock();
+      // Hero.init();
       
-    }, time);
+    }, delay);
   }
 };

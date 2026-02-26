@@ -1,0 +1,276 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+
+  assign featured_collection_handle = section.settings.featured_collection | default: "" 
+
+  if featured_collection_handle != blank
+    assign featured_source = collections[featured_collection_handle].products
+  else
+    assign featured_source = collections.all.products
+  endif
+
+  assign featured_heading = section.settings.featured_heading
+  assign featured_limit = 50
+  if request.design_mode
+    assign featured_limit = 4
+  endif
+
+%}
+
+{% if featured_source and featured_source.size > 0 %}
+
+  <div {{ id }}class="featured-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+
+    {% if spacing_header %}
+      <div class="gap-hh"></div>
+    {% endif %}
+
+    <div class="featured-container container{{ container_size }}">
+      
+      {% if featured_heading %}
+        <h2 class="heading-3 mb-3 color-{{ text_color }} {{ text_alignment }} mb-4">{{ featured_heading }}</h2>
+      {% endif %}
+      
+      {% if featured_source and featured_source.size > 2 %}
+      <div class="slider-mobile">
+        <div class="swiper mx-nq mx-0-upt px-4 px-0-upt">
+      {% endif %}
+
+          <ul class="featured-products d-flex-t ls-none{% if featured_source and featured_source.size > 2 %} swiper-wrapper{% endif %} mx-n1-upt">
+    
+            {% for related_product in featured_source limit: featured_limit %}
+              <li class="featured-product w-100 wt-25 px-1{% if featured_source and featured_source.size > 2 %} swiper-slide{% endif %}">
+                {% render 'card-product', product: related_product, background_color: background_color, text_color: text_color %}
+              </li>
+            {% endfor %}
+    
+          </ul>
+
+      {% if featured_source and featured_source.size > 2 %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+{% endif %}
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const container = document.querySelector('.featured-products');
+    if (!container) return;
+
+    const items = Array.from(container.children);
+
+    // Shuffle products
+    items.sort(() => Math.random() - 0.5);
+
+    // Keep only 4
+    container.innerHTML = '';
+    items.slice(0, 4).forEach(item => container.appendChild(item));
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "tag": "section",
+  "class": "featured section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section ID Options"
+    },
+    {
+      "type": "text",
+      "id": "id",
+      "label": "Section ID",
+      "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+    },
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "spacing_top",
+      "default": "md",
+      "label": "Section Spacing Top",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "spacing_bottom",
+      "default": "md",
+      "label": "Section Spacing Bottom",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, {
+          "label": "X-Large",
+          "value": "xl"
+        }, {
+          "label": "XX-Large",
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "spacing_header",
+      "default": false,
+      "label": "Add extra spacing for header"
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container_size",
+      "default": "xx",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, 
+        {
+          "label": "X-Large",
+          "value": "xl"
+        }, 
+        {
+          "label": "XX-Large",
+          "value": "xx"
+        }, 
+        {
+          "label": "Maximum",
+          "value": "max"
+        },
+        {
+          "label": "Extra",
+          "value": "xtr"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Featured Products Options"
+    },
+    {
+      "type": "text",
+      "id": "featured_heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Collection",
+      "info": "⚠️ If no collection is selected, all products will be used by default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}

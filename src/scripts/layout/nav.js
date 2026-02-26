@@ -1,70 +1,64 @@
-var nav = $('.nav');
-var menu_btn = $('#hamburger');
+const nav = $('#nav');
+const menu_btn = $('#menu');
 
-var Navigation = {
-  init: function() {
-    Navigation.build()
+const Navigation = {
+  
+  init() {
+    this.build();
   },
-  build: function() {
-    if(nav.is(':visible')) {
 
-      Navigation.overflow();
-      
-      menu_btn.on('click',function() {
-        $(this).toggleClass('active');
-        ($(this).hasClass('active')) ? Navigation.open() : Navigation.close();
+  build() {
+    if (nav.isVisible()) {
+
+      menu_btn.on('click', () => {
+        const isActive = menu_btn.el.classList.toggle('active');
+        isActive ? this.open() : this.close();
       });
 
-      w
-      .on('keyup', function(e){
-        if(nav.hasClass('nav--open')) {
-          if (e.key === 'Escape') Navigation.close();
+      w.on('keyup', (e) => {
+        if (nav.el.classList.contains('nav--open') && e.key === 'Escape') {
+          this.close();
         }
-      })
-      .on('resize',function(){
-        Navigation.overflow();
       });
-
     }
   },
-  open: function() {
+
+  open() {
     Scrolling.lock();
 
-    menu_btn.attr('aria-label','Close');
+    menu_btn.el.textContent = 'Close';
+    menu_btn.el.setAttribute('aria-label', 'Close');
     menu_btn.addClass('active');
-    
+
     nav.addClass('nav--open');
     body.addClass('nav-open');
     body.addClass('nav-active');
 
-    nav.find('.nav--animate').each(function (i) {
-      $(this).delay(500 * i).queue(function () {
-        $(this).addClass('active').dequeue();
-      });
+    setTimeout(() => {
+      nav.el.focus();
+    }, 100);
+
+    const items = nav.el.querySelectorAll('.nav--animate');
+    items.forEach((item, i) => {
+      setTimeout(() => item.classList.add('active'), 500 * i);
     });
   },
-  close: function() {
+
+  close() {
     Scrolling.unlock();
-    menu_btn.attr('aria-label','Menu');
+    
+    menu_btn.el.textContent = 'Menu';
+    menu_btn.el.setAttribute('aria-label', 'Menu');
     menu_btn.removeClass('active');
-    
-    nav.find('.nav--animate').removeClass('active');
-    
+
+    const items = nav.el.querySelectorAll('.nav--animate');
+    items.forEach(item => item.classList.remove('active'));
+
+    nav.removeClass('nav--open');
+    body.removeClass('nav-open');
+
     setTimeout(() => {
-      nav.removeClass('nav--open');
-      body.removeClass('nav-open');
-      
-      setTimeout(() => {
-        body.removeClass('nav-active');
-      }, 600);
-      
-    }, 300);
-
-  },
-  overflow: function() {
-    var sh = nav.find('.nav-container')[0].scrollHeight;
-    var nh = sh + header.outerHeight();
-
-    nh > wh ? nav.addClass('nav--scroll') : nav.removeClass('nav--scroll');
+      body.removeClass('nav-active');
+    }, 420);
   }
-}
+};

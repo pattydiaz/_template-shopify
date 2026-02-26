@@ -1,9 +1,12 @@
+@use "../shared" as *;
+
 .lazy {
   
   &:not(.not-animated) {
     @include animate-in;
     
-    &.loaded {
+    &.loaded,
+    &.applied {
       animation: fade-in 0.4s ease forwards;
     }
   }

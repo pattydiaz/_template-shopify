@@ -1,8 +1,8 @@
+@use "../shared" as *;
+
 .default {
 
   &-page {
-    // padding-top: var(--hh, 120px);
-    // padding-bottom: var(--hh, 120px);
+    // padding-top: var(--hh);
   }
-
 }

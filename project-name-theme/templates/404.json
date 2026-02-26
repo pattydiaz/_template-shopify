@@ -1,11 +1,8 @@
 {
   "sections": {
     "main": {
-      "type": "section-404",
-      "settings": {}
+      "type": "section-hero"
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main"]
 }

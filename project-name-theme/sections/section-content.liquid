@@ -1,22 +1,47 @@
 {% liquid
 
-assign spacing-top = section.settings.spacing-top | prepend: ' gap-tm--'
-assign spacing-bottom = section.settings.spacing-bottom | prepend: ' gap-bm--'
-assign spacing-header = section.settings.spacing-header
-assign container-size = section.settings.container-size | prepend: ' container-'
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
   
 %}
 
-{% if spacing-header == true %}
-  <div class="gap-hh"></div>
-{% endif %}
+{% if page.url contains 'style-guide' %}
 
-{% if page.url contains 'design-guide' %}
-  {% render 'block-design-guide' %}
+  {% render 'style-guide' %}
+  
 {% else %}
 
-  <div class="stuff-wrap{{ spacing-top }}{{ spacing-bottom }}">
-    <div class="container{{ container-size }} contents">{{ page.content }}</div>
+  <div class="default-content-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+
+    {% if spacing_header == true %}
+      <div class="gap-hh"></div>
+    {% endif %}
+
+    <div class="container{{ container_size }}">
+      
+      {% if page.content == blank %}
+
+        <div class="text-center">
+          <h3 class="mb-1">There is currently no content.</h3>
+          <div class="contents">
+            {% if customer %}
+              <p>Add content in the Shopify admin: <a href="/admin" title="Edit this page">Edit this page</a>.</p>
+            {% else %}
+              <p><a href="/admin" title="Log in">Log in</a> to Shopify to edit this page.</p>
+            {% endif %}
+            <a href="/" class="btn btn-primary mt-2" title="Back to Home">Back to Home</a>
+          </div>
+        </div>
+
+      {% else %}
+        <div class="contents">{{ page.content }}</div>
+
+      {% endif %}
+
+    </div>
   </div>
 
 {% endif %}
@@ -25,7 +50,7 @@ assign container-size = section.settings.container-size | prepend: ' container-'
   {
     "name": "Page Content",
     "tag": "section",
-    "class": "stuff section",
+    "class": "default-content section",
     "limit": 1,
     "settings": [
       {
@@ -34,8 +59,8 @@ assign container-size = section.settings.container-size | prepend: ' container-'
       },
       {
         "type": "select",
-        "id": "spacing-top",
-        "default": "none",
+        "id": "spacing_top",
+        "default": "md",
         "label": "Section Spacing Top",
         "options": [
           {
@@ -68,7 +93,7 @@ assign container-size = section.settings.container-size | prepend: ' container-'
       },
       {
         "type": "select",
-        "id": "spacing-bottom",
+        "id": "spacing_bottom",
         "default": "md",
         "label": "Section Spacing Bottom",
         "options": [
@@ -102,7 +127,7 @@ assign container-size = section.settings.container-size | prepend: ' container-'
       },
       {
         "type": "checkbox",
-        "id": "spacing-header",
+        "id": "spacing_header",
         "default": false,
         "label": "Add extra spacing for header"
       }, 
@@ -113,8 +138,8 @@ assign container-size = section.settings.container-size | prepend: ' container-'
       {
         "type": "select",
         "label": "Container Size",
-        "id": "container-size",
-        "default": "md",
+        "id": "container_size",
+        "default": "lg",
         "options": [
           {
             "label": "None",
@@ -135,15 +160,22 @@ assign container-size = section.settings.container-size | prepend: ' container-'
           {
             "label": "Large",
             "value": "lg"
-          }, {
+          }, 
+          {
             "label": "X-Large",
             "value": "xl"
-          }, {
+          }, 
+          {
             "label": "XX-Large",
             "value": "xx"
-          }, {
+          }, 
+          {
             "label": "Maximum",
             "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
           }
         ]
       }

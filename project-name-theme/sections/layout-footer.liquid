@@ -1,33 +1,57 @@
-<div class="footer-wrap bg-black">
-  <div class="container">
+{% liquid
+  
+  assign footer_newsletter_title = section.settings.footer_newsletter_title | default: 'Newsletter Mailchimp'
+  assign footer_newsletter_blurb = section.settings.footer_newsletter_blurb
 
+%}
 
-    <div class="footer-newsletter gap-ym--md text-center color-white">
-      <h2 class="heading-3">Newsletter Sign Up</h2>
-      <div class="input w-max mx-auto mt-2" style="--mw: 400px">
-        <input type="email" name="" id="" class="input-field border-white color-white">
-      </div>
-      <div class="input w-max mx-auto mt-2" style="--mw: 400px">
-        <button class="btn btn-primary--light">Submit</button>
-      </div>
+<div class="footer-wrapper gap-tm--sm">
+  <div class="footer-container container container-xx">
+
+    <div class="footer-newsletter text-center">
+      {% if footer_newsletter_title != blank %}
+        <h2 class="">{{ footer_newsletter_title }}</h2>
+      {% endif %}
+      {% if footer_newsletter_blurb != blank %}
+        <div class="blurb w-max mt-1">{{ footer_newsletter_blurb }}</div>
+      {% endif %}
+      {% render 'form-mailchimp', class: 'footer-newsletter-form mt-2' %}
     </div>
 
 
-    {% if linklists[section.settings.footer-nav] %}
-      <ul class="footer-nav py-2 ls-none text-center color-white-transparent">
-        <li class="d-ib">
-          <span class="px-h py-h caption">&copy; Copyright {{ "now" | date: "%Y" }} {{ shop.name }}</span>
-        </li>
-        {% for link in linklists[section.settings.footer-nav].links %}
-          {% if linklists[section.settings.footer-nav].levels == 1 %}
-            <li class="d-ib">
-              <a href="{{ link.url }}" class="button-opacity px-h py-h caption" title="{{ link.title | escape }}">{{ link.title | escape }}</a>
+    {% render 'component-social', class: 'footer-social mt-q', color: 'black' %}
+
+
+    {% if linklists[section.settings.footer_nav] %}
+      <ul class="footer-nav ls-none text-center">
+        {% for link in linklists[section.settings.footer_nav].links %}
+          {% if linklists[section.settings.footer_nav].levels == 1 %}
+            <li class="footer-nav-item">
+              <a href="{{ link.url }}" class="footer-nav-anchor button-opacity text-uppercase" title="{{ link.title | strip_html | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | strip_html | escape }}</a>
             </li>
           {% endif %}
         {% endfor %}
       </ul>
     {% endif %}
 
+
+    {% if linklists[section.settings.footer_nav_sub] %}
+      <ul class="footer-legal ls-none text-center mt-h-upt py-2">
+        <li class="footer-legal-item d-ib-middle mr-h caption">
+          <span class="caption">&copy; {{ "now" | date: "%Y" }} {{ shop.name }}. All rights reserved.</span>
+        </li>
+        {% for link in linklists[section.settings.footer_nav_sub].links %}
+          {% if linklists[section.settings.footer_nav_sub].levels == 1 %}
+            <li class="footer-legal-item d-ib-middle mr-h caption">
+              <a href="{{ link.url }}" class="footer-legal-anchor caption button-opacity" title="{{ link.title | strip_html | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | strip_html | escape }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        <li class="footer-legal-item d-ib-middle mr-h caption">
+          <a href="https://makersandallies.com" class="footer-legal-anchor caption button-opacity" title="Made by Makers" target="_blank" rel="nofollow">Made by Makers</a>
+        </li>
+      </ul>
+    {% endif %}
 
   </div>
 </div>
@@ -39,9 +63,32 @@
     "class": "footer",
     "settings" : [
       {
+        "type": "header",
+        "content": "Newsletter"
+      },
+      {
+        "type": "text",
+        "id": "footer_newsletter_title",
+        "label": "Newsletter Title"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_newsletter_blurb",
+        "label": "Newsletter Text Blurb"
+      },
+      {
+        "type": "header",
+        "content": "Navigation"
+      },
+      {
         "type": "link_list",
-        "id": "footer-nav",
+        "id": "footer_nav",
         "label": "Footer Menu"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_nav_sub",
+        "label": "Footer Sub Menu"
       }
     ]
   }

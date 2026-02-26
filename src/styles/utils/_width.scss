@@ -1,8 +1,12 @@
+@use "../shared" as *;
+
 $widths: (
   "5": 5%,
   "15": 15%,
+  "16": 16.666%,
   "25": 25%,
   "33": 33.333%,
+  "45": 45%,
   "75": 75%,
 );
 
@@ -64,6 +68,77 @@ $widths: (
 
 .w-max {
   max-width: var(--mw, 560px);
+  
+  @include bp-up(md) {
+    max-width: var(--mw-upt, var(--mw, 560px));
+  }
+  
+  @include bp-up(lg) {
+    max-width: var(--mw-upd, var(--mw-upt, var(--mw, 560px)));
+  }
+
+  /*! purgecss start ignore */
+
+  .text-center & {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .text-right & {
+    margin-left: auto;
+  }
+
+  /*! purgecss end ignore */
+}
+
+.w-max-upt {
+  @include bp-up(md) {
+    max-width: var(--mw, 560px);
+  }
+
+  /*! purgecss start ignore */
+
+  .text-center & {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .text-right & {
+    margin-left: auto;
+  }
+
+  /*! purgecss end ignore */
+}
+
+.w-max-upd {
+  @include bp-up(lg) {
+    max-width: var(--mw, 560px);
+  }
+
+  /*! purgecss start ignore */
+
+  .text-center & {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .text-right & {
+    margin-left: auto;
+  }
+
+  /*! purgecss end ignore */
+}
+
+.w-min {
+  min-width: var(--mw, 560px);
+  
+  @include bp-up(md) {
+    min-width: var(--mw-upt, var(--mw, 560px));
+  }
+  
+  @include bp-up(lg) {
+    min-width: var(--mw-upd, var(--mw-upt, var(--mw, 560px)));
+  }
 }
 
 .w-full {
