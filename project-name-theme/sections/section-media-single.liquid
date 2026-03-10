@@ -2,7 +2,7 @@
 
   assign id = section.settings.id
   if id != blank
-    assign id = id | lowercase | replace: " ", "-" | prepend: 'id="' | append: '" '
+    assign id = id | downcase | replace: " ", "-" | prepend: 'id="' | append: '" '
   else
     assign id = ''
   endif
@@ -63,7 +63,7 @@
         "type": "text",
         "id": "id",
         "label": "Section ID",
-        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+        "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
       },
       {
         "type": "header",
