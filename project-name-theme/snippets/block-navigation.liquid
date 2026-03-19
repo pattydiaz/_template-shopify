@@ -1,0 +1,32 @@
+{% liquid
+
+  assign nav = block.settings.nav
+  assign nav_type = block.settings.nav_type
+  assign nav_button = block.settings.nav_button
+  assign nav_button_color = block.settings.nav_button_color
+  assign nav_button_bg = block.settings.nav_button_bg
+
+%}
+
+{% if nav != blank %}
+  <div class="header-cta{% if nav_type == 'list' %} d-none-upt{% endif %}">
+    {% if nav_button == 'menu' %}
+      <button id="menu" class="header-btn content button-opacity color-{{ nav_button_color }} bg-{{ nav_button_bg }}" aria-label="Menu">
+        <span>
+          <span>Menu</span>
+          <span>Close</span>
+        </span>
+      </button>
+    {% elsif nav_button == 'hamburger' %}
+      <button id="menu" class="header-btn hamburger button-opacity color-{{ nav_button_color }}" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% if nav != blank %}
+  {% render 'navigation', nav_settings: block.settings %}
+{% endif %}

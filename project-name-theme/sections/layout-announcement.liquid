@@ -8,10 +8,14 @@
     endcase
   endfor
 
+  assign text_color = section.settings.text_color
+  assign accent_color = section.settings.accent_color
+  assign bg_color = section.settings.bg_color
+
 %}
 
 
-<div class="announcement-wrapper{% if count < 1 %} announcement--hidden{% endif %}">
+<div class="announcement-wrapper bg-{{ bg_color }} color-{{ text_color }}{% if count < 1 %} announcement--hidden{% endif %}">
   <div class="announcement-container">
 
     <div class="slider-default">
@@ -28,7 +32,7 @@
               %}
               <div class="announcement-slide swiper-slide text-center">
                 {% if announcement_text != blank %}
-                  <div class="blurb">{{ announcement_text }}</div>
+                  <div class="blurb caption">{{ announcement_text }}</div>
                 {% endif %}
               </div>
     
@@ -39,8 +43,8 @@
         </div>
         {% if count > 1 %}
           <div class="slider-nav float--cover d-flex d-flex--align-center d-flex--justify-between">
-            <button class="slider-prev slider-btn button-opacity border-current"><</button>
-            <button class="slider-next slider-btn button-opacity border-current">></button>
+            <button class="slider-prev slider-btn button-opacity heading-5 mx-1 color-{{ accent_color }}">&larr;</button>
+            <button class="slider-next slider-btn button-opacity heading-5 mx-1 color-{{ accent_color }}">&rarr;</button>
           </div>
         {% endif %}
       </div>
@@ -56,6 +60,65 @@
     "name": "Announcement Banner",
     "class": "announcement",
     "tag": "div",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "accent_color",
+        "label": "Accent Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent color-{{ text_color }}"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      }
+    ],
     "blocks": [
       {
         "type": "announcement",

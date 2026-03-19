@@ -1,54 +1,49 @@
 {% liquid
   
-  assign footer_newsletter_title = section.settings.footer_newsletter_title | default: 'Newsletter Mailchimp'
-  assign footer_newsletter_blurb = section.settings.footer_newsletter_blurb
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.text_color
+
+  assign footer_email = section.settings.footer_email
+  assign footer_nav = section.settings.footer_nav
 
 %}
 
-<div class="footer-wrapper gap-tm--sm">
-  <div class="footer-container container container-xx">
+<div class="footer-wrapper{% if footer_email != blank or section.blocks.size > 0  %} gap-tm--sm{% endif %} bg-{{ bg_color }} color-{{ text_color }}">
+  <div class="footer-container container{{ container_size }}{% if footer_email != blank or section.blocks.size > 0  %} mt-2{% endif %}">
 
-    <div class="footer-newsletter text-center">
-      {% if footer_newsletter_title != blank %}
-        <h2 class="">{{ footer_newsletter_title }}</h2>
-      {% endif %}
-      {% if footer_newsletter_blurb != blank %}
-        <div class="blurb w-max mt-1">{{ footer_newsletter_blurb }}</div>
-      {% endif %}
-      {% render 'form-mailchimp', class: 'footer-newsletter-form mt-2' %}
-    </div>
-
-
-    {% render 'component-social', class: 'footer-social mt-q', color: 'black' %}
-
-
-    {% if linklists[section.settings.footer_nav] %}
-      <ul class="footer-nav ls-none text-center">
-        {% for link in linklists[section.settings.footer_nav].links %}
-          {% if linklists[section.settings.footer_nav].levels == 1 %}
-            <li class="footer-nav-item">
-              <a href="{{ link.url }}" class="footer-nav-anchor button-opacity text-uppercase" title="{{ link.title | strip_html | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | strip_html | escape }}</a>
-            </li>
+    {% if footer_email != blank or section.blocks.size > 0  %}
+      
+      <div class="footer-columns columns columns-swap gap-ym--xs d-flex-t d-flex--align-center border-y-current">
+        <div class="footer-column column">
+          {% content_for 'blocks' %}
+        </div>
+        <div class="footer-column column" style="--column-margin: 5px;">
+          {% if footer_email != blank %}
+            <span class="subheading">Contact Us:</span>
+            <a href="mailto:{{ footer_email }}" class="button-opacity subheading" title="{{ footer_email }}">{{ footer_email }}</a>
           {% endif %}
-        {% endfor %}
-      </ul>
+        </div>
+      </div>
+
     {% endif %}
 
 
-    {% if linklists[section.settings.footer_nav_sub] %}
-      <ul class="footer-legal ls-none text-center mt-h-upt py-2">
-        <li class="footer-legal-item d-ib-middle mr-h caption">
-          <span class="caption">&copy; {{ "now" | date: "%Y" }} {{ shop.name }}. All rights reserved.</span>
+
+    {% if linklists[footer_nav] %}
+      <ul class="footer-nav ls-none text-center mt-h-upt py-3">
+        <li class="footer-nav-item d-ib-middle mr-h caption text-uppercase">
+          <span class="caption text-uppercase">&copy; {{ "now" | date: "%Y" }} {{ shop.name }}</span>
         </li>
-        {% for link in linklists[section.settings.footer_nav_sub].links %}
-          {% if linklists[section.settings.footer_nav_sub].levels == 1 %}
-            <li class="footer-legal-item d-ib-middle mr-h caption">
-              <a href="{{ link.url }}" class="footer-legal-anchor caption button-opacity" title="{{ link.title | strip_html | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | strip_html | escape }}</a>
+        {% for link in linklists[footer_nav].links %}
+          {% if linklists[footer_nav].levels == 1 %}
+            <li class="footer-nav-item d-ib-middle mr-h caption text-uppercase">
+              <a href="{{ link.url }}" class="footer-nav-anchor caption text-uppercase button-opacity" title="{{ link.title | strip_html | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | strip_html | escape }}</a>
             </li>
           {% endif %}
         {% endfor %}
-        <li class="footer-legal-item d-ib-middle mr-h caption">
-          <a href="https://makersandallies.com" class="footer-legal-anchor caption button-opacity" title="Made by Makers" target="_blank" rel="nofollow">Made by Makers</a>
+        <li class="footer-nav-item d-ib-middle mr-h caption text-uppercase">
+          <a href="https://makersandallies.com" class="footer-nav-anchor caption text-uppercase button-opacity" title="Made by Makers" target="_blank" rel="nofollow">Made by Makers</a>
         </li>
       </ul>
     {% endif %}
@@ -64,32 +59,108 @@
     "settings" : [
       {
         "type": "header",
-        "content": "Newsletter"
+        "content": "Content Options"
       },
       {
-        "type": "text",
-        "id": "footer_newsletter_title",
-        "label": "Newsletter Title"
+        "type": "select",
+        "label": "Container Size",
+        "id": "container_size",
+        "default": "xl",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, 
+          {
+            "label": "X-Large",
+            "value": "xl"
+          }, 
+          {
+            "label": "XX-Large",
+            "value": "xx"
+          }, 
+          {
+            "label": "Maximum",
+            "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
+          }
+        ]
       },
       {
-        "type": "textarea",
-        "id": "footer_newsletter_blurb",
-        "label": "Newsletter Text Blurb"
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
       },
       {
         "type": "header",
-        "content": "Navigation"
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Footer Options"
+      },
+      {
+        "type": "text",
+        "id": "footer_email",
+        "label": "Contact Email",
+        "placeholder": "emailaddress@email.com"
       },
       {
         "type": "link_list",
         "id": "footer_nav",
         "label": "Footer Menu"
-      },
-      {
-        "type": "link_list",
-        "id": "footer_nav_sub",
-        "label": "Footer Sub Menu"
       }
+    ],
+    "blocks": [
+      { "type": "_icons" }
     ]
   }
 {% endschema %}

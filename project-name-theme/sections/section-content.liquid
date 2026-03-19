@@ -5,6 +5,8 @@
   assign spacing_header = section.settings.spacing_header
   
   assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
   
 %}
 
@@ -14,7 +16,7 @@
   
 {% else %}
 
-  <div class="default-content-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+  <div class="default-content-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
     {% if spacing_header == true %}
       <div class="gap-hh"></div>
@@ -24,7 +26,7 @@
       
       {% if page.content == blank %}
 
-        <div class="text-center">
+        <div class="text-center color-{{ text_color }}">
           <h3 class="mb-1">There is currently no content.</h3>
           <div class="contents">
             {% if customer %}
@@ -37,7 +39,7 @@
         </div>
 
       {% else %}
-        <div class="contents">{{ page.content }}</div>
+        <div class="contents color-{{ text_color }}">{{ page.content }}</div>
 
       {% endif %}
 
@@ -176,6 +178,44 @@
           {
             "label": "Extra",
             "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
           }
         ]
       }

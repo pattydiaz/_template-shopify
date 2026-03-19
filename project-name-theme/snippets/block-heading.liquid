@@ -1,0 +1,15 @@
+{% liquid
+
+assign heading = block.settings.heading
+assign heading_spacing_top = block.settings.heading_spacing_top | prepend: ' mt-'
+assign heading_spacing_bottom = block.settings.heading_spacing_bottom | prepend: ' mb-'
+assign heading_tag = block.settings.heading_tag
+assign heading_type = block.settings.heading_type
+assign heading_color = block.settings.heading_color
+assign heading_width = block.settings.heading_width
+assign heading_width_mobile = block.settings.heading_width_mobile | prepend: '--mw:' | append: 'px;'
+assign heading_width_desktop = block.settings.heading_width_desktop | prepend: '--mw-upt:' | append: 'px;'
+
+%}
+
+<{{ heading_tag }} class="{{ heading_type }}{{ heading_spacing_top }}{{ heading_spacing_bottom }} color-{{ heading_color }}{% if heading_width == true %} w-max" style="{{ heading_width_mobile }} {{ heading_width_desktop }}{% endif %}">{{ heading }}</{{ heading_tag }}>

@@ -1,6 +1,6 @@
-<a href="{{ product.url }}" class="product-card">
+<a href="{{ product.url }}" class="product-card color-{{ product_color }}" title="{{ product.title }}">
   <div class="product-card-image">
-    <div class="ratio-1x1 border-radius">
+    <div class="ratio-1x1"{% unless product.featured_image %} style="background-color: hsl(from var(--{{ product_bg }}) h s calc(l - 5));"{% endunless %}>
       {% if product.featured_image %}
         {% render 'component-image', img: product.featured_image, size: 750 lazy: true %}
       {% else %}
@@ -11,7 +11,7 @@
   </div>
 
   <div class="product-card-content mt-q">
-    <h3 class="product-card-title ">{{ product.title }}</h3>
+    <h3 class="product-card-title">{{ product.title }}</h3>
     <div class="product-card-price mt-h">
       {% render 'product-price', product: product %}
     </div>

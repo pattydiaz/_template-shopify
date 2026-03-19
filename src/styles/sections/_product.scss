@@ -1,0 +1,157 @@
+@use "../shared" as *;
+
+@mixin product-badge { @include subheading; }
+@mixin product-card-title { font-weight: $fw-bold; }
+@mixin product-title { @include heading-3; }
+@mixin product-variants { @include caption; }
+
+.product {
+  $self: &;
+
+  &-card {
+    
+    &-image {
+      position: relative;
+    }
+
+    &-title {
+      @include product-card-title;
+    }
+
+    #{$self}-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      margin-left: 0;
+      z-index: 1;
+
+      background-color: $global-accent;
+      color: $global-color;
+      border-radius: 50px;
+      @include product-badge;
+    }
+
+    &[href] {
+      transition: opacity 0.3s $ease-default;
+
+      @include hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  &-content {
+
+    #{$self}-title {
+      @include product-title;
+    }
+
+    #{$self}-badge {
+      display: inline-block;
+      margin-left: 0;
+      margin-top: $spacing;
+      background-color: $global-accent;
+      color: $global-color;
+      border-radius: 50px;
+      @include product-badge;
+    }
+  }
+
+  &-variants {
+
+    &-heading { display: block; }
+
+    fieldset {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+
+      input { display: none; }
+
+      label {
+        display: inline-block;
+        position: relative;
+        padding: $spacing $spacing*2;
+        margin-right: $spacing;
+        margin-bottom: $spacing;
+
+        border: 1px solid $current;
+        border-radius: 50px;
+        background-color: $global-bg;
+        color: $global-color;
+        text-align: center;
+
+        @include product-variants;
+        cursor: pointer;
+        transition: opacity 0.5s $ease-default;
+
+        @include hover {
+          opacity: 0.5;
+        }
+      }
+
+      input:disabled + label {
+        opacity: 0.5;
+        cursor: auto;
+
+        &:after {
+          content:'';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 1px;
+          height: 100%;
+          background-color: $current;
+          transform: translate3d(-50%,-50%,0) rotate(45deg);
+          transform-origin: center;
+        }
+      }
+
+      input:checked + label {
+        opacity: 1 !important;
+        background-color: $global-color;
+        color: $global-bg;
+      }
+    }
+
+    select {
+      display: block;
+      width: 100%;
+      padding: $spacing $spacing*2;
+
+      border: 1px solid $current;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.230169 0.209376C0.528748 -0.0777189 1.00353 -0.0684095 1.29063 0.230169L5 4.16792L8.70938 0.230169C8.99647 -0.0684094 9.47125 -0.0777189 9.76983 0.209376C10.0684 0.496471 10.0777 0.971254 9.79063 1.26983L5.54063 5.76983C5.39922 5.91689 5.20401 6 5 6C4.79599 6 4.60078 5.91689 4.45938 5.76983L0.209376 1.26983C-0.0777189 0.971254 -0.0684095 0.496471 0.230169 0.209376Z' fill='%23FFFFFF'/%3E%3C/svg%3E") $transparent no-repeat calc(100% - 20px) 50%/15px;
+      text-align: left;
+
+      @include body;
+      text-transform: uppercase;
+      color: $current;
+    }
+  }
+
+  &-checkout {
+    display: flex;
+
+    .qty {
+      display: flex;
+      margin-right: $spacing*1.5;
+      border: 1px solid $current;
+      border-radius: 50px;
+
+      button,input {
+        min-width: 45px;
+        max-width: 45px;
+
+        @include body;
+        color: $current;
+        background-color: $transparent;
+      }
+      
+      input {
+        text-align: center;
+      }
+    }
+
+  }
+
+}

@@ -15,7 +15,7 @@
           
 
           <td class="cart-item-details">
-            <a class="cart-media d-block ratio-1x1 border-radius" href="{{ item.url }}" title="{{ item.product.title }}">
+            <a class="cart-media button-opacity d-block ratio-1x1" href="{{ item.url }}" title="{{ item.product.title }}">
               {% if item.image %}
                 {% render 'component-image', img: item.image, size: 150, lazy: false %}
               {% else %}
@@ -38,9 +38,9 @@
               </div>
               <div class="cart-input">
                 <div class="qty">
-                  <button class="minus button-scale" aria-label="Decrease quantity">-</button>
+                  <button class="minus button-opacity" aria-label="Decrease quantity">-</button>
                   <input type="text" class="cart-qty" value="{{ item.quantity }}" pattern="\d*">
-                  <button class="plus button-scale" aria-label="Increase quantity">+</button>
+                  <button class="plus button-opacity" aria-label="Increase quantity">+</button>
                 </div>
                 <a href="#" class="cart-remove button-opacity">Remove</a>
               </div>
@@ -49,7 +49,7 @@
 
 
           <td class="cart-item-total">
-            <div class="cart-total caption">{{ item.line_price | money }}</div>
+            <div class="cart-total">{{ item.line_price | money }}</div>
           </td>
 
 

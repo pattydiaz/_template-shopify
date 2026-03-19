@@ -1,15 +1,19 @@
 {% liquid
   assign class = class | default: '' | append: ' '
 
-  assign bg = bg_settings.bg_img
+  assign bg_img = bg_settings.bg_img
+  assign bg_vid = bg_settings.bg_video
   assign bg_position_x = bg_settings.bg_position_x | default: 50
   assign bg_position_y = bg_settings.bg_position_y | default: 50
   assign bg_position = '--position:' | append: bg_position_x | append: '% ' | append: bg_position_y | append: '%;'
-
   assign bg_overlay = '--opacity:' | append: bg_settings.bg_overlay | default: 0 | append: ';'
 
-  assign bg_grayscale = bg_grayscale | default: false
-  assign vid = bg_settings.bg_video
+  assign bg_mobile = bg_settings.bg_mobile
+  assign bg_vid_mobile = bg_settings.bg_video_mobile
+  assign bg_img_mobile = bg_settings.bg_img_mobile
+  assign bg_position_x_mobile = bg_settings.bg_position_x_mobile | default: 50
+  assign bg_position_y_mobile = bg_settings.bg_position_y_mobile | default: 50
+  assign bg_position_mobile = '--position:' | append: bg_position_x_mobile | append: '% ' | append: bg_position_y_mobile | append: '%;'
 
   assign lazy = lazy | default: true, allow_false: true
   assign critical = critical | default: false, allow_false: true
@@ -27,13 +31,27 @@
   endif
 %}
 
-{% if bg %}
-  <div class="{{ class }}bg-cover bg--overlay{% if bg_grayscale %} bg--grayscale{% endif %}" style="{{ bg_overlay }}{{ bg_position }}">
-    {% if vid and bg %}
-      <div class="video-cover">
-        {% render 'component-video', video: vid, poster: bg, lazy: lazy %}
+
+{% if bg_img %}
+  <div class="{{ class }}bg-cover bg--overlay" style="{{ bg_overlay }}">
+    {% if bg_mobile and bg_img_mobile %}
+      <div class="bg-cover-inner d-block d-none-upt" style="{{ bg_position_mobile }}">
+        {% render 'component-image', img: bg_img_mobile, lazy: lazy, critical: critical, class: img_class, attr: img_attr %}
       </div>
     {% endif %}
-    {% render 'component-image', img: bg, lazy: lazy, critical: critical, class: img_class, attr: img_attr %}
+    <div class="bg-cover-inner{% if bg_mobile and bg_img_mobile %} d-none d-block-upt{% endif %}" style="{{ bg_position }}">
+      {% render 'component-image', img: bg_img, lazy: lazy, critical: critical, class: img_class, attr: img_attr %}
+    </div>
+
+    {% if bg_vid and bg_img %}
+      {% if bg_mobile and bg_vid_mobile and bg_img_mobile %}
+        <div class="video-cover d-block d-none-upt" style="{{ bg_position_mobile }}">
+          {% render 'component-video', video: bg_vid_mobile, poster: bg_img_mobile, lazy: lazy %}
+        </div>
+      {% endif %}
+      <div class="video-cover{% if bg_mobile and bg_vid_mobile %} d-none d-block-upt{% endif %}" style="{{ bg_position }}">
+        {% render 'component-video', video: bg_vid, poster: bg_img, lazy: lazy %}
+      </div>
+    {% endif %}
   </div>
 {% endif %}

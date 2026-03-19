@@ -8,7 +8,7 @@
         {% assign options_count = option.values | size %}
         <div class="product-variants variant-group my-2">
           {% if options_count > 7 %}
-            <label class="product-variants-heading mb-1" for="option-{{ option.name | handleize }}">{{ option.name }}</label>
+            <label class="product-variants-heading text-bold mb-1" for="option-{{ option.name | handleize }}">{{ option.name }}</label>
             <select class="variant-option" name="options[{{ option.name }}]" id="option-{{ option.name | handleize }}">
               {% for value in option.values %}
                 <option value="{{ value }}"{% if value.available %}{% if value.selected %} selected{% elsif forloop.first %} selected{% endif %}{% else %} disabled{% endif %}>
@@ -17,7 +17,7 @@
               {% endfor %}
             </select>
           {% else %}
-            <div class="product-variants-heading mb-1">{{ option.name }}</div>
+            <div class="product-variants-heading text-bold mb-1">{{ option.name }}</div>
             <fieldset>
               {% for value in option.values %}
                 <input class="variant-option float--center{% if value.available == false %} disabled{% endif %}" type="radio" name="options[{{ option.name }}]" id="{{ option.name | handleize }}-{{ value | handleize }}" value="{{ value }}"{% if value.available %}{% if value.selected %} checked{% elsif forloop.first %} checked{% endif %}{% else %} disabled{% endif %}>
@@ -35,9 +35,9 @@
   
   <div class="product-checkout">
     <div class="qty">
-      <button type="button" class="minus" aria-label="-">-</button>
+      <button type="button" class="minus button-opacity" aria-label="-">-</button>
       <input type="text" id="ProductQuantity" name="quantity" value="1" pattern="\d*">
-      <button type="button" class="plus" aria-label="+">+</button>
+      <button type="button" class="plus button-opacity" aria-label="+">+</button>
     </div>
 
 

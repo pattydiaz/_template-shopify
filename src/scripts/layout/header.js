@@ -1,3 +1,4 @@
+const header_wrapper = header.find('.header-wrapper');
 let header_anim;
 let header_height;
 let announcement_height = 0;
@@ -48,7 +49,7 @@ const Header = {
       paused: true,
       scrollTrigger: {
         trigger: body.el,
-        start: "200px 0",
+        start: "0 0",
         end: "100% 0",
         // markers: true,
 
@@ -60,7 +61,7 @@ const Header = {
           const navActive = body.el.classList.contains("nav-active");
           const sidecartActive = body.el.classList.contains("sidecart-active");
 
-          if (self.progress > 0.0001) {
+          if (self.progress > 0.01) {
             header.el.classList.add("header--scroll");
           } else {
             header.el.classList.remove("header--scroll");
@@ -77,15 +78,20 @@ const Header = {
       }
     });
 
-    header_anim.to(header.el, {
-      y: "-150%",
-      duration: 0.4,
-      ease: "power2.inOut"
-    });
+    if(!header_wrapper.el.classList.contains("header--fixed")) {
+
+      header_anim.to(header_wrapper.el, {
+        y: "-150%",
+        duration: 0.3,
+        ease: "power2.inOut"
+      });
+      
+    }
+
   },
 
   cart() {
-    const btn = $('.nav-cart');
+    const btn = $('#cart-btn');
     if (!btn.el) return;
 
     btn.on('click', e => {

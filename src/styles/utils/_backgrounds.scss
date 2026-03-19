@@ -9,12 +9,8 @@
     @include cover($position: absolute,  $important: !important);
     pointer-events: none;
 
-    img {
-      object-position: var(--position, 50% 50%);
-    }
-
-    &--half {
-      height: 50% !important;
+    &-inner {
+      @include cover;
     }
   }
 

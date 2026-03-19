@@ -1,0 +1,52 @@
+/*! purgecss start ignore */
+
+.marquee {
+  $self: &;
+
+  &-container {
+    --marquee-gap: var(--gap);
+    --marquee-speed: var(--speed);
+
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    gap: var(--marquee-gap);
+    // transform: rotate(-5deg) translateY(-30px) translateX(50px);
+  }
+
+  &-group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 100%;
+    gap: var(--marquee-gap);
+    animation: marquee var(--marquee-speed) linear infinite;
+    animation-direction: normal;
+    
+    .marquee--reverse & {
+      animation-direction: reverse;
+    }
+
+    &--blurb {
+      justify-content: space-between;
+      
+      span {
+        white-space: nowrap;
+      }
+    }
+
+    &--media {
+      span {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(calc(-100% - var(--marquee-gap)),0,0); }
+}
+
+/*! purgecss end ignore */

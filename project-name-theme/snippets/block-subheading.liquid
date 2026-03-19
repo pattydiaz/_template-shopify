@@ -1,0 +1,13 @@
+{% liquid
+
+  assign subheading = block.settings.subheading
+  assign subheading_spacing_top = block.settings.subheading_spacing_top | prepend: ' mt-'
+  assign subheading_spacing_bottom = block.settings.subheading_spacing_bottom | prepend: ' mb-'
+  assign subheading_tag = block.settings.subheading_tag
+  assign subheading_type = block.settings.subheading_type
+  assign subheading_color = block.settings.subheading_color
+  assign subheading_tag = 'h3'
+
+%}
+
+<{{ subheading_tag }} class="{{ subheading_type }}{{ subheading_spacing_top }}{{ subheading_spacing_bottom }} color-{{ subheading_color }}">{{ subheading }}</{{ subheading_tag }}>

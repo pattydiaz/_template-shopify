@@ -1,0 +1,220 @@
+{% render 'block-cart', block: block %}
+
+{% schema %}
+{
+  "name": "Cart Icon",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Formatting Options"
+    },
+    {
+      "type": "select",
+      "id": "cart_size",
+      "label": "Icon Size",
+      "default": "sm",
+      "options": [
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        },
+        {
+          "label": "X-Large",
+          "value": "xl"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "cart_color",
+      "label": "Icon Color",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "cart_count_bg",
+      "default": "pink",
+      "label": "Count Bubble Background",
+      "options": [
+        {
+          "label": "Transparent",
+          "value": "transparent"
+        },
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "cart_count_color",
+      "label": "Count Bubble Color",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id": "cart_spacing_left",
+      "label": "Spacing Left",
+      "default": "none",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "5px",
+          "value": "h"
+        },
+        {
+          "label": "10px",
+          "value": "1"
+        },
+        {
+          "label": "15px",
+          "value": "q"
+        },
+        {
+          "label": "20px",
+          "value": "2"
+        },
+        {
+          "label": "30px",
+          "value": "3"
+        },
+        {
+          "label": "40px",
+          "value": "4"
+        },
+        {
+          "label": "50px",
+          "value": "5"
+        },
+        {
+          "label": "60px",
+          "value": "6"
+        },
+        {
+          "label": "70px",
+          "value": "7"
+        },
+        {
+          "label": "80px",
+          "value": "8"
+        },
+        {
+          "label": "90px",
+          "value": "9"
+        },
+        {
+          "label": "100px",
+          "value": "10"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "cart_spacing_right",
+      "label": "Spacing Right",
+      "default": "none",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "5px",
+          "value": "h"
+        },
+        {
+          "label": "10px",
+          "value": "1"
+        },
+        {
+          "label": "15px",
+          "value": "q"
+        },
+        {
+          "label": "20px",
+          "value": "2"
+        },
+        {
+          "label": "30px",
+          "value": "3"
+        },
+        {
+          "label": "40px",
+          "value": "4"
+        },
+        {
+          "label": "50px",
+          "value": "5"
+        },
+        {
+          "label": "60px",
+          "value": "6"
+        },
+        {
+          "label": "70px",
+          "value": "7"
+        },
+        {
+          "label": "80px",
+          "value": "8"
+        },
+        {
+          "label": "90px",
+          "value": "9"
+        },
+        {
+          "label": "100px",
+          "value": "10"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart Icon"
+    }
+  ]
+}
+{% endschema %}

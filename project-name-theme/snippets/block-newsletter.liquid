@@ -1,0 +1,24 @@
+{% liquid
+
+  assign newsletter_spacing_top = block.settings.newsletter_spacing_top | prepend: ' mt-'
+  assign newsletter_spacing_bottom = block.settings.newsletter_spacing_bottom | prepend: ' mb-'
+  assign newsletter_action = block.settings.newsletter_action | default: settings.newsletter_action
+  assign newsletter_alignment = block.settings.newsletter_alignment | prepend: 'text-'
+  assign newsletter_width_mobile = block.settings.newsletter_width_mobile | prepend: '--mw:' | append: 'px;'
+  assign newsletter_width_desktop = block.settings.newsletter_width_desktop | prepend: '--mw-upd:' | append: 'px;'
+  assign newsletter_button_type = block.settings.newsletter_button_type
+  assign newsletter_input_color = block.settings.newsletter_input_color | prepend: '--input-color: var(--' | append: ');'
+  assign newsletter_placeholder_color = block.settings.newsletter_input_color | prepend: '--input-placeholder-color: var(--' | append: ');'
+  assign newsletter_input_bg = block.settings.newsletter_input_bg | prepend: '--input-bg: var(--' | append: ');'
+
+%}
+
+<div class="newsletter {{ newsletter_alignment }}{{ newsletter_spacing_top }}{{ newsletter_spacing_bottom }}" style="{{ newsletter_input_color }} {{ newsletter_placeholder_color }} {{ newsletter_input_bg }}">
+  <div class="newsletter-container w-100 w-max" style="{{ newsletter_width_mobile }} {{ newsletter_width_desktop }}">
+    {% if newsletter_action != blank and settings.newsletter_recaptcha_key != blank %}
+      {% render 'form-mailchimp', action: newsletter_action, button_type: newsletter_button_type %}
+    {% else %}
+      <span class="color-error">Form Action and Recaptcha Site Key required to display form.</span>
+    {% endif %}
+  </div>
+</div>

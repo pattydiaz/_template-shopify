@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "Project Name Theme",
-    "theme_version": "1.0.0",
+    "theme_version": "1.0.1",
     "theme_author": "Makers & Allies",
     "theme_documentation_url": "https:\/\/help.shopify.com",
     "theme_support_url": "https:\/\/support.shopify.com\/"
@@ -91,7 +91,7 @@
       },
       {
         "type": "text",
-        "id": "google-fonts",
+        "id": "google_fonts",
         "label": "Google Fonts"
       }
     ]
@@ -101,19 +101,34 @@
     "settings": [
       {
         "type": "text",
-        "id": "google-analytics",
+        "id": "google_analytics",
         "label": "Google Analytics"
       },
       {
         "type": "text",
-        "id": "google-tag-manager",
+        "id": "google_tag_manager",
         "label": "Google Tag Manager"
       },
       {
         "type": "text",
-        "id": "facebook-pixel",
+        "id": "facebook_pixel",
         "label": "Facebook Pixel"
       }
+    ]
+  },
+  {
+    "name": "Newsletter",
+    "settings": [
+      {
+        "type": "text",
+        "id": "newsletter_action",
+        "label": "Form Action"
+      },
+      {
+        "type": "text",
+        "id": "newsletter_recaptcha_key",
+        "label": "Recaptcha Site Key"
+      },
     ]
   }
 ]

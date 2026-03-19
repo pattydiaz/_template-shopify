@@ -2,4 +2,8 @@
 
 .hero {
   $self:&;
+
+  &--hidden {
+    @include hide;
+  }
 }

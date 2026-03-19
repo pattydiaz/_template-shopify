@@ -1,24 +1,50 @@
 {% liquid
 
-  assign header_callout = header_settings.header_callout
-  assign header_instagram = settings.social_instagram_link
-  assign header_email = settings.email
-  assign header_address = settings.address
-  assign header_address_link = settings.address_link
+  assign nav = nav_settings.nav
+  assign nav_type = nav_settings.nav_type
+  assign nav_color = nav_settings.nav_color
+  assign nav_email = nav_settings.nav_email
+  assign nav_social = nav_settings.nav_social
+  assign nav_bg_color = nav_settings.nav_bg_color
+  assign nav_alignment = nav_settings.nav_alignment
+  assign nav_bg_media_option = nav_settings.nav_bg_media_option
+
+  assign email_address = settings.email_address
 
 %}
 
-<nav id="nav" class="nav header-nav" tabindex="-1">
+<nav id="nav" class="nav nav--{{ nav_type }} header-nav bg-{{ nav_bg_color }}" tabindex="-1">
 
-  {% if linklists[section.settings.nav] %}
-    <ul class="header-menu nav-main ls-none">
-      {% for link in linklists[section.settings.nav].links %}
-        {% if linklists[section.settings.nav].levels == 1 %}
-          <li class="nav-main-item">
-            <a href="{{ link.url }}" class="nav-main-anchor{% if link.url == '/collections/all' and request.path contains '/collections' %} active{% elsif link.active %} active{% endif %}" title="{{ link.title | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | escape }}</a>
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
+  {% if nav_bg_media_option == true %}
+    {% render 'component-background', bg_settings: nav_settings, class: 'nav-bg' %}
   {% endif %}
+
+  <div class="nav-container container">
+
+    {% if linklists[nav] %}
+      <ul class="nav-list nav--animate ls-none text-{{ nav_alignment }}">
+        {% for link in linklists[nav].links %}
+          {% if linklists[nav].levels == 1 %}
+            <li class="nav-list-item py-q">
+              <a href="{{ link.url }}" class="button-opacity d-ib heading-nav color-{{ nav_color }}" title="{{ link.title | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | escape }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+    
+    {% if nav_email == true and nav_social == true %}
+      <div class="nav-contact{% if nav_type == 'list' %} d-none-upt nav--animate{% endif %} pt-10">
+        {% if nav_email == true %}
+          <a href="mailto:{{ email_address }}" class="button-opacity subheading d-block py-q" title="{{ email_address }}">{{ email_address }}</a>
+        {% endif %}
+        {% if nav_social == true %}
+          {% render 'component-social', class: 'nav-social text-center' %}
+        {% endif %}
+      </div>
+    {% endif %}
+    
+
+  </div>
+
 </nav>

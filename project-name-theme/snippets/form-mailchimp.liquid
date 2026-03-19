@@ -6,19 +6,29 @@
     assign class = class | prepend: ' '
   endif
 
+  if action == blank
+    assign action = ''
+  endif
+
+  if button_type == blank
+    assign button_type = 'primary'
+  else
+    assign button_type = button_type
+  endif
+
 %}
 
-<form class="newsletter{{ class }}" autocomplete="off" action="{{ action }}">  
-  <div class="d-flex w-max">
+<form class="newsletter{{ class }}" autocomplete="off" action="{{ action }}" data-recaptcha-key="{{ settings.newsletter_recaptcha_key }}">
+  <div class="input">
     <span class="sr-only">Email*</span>
     <input type="email" class="input-field" placeholder="Enter Your Email" name="EMAIL" id="mce-EMAIL-{{ section.id | default: block.id | default: unique }}" required>
-    <div class="cta">
-      <button class="btn btn-secondary h-full" type="submit" aria-label="Sign Up">Sign Up</button>
-    </div>
   </div>
   <div class="pt-1">
     <label class="input-alert caption" for="mce-EMAIL-{{ section.id | default: block.id | default: unique }}"></label>
   </div>
+  <div class="cta mt-1">
+    <button class="btn btn-{{ button_type }}" type="submit" aria-label="Subscribe">Subscribe</button>
+  </div>
 </form>
 
-<div class="newsletter-success d-none mt-2">Thank you for subscribing!</div>
+<div class="newsletter-success heading-5 d-none mt-2">Thank you for subscribing!</div>

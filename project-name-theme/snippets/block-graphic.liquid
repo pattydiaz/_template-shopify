@@ -1,0 +1,20 @@
+{% liquid
+
+  assign graphic = block.settings.graphic
+  assign graphic_spacing_top = block.settings.graphic_spacing_top | prepend: ' mt-'
+  assign graphic_spacing_bottom = block.settings.graphic_spacing_bottom | prepend: ' mb-'
+  assign graphic_ratio = block.settings.graphic_ratio | prepend: ' ratio-'
+  assign graphic_fit = block.settings.graphic_fit | prepend: 'img-'
+  assign graphic_width_mobile = block.settings.graphic_width_mobile | prepend: '--mw:' | append: 'px;'
+  assign graphic_width_desktop = block.settings.graphic_width_desktop | prepend: '--mw-upt:' | append: 'px;'
+  assign graphic_float = block.settings.graphic_float
+  assign graphic_rotate_animate = block.settings.graphic_rotate_animate
+  assign graphic_rotate_speed = block.settings.graphic_rotate_speed | prepend: '--speed:' | append: 's;'
+
+%}
+
+<div class="graphic w-100 w-max{{ graphic_spacing_top }}{{ graphic_spacing_bottom }}{% if graphic_float == true %} float--center{% endif %}" style="{{ graphic_width_mobile }} {{ graphic_width_desktop }}{% if graphic_rotate_animate %}{{ graphic_rotate_speed }}{% endif %}">
+  <div class="ratio{{ graphic_ratio }}{% if graphic_rotate_animate == true %} animated-rotate{% endif %}"{% unless graphic %} style="border: 2px solid black;"{% endunless %}>
+    {% render 'component-image', img: graphic, class: graphic_fit, lazy: true %}
+  </div>
+</div>

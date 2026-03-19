@@ -16,17 +16,16 @@
   assign spacing_header = section.settings.spacing_header
   
   assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
 
   assign columns_width_content = section.settings.columns_width_content | default: 50
   assign columns_width_media = 100 | minus: columns_width_content
 
-  assign product_variant = product.selected_or_first_available_variant
-  assign product_tags = product.tags | join: ',' | downcase
-
 %}
 
 
-<div {{ id }}class="product-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+<div {{ id }}class="product-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
   {% if spacing_header == true %}
     <div class="gap-hh"></div>
@@ -34,11 +33,11 @@
     
   <div class="product-container container{{ container_size }}">
 
-    <div class="product-back py-2">
-      <a href="{{ collections['all'].url }}" class="button-transparent d-ib py-2" title="Back to Shop">< Back to Shop</a>
+    <div class="product-back py-3">
+      <a href="{{ collections['all'].url }}" class="btn btn-primary" title="Back to Shop">Back to Shop</a>
     </div>
 
-    <div class="product-columns columns columns-flush d-flex-t d-flex--justify-between">
+    <div class="product-columns columns columns-flush d-flex-t d-flex--justify-between color-{{ text_color }}">
 
       <div class="product-media column column--left" style="--column-width: {{ columns_width_media }}%; --column-padding-up: 25px;">
         {% render 'product-media', product: product %}
@@ -50,12 +49,12 @@
 
         <div class="product-price my-2">
           <span id="product-price">{% render 'product-price', product: product %}</span>
-          <span class="d-block">{% render 'product-badge', product: product %}</span>
+          <span class="ml-h">{% render 'product-badge', product: product %}</span>
         </div>
 
-        {% if product.description != empty %}
+        {% if product.description != blank %}
           <div class="product-description my-2">
-            <h2 class="mb-1">Info</h2>
+            <h2 class="text-bold mb-1">Description</h2>
             <div class="blurb contents w-max">{{ product.description }}</div>
           </div>
         {% endif %}
@@ -87,7 +86,7 @@
         "type": "text",
         "id": "id",
         "label": "Section ID",
-        "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
       },
       {
         "type": "header",
@@ -216,6 +215,21 @@
         ]
       },
       {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
         "type": "range",
         "id": "columns_width_content",
         "label": "Content Width",
@@ -224,6 +238,29 @@
         "step": 5,
         "unit": "%",
         "default": 50
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
       }
     ],
     "presets": [

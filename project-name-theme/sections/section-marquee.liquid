@@ -1,0 +1,279 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | downcase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
+
+  assign marquee_text = section.settings.marquee_text
+  assign marquee_heading_type = section.settings.marquee_heading_type
+  assign marquee_reverse = section.settings.marquee_reverse
+  assign marquee_repeat = section.settings.marquee_repeat
+  assign marquee_gap = section.settings.marquee_gap | prepend: '--gap:' | append: 'px;'
+  assign marquee_speed = section.settings.marquee_speed | prepend: '--speed:' | append: 's;'
+
+%}
+
+
+<div {{ id }}class="marquee-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
+
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+
+  <div class="marquee-container{%  if marquee_reverse == true %} marquee--reverse{% endif %}" style="{{ marquee_gap }}{{ marquee_speed }}">
+
+    <div class="marquee-group marquee-group--blurb {{ marquee_heading_type }} my-1 color-{{ text_color }}">
+      {% for i in (1..marquee_repeat) %}
+        <span>{{ marquee_text }}</span>
+      {% endfor %}
+    </div>
+      
+    <div class="marquee-group marquee-group--blurb {{ marquee_heading_type }} my-1 color-{{ text_color }}" aria-hidden="true">
+      {% for i in (1..marquee_repeat) %}
+        <span>{{ marquee_text }}</span>
+      {% endfor %}
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "Marquee",
+    "tag": "section",
+    "class": "marquee section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section ID Options"
+      },
+        {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "default": "xs",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "default": "xs",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing_header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Marquee Options"
+      },
+      {
+        "type": "inline_richtext",
+        "id": "marquee_text",
+        "label": "Marquee Text",
+        "default": "Lorem Ipsum"
+      },
+      {
+        "type": "select",
+        "id": "marquee_heading_type",
+        "label": "Heading Type",
+        "visible_if": "{{ section.settings.marquee_text != blank  }}",
+        "options": [
+          {
+            "label": "Heading 1",
+            "value": "heading-1"
+          },
+          {
+            "label": "Heading 2",
+            "value": "heading-2"
+          },
+          {
+            "label": "Heading 3",
+            "value": "heading-3"
+          },
+          {
+            "label": "Heading 4",
+            "value": "heading-4"
+          },
+          {
+            "label": "Heading 5",
+            "value": "heading-5"
+          },
+          {
+            "label": "Heading 6",
+            "value": "heading-6"
+          },
+          {
+            "label": "Subheading",
+            "value": "subheading"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "marquee_repeat",
+        "label": "Marquee Repetitions",
+        "default": 5,
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "visible_if": "{{ section.settings.marquee_text != blank  }}"
+      },
+      {
+        "type": "range",
+        "id": "marquee_gap",
+        "label": "Gap",
+        "default": 20,
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "px",
+        "visible_if": "{{ section.settings.marquee_text != blank  }}"
+      },
+      {
+        "type": "range",
+        "id": "marquee_speed",
+        "label": "Speed",
+        "default": 15,
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "unit": "s",
+        "visible_if": "{{ section.settings.marquee_text != blank  }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "marquee_reverse",
+        "label": "Reverse direction of marquee",
+        "default": false,
+        "visible_if": "{{ section.settings.marquee_text != blank  }}"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Marquee"
+      }
+    ]
+  }
+{% endschema %}

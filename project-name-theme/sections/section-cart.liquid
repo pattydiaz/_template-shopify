@@ -12,22 +12,24 @@
   assign spacing_header = section.settings.spacing_header
   
   assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
 
 %}
 
 
-<div {{ id }}class="cart-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+<div {{ id }}class="cart-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
   {% if spacing_header == true %}
     <div class="gap-hh"></div>
   {% endif %}
     
   <div class="cart-container container{{ container_size }}">
-    <div class="cart-content">
+    <div class="cart-content color-{{ text_color }}">
       {% if cart.item_count > 0 %}
         <div class="cart-heading">
-          <h2 class="">Your Cart (<span class="cart-count">0</span>)</h2>
-          <a href="{{ collections['all'].url }}" class="button-transparent d-ib py-2" title="Back to Shop"> < Back to Shop</a>
+          <h2 class="heading-5">Your Cart (<span class="cart-count">{{ cart.item_count }}</span>)</h2>
+          <a href="{{ collections['all'].url }}" class="btn btn-primary" title="Back to Shop">Back to Shop</a>
         </div>
 
         {% render 'cart-items' %}
@@ -73,7 +75,7 @@
         "type": "text",
         "id": "id",
         "label": "Section ID",
-        "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
       },
       {
         "type": "header",
@@ -198,6 +200,44 @@
           {
             "label": "Extra",
             "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
           }
         ]
       }

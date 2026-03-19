@@ -14,6 +14,9 @@
   assign container_size = section.settings.container_size | prepend: ' container-'
   assign text_alignment = section.settings.text_alignment | prepend: 'text-'
 
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
+
   if product and product.collections.size > 0
     assign recommended_source = product.collections.first.products
     assign current_product_id = product.id
@@ -33,7 +36,7 @@
 
 {% if recommended_source and recommended_source.size > 0 %}
 
-  <div {{ id }}class="recommended-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+  <div {{ id }}class="recommended-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
     {% if spacing_header %}
       <div class="gap-hh"></div>
@@ -42,7 +45,7 @@
     <div class="recommended-container container{{ container_size }}">
       
       {% if recommended_heading %}
-        <h2 class="heading-3 {{ text_alignment }} mb-3">{{ recommended_heading }}</h2>
+        <h2 class="heading-3 {{ text_alignment }} mb-3 color-{{ text_color }}">{{ recommended_heading }}</h2>
       {% endif %}
       
       {% if recommended_source and recommended_source.size > 2 %}
@@ -55,7 +58,7 @@
             {% for related_product in recommended_source limit: recommended_limit %}
               {% if current_product_id == nil or related_product.id != current_product_id %}
                 <li class="recommended-product w-100 wt-33 px-1 px-2-upd{% if recommended_source and recommended_source.size > 2 %} swiper-slide{% endif %}">
-                  {% render 'card-product', product: related_product %}
+                  {% render 'card-product', product: related_product, product_bg: bg_color, product_color: text_color %}
                 </li>
               {% endif %}
             {% endfor %}
@@ -108,7 +111,7 @@
       "type": "text",
       "id": "id",
       "label": "Section ID",
-      "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+      "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
     },
     {
       "type": "header",
@@ -238,6 +241,21 @@
     },
     {
       "type": "select",
+      "id": "text_color",
+      "label": "Text Color",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
       "id": "text_alignment",
       "label": "Text Alignment",
       "default": "center",
@@ -253,6 +271,29 @@
         {
           "label": "Right",
           "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Background Options"
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Background Color",
+      "options": [
+        {
+          "label": "Transparent",
+          "value": "transparent"
+        },
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
         }
       ]
     },

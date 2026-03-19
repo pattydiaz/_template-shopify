@@ -1,0 +1,227 @@
+{% render 'block-subheading', block: block %}
+
+{% schema %}
+{
+  "name": "Subheading",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "default": "Lorem Ipsum",
+      "label": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Formatting Options"
+    },
+    {
+      "type": "select",
+      "id": "subheading_tag",
+      "label": "Heading Tag",
+      "default": "h3",
+      "options": [
+        {
+          "label": "H2",
+          "value": "h2"
+        },
+        {
+          "label": "H3",
+          "value": "h3"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id":"subheading_type",
+      "label": "Heading Type",
+      "default": "heading-5",
+      "options": [
+        {
+          "label": "Heading 5",
+          "value": "heading-5"
+        },
+        {
+          "label": "Heading 6",
+          "value": "heading-6"
+        },
+        {
+          "label": "Subheading",
+          "value": "subheading"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "subheading_color",
+      "label": "Text Color",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "subheading_width",
+      "label": "Add custom subheading width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "subheading_width_mobile",
+      "default": 760,
+      "label": "Subheading Width (Mobile)",
+      "step": 10,
+      "min": 200,
+      "max": 1200,
+      "unit": "px",
+      "visible_if": "{{ block.settings.subheading_width == true }}"
+    }, 
+    {
+      "type": "range",
+      "id": "subheading_width_desktop",
+      "default": 760,
+      "label": "Subheading Width (Desktop)",
+      "step": 10,
+      "min": 200,
+      "max": 1200,
+      "unit": "px",
+      "visible_if": "{{ block.settings.subheading_width == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id":"subheading_spacing_top",
+      "label": "Spacing Top",
+      "default": "none",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "5px",
+          "value": "h"
+        },
+        {
+          "label": "10px",
+          "value": "1"
+        },
+        {
+          "label": "15px",
+          "value": "q"
+        },
+        {
+          "label": "20px",
+          "value": "2"
+        },
+        {
+          "label": "30px",
+          "value": "3"
+        },
+        {
+          "label": "40px",
+          "value": "4"
+        },
+        {
+          "label": "50px",
+          "value": "5"
+        },
+        {
+          "label": "60px",
+          "value": "6"
+        },
+        {
+          "label": "70px",
+          "value": "7"
+        },
+        {
+          "label": "80px",
+          "value": "8"
+        },
+        {
+          "label": "90px",
+          "value": "9"
+        },
+        {
+          "label": "100px",
+          "value": "10"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id":"subheading_spacing_bottom",
+      "label": "Spacing Bottom",
+      "default": "none",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "5px",
+          "value": "h"
+        },
+        {
+          "label": "10px",
+          "value": "1"
+        },
+        {
+          "label": "15px",
+          "value": "q"
+        },
+        {
+          "label": "20px",
+          "value": "2"
+        },
+        {
+          "label": "30px",
+          "value": "3"
+        },
+        {
+          "label": "40px",
+          "value": "4"
+        },
+        {
+          "label": "50px",
+          "value": "5"
+        },
+        {
+          "label": "60px",
+          "value": "6"
+        },
+        {
+          "label": "70px",
+          "value": "7"
+        },
+        {
+          "label": "80px",
+          "value": "8"
+        },
+        {
+          "label": "90px",
+          "value": "9"
+        },
+        {
+          "label": "100px",
+          "value": "10"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Subheading"
+    }
+  ]
+}
+{% endschema %}

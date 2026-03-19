@@ -1,0 +1,18 @@
+{% liquid
+
+  assign cart_spacing_left = block.settings.cart_spacing_left | prepend: ' ml-'
+  assign cart_spacing_right = block.settings.cart_spacing_right | prepend: ' mr-'
+  
+  assign cart_color = block.settings.cart_color
+  assign cart_size = block.settings.cart_size | prepend: 'icon-'
+  assign cart_count_color = block.settings.cart_count_color
+  assign cart_count_bg = block.settings.cart_count_bg
+
+%}
+
+<div class="d-ib{{ cart_spacing_left }}{{ cart_spacing_right }}">
+  <a id="cart-btn" href="/cart" class="icon-cart button-scale {{ cart_size }} color-{{ cart_color }}" title="Cart">
+    <div class="count bg-{{ cart_count_bg }} color-{{ cart_count_color }}">{{ cart.item_count }}</div>
+    <span><i></i></span>
+  </a>
+</div>

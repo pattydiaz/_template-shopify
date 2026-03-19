@@ -12,13 +12,15 @@
   assign spacing_header = section.settings.spacing_header
   
   assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
 
   assign search_heading = section.settings.search_heading
 
 %}
 
 
-<div {{ id }}class="search-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+<div {{ id }}class="search-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
   {% if spacing_header == true %}
     <div class="gap-hh"></div>
@@ -27,7 +29,7 @@
   <div class="search-container container{{ container_size }}">
 
     <div class="search-heading text-center gap-bm--sm">
-      <h1 class="">{{ search_heading }}</h1>
+      <h1 class="heading-3 text-{{ text_color }}">{{ search_heading }}</h1>
     </div>
 
     <form action="/search" method="get" class="search-form d-flex gap-bm--md w-max mx-auto" style="--mw: 800px;">
@@ -77,7 +79,7 @@
         "type": "text",
         "id": "id",
         "label": "Section ID",
-        "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
       },
       {
         "type": "header",
@@ -202,6 +204,44 @@
           {
             "label": "Extra",
             "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
           }
         ]
       },

@@ -10,39 +10,75 @@
   assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
   assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
   assign spacing_header = section.settings.spacing_header
+
+  assign animated = section.settings.animated
+  assign animation = ''
+  if animated == true
+    assign animation = ' animated animated-group animate-up-in'
+  endif
   
   assign container_size = section.settings.container_size | prepend: ' container-'
+  assign bg_color = section.settings.bg_color
 
   assign media_image = section.settings.media_image
   assign media_video = section.settings.media_video
   assign media_ratio = section.settings.media_ratio
+  assign media_animate = section.settings.media_animate
+
+  assign media_split = section.settings.media_split
+  assign media_image_2 = section.settings.media_image_2
+  assign media_video_2 = section.settings.media_video_2
 
 %}
 
 
-<div {{ id }}class="media-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+<div {{ id }}class="media-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
   {% if spacing_header == true %}
     <div class="gap-hh"></div>
   {% endif %}
     
-  <div class="media-container container{{ container_size }}">
-    <div class="ratio ratio-{{ media_ratio }} bg-black">
+  <div class="media-container{% unless container_size contains 'none' %} container{{ container_size }}{% endunless %}{{ animation }}">
+    <div class="ratio ratio-{{ media_ratio }}"{% unless media_image %} style="background-color: hsl(from var(--{{ bg_color }}) h s calc(l - 5));"{% endunless %}>
 
-      {% unless request.design_mode %}
+      {% unless request.design_mode or media_animate == false %}
         <div class="parallax parallax-item parallax-zoom" data-percent="-25">
       {% endunless %}
 
-          {% if media_image and media_video %}
-            <div class="video-cover">
-              {% render 'component-video', video: media_video, poster: media_image, lazy: true %}
-            </div>
-          {% endif %}
-          {% render 'component-image', img: media_image, lazy: true %}
+        {% if media_split and media_image_2 != blank %}
+          <div class="media-split d-flex float--cover">
+            <div class="media-split-column pos-relative">
+        {% endif %}
 
-      {% unless request.design_mode %}
+            {% render 'component-image', img: media_image, lazy: true %}
+            {% if media_image and media_video %}
+              <div class="video-cover">
+                {% render 'component-video', video: media_video, poster: media_image, lazy: true %}
+              </div>
+            {% endif %}
+
+        {% if media_split and media_image_2 != blank %}
+            </div>
+            <div class="media-split-column pos-relative">
+              {% render 'component-image', img: media_image_2, lazy: true %}
+              {% if media_image and media_video %}
+                <div class="video-cover">
+                  {% render 'component-video', video: media_video_2, poster: media_image, lazy: true %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+      {% unless request.design_mode or media_animate == false %}
         </div>
       {% endunless %}
+
+      {% if section.blocks.size > 0 %}       
+        <div class="float--center w-100 text-center px-q z-5">
+          {% content_for 'blocks' %}
+        </div>
+      {% endif %}
 
     </div>
   </div>
@@ -63,7 +99,7 @@
         "type": "text",
         "id": "id",
         "label": "Section ID",
-        "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
       },
       {
         "type": "header",
@@ -145,6 +181,16 @@
       },
       {
         "type": "header",
+        "content": "Animation Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "animated",
+        "label": "Include default section animation",
+        "default": false
+      },
+      {
+        "type": "header",
         "content": "Content Options"
       },
       {
@@ -193,6 +239,29 @@
       },
       {
         "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
         "content": "Media Options"
       },
       {
@@ -204,13 +273,15 @@
         "type": "video",
         "id": "media_video",
         "label": "Video",
-        "info": "⚠️ Image is required as a fallback for video"
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.media_image != blank }}"
       },
       {
         "type": "select",
         "id": "media_ratio",
         "default": "16x9",
         "label": "Media Aspect Ratio",
+        "visible_if": "{{ section.settings.media_image != blank }}",
         "options": [
           { 
             "value": "1x1", 
@@ -297,7 +368,36 @@
             "label": "Aspect Ratio 1:10"
             }
         ]
+      },
+      {
+        "type": "checkbox",
+        "id": "media_animate",
+        "label": "Include parallax animation",
+        "default": false,
+        "visible_if": "{{ section.settings.media_image != blank }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "media_split",
+        "label": "Add another media item",
+        "default": false
+      },
+      {
+        "type": "image_picker",
+        "id": "media_image_2",
+        "label": "Image 2",
+        "visible_if": "{{ section.settings.media_split == true }}"
+      },
+      {
+        "type": "video",
+        "id": "media_video_2",
+        "label": "Video 2",
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.media_split == true and section.settings.media_image_2 != blank }}"
       }
+    ],
+    "blocks": [
+      { "type": "_graphic" }
     ],
     "presets": [
       {

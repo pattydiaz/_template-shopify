@@ -1,0 +1,15 @@
+{% liquid
+
+  assign button_spacing_top = block.settings.button_spacing_top | prepend: ' mt-'
+  assign button_spacing_bottom = block.settings.button_spacing_bottom | prepend: ' mb-'
+  assign button_spacing_left = block.settings.button_spacing_left | prepend: ' ml-'
+  assign button_spacing_right = block.settings.button_spacing_right | prepend: ' mr-'
+  assign button_type = block.settings.button_type | prepend: ' btn-'
+  assign button_url = block.settings.button_url
+  assign button_text = block.settings.button_text
+  
+%}
+
+<div class="cta{{ button_spacing_top }}{{ button_spacing_bottom }}{{ button_spacing_left }}{{ button_spacing_right }}">
+  <a href="{{ button_url }}" class="btn{{ button_type }}" title="{{ button_text }}"{% if button_url contains 'http://' or button_url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ button_text }}</a>
+</div>

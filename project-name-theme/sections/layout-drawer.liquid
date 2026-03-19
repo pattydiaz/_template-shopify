@@ -1,11 +1,18 @@
+{% liquid
+  
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
+
+%}
+
 <div id="cart-drawer" class="drawer" aria-hidden="true">
 
   <div class="drawer-overlay" data-drawer-close></div>
 
-  <div class="drawer-wrapper">
+  <div class="drawer-wrapper bg-{{ bg_color }} color-{{ text_color }}">
 
     <div class="drawer-header">
-      <h2 class="">Your Cart (<span class="cart-count">0</span>)</h2>
+      <h2 class="">Your Cart (<span class="cart-count">{{ cart.item_count }}</span>)</h2>
       <button class="drawer-close button-scale icon-sm" aria-label="Close cart" data-drawer-close>
         <span><i class="icon-close"></i></span>
       </button>
@@ -34,3 +41,53 @@
 
   </div>
 </div>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text Color",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Background Options"
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Background Color",
+      "options": [
+        {
+          "label": "Transparent",
+          "value": "transparent"
+        },
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

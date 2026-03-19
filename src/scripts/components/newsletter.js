@@ -1,5 +1,4 @@
 const Newsletter = {
-
   init() {
     this.build();
   },
@@ -11,8 +10,11 @@ const Newsletter = {
   form(el) {
     if (!el.isVisible()) return;
 
+    const recaptchaKey = el.el.dataset.recaptchaKey || null;
+
     ajaxChimp(el.el, {
       language: 'en',
+      recaptchaSiteKey: recaptchaKey,
       callback: resp => {
         if (resp.result === 'success') {
           const successMsg = el.next();
@@ -23,7 +25,5 @@ const Newsletter = {
         }
       }
     });
-
   }
-
 };

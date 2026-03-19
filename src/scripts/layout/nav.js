@@ -26,7 +26,7 @@ const Navigation = {
   open() {
     Scrolling.lock();
 
-    menu_btn.el.textContent = 'Close';
+    // menu_btn.el.textContent = 'Close';
     menu_btn.el.setAttribute('aria-label', 'Close');
     menu_btn.addClass('active');
 
@@ -47,7 +47,7 @@ const Navigation = {
   close() {
     Scrolling.unlock();
     
-    menu_btn.el.textContent = 'Menu';
+    // menu_btn.el.textContent = 'Menu';
     menu_btn.el.setAttribute('aria-label', 'Menu');
     menu_btn.removeClass('active');
 

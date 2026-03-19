@@ -189,6 +189,29 @@
       }
     }
   }
+
+  &-rotate {
+    animation: spin var(--speed, 10s) linear infinite;
+  }
+}
+
+#page.no-animate {
+  .animated {
+
+    &-item {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    &-group {
+      >* {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+      }
+    }
+  }
 }
 
 /*! purgecss end ignore */

@@ -1,0 +1,407 @@
+{% liquid
+
+  assign section_size = section.settings.section_size | prepend: ' section-'
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+
+  assign animated = section.settings.animated
+  assign animation = ''
+  if animated == true
+    assign animation = ' animated animated-group animate-up-in'
+  endif
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_position = section.settings.text_position
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.text_color
+
+%}
+
+{% if spacing_header == true and section_size contains 'none' %}
+  <div class="gap-hh"></div>
+{% endif %}
+
+<div class="banner-wrapper{% if section_size contains 'none' %}{{ spacing_top }}{{ spacing_bottom }}{% else %}{{ section_size }}{% endif %} bg-{{ bg_color }}">
+
+  {% render 'component-background', class: 'banner-bg', bg_settings: section.settings, critical: true %}
+
+  <div class="banner-container container{{ container_size }}">
+    {% if section.blocks.size > 0 %}
+      <div class="banner-text {{ text_position }} {{ text_alignment }} color-{{ text_color }}{{ animation }}">
+
+        {% content_for 'blocks' %}
+        
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "Banner",
+    "tag": "section",
+    "class": "banner section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section Options"
+      },
+      {
+        "type": "select",
+        "id": "section_size",
+        "label": "Section Size",
+        "default": "none",
+        "options": [
+          {
+            "value": "100",
+            "label": "Fullscreen"
+          }, 
+          {
+            "value": "75",
+            "label": "Three-quarters"
+          },
+          {
+            "value": "50",
+            "label": "Half"
+          },
+          {
+            "value": "none",
+            "label": "None"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options",
+        "visible_if": "{{ section.settings.section_size == 'none' }}"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "label": "Section Spacing Top",
+        "default": "md",
+        "visible_if": "{{ section.settings.section_size == 'none' }}",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "label": "Section Spacing Bottom",
+        "default": "md",
+        "visible_if": "{{ section.settings.section_size == 'none' }}",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing_header",
+        "default": false,
+        "label": "Add extra spacing for header",
+        "visible_if": "{{ section.settings.section_size == 'none' }}"
+      },
+      {
+        "type": "header",
+        "content": "Animation Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "animated",
+        "label": "Include default section animation",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container_size",
+        "default": "lg",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, 
+          {
+            "label": "X-Large",
+            "value": "xl"
+          }, 
+          {
+            "label": "XX-Large",
+            "value": "xx"
+          }, 
+          {
+            "label": "Maximum",
+            "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_position",
+        "label": "Text Position",
+        "default": "middle",
+        "visible_if": "{{ section.settings.section_size != 'none' }}",
+        "options": [
+          {
+            "label": "Top",
+            "value": "top"
+          },
+          {
+            "label": "Middle",
+            "value": "middle"
+          },
+          {
+            "label": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text Alignment",
+        "default": "center",
+        "options": [
+          {
+            "label": "Left",
+            "value": "left"
+          },
+          {
+            "label": "Center",
+            "value": "center"
+          },
+          {
+            "label": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_img",
+        "label": "Background Image"
+      },
+      {
+        "type": "video",
+        "id": "bg_video",
+        "label": "Background Video",
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_y",
+        "label": "Image Position (Top/Bottom)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_x",
+        "label": "Image Position (Left/Right)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_overlay",
+        "label": "Image Overlay Opacity",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "default": 0,
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_mobile",
+        "label": "Show different media on mobile",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Mobile Background Options",
+        "visible_if": "{{ section.settings.bg_mobile == true }}"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_img_mobile",
+        "label": "Background Image",
+        "visible_if": "{{ section.settings.bg_mobile == true }}"
+      },
+      {
+        "type": "video",
+        "id": "bg_video_mobile",
+        "label": "Background Video",
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_y_mobile",
+        "label": "Image Position (Top/Bottom)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_x_mobile",
+        "label": "Image Position (Left/Right)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      }
+    ],
+    "blocks": [
+      { "type": "heading" },
+      { "type": "subheading" },
+      { "type": "blurb" },
+      { "type": "button" },
+      { "type": "_graphic" },
+      { "type": "_icons" },
+      { "type": "_newsletter" }
+    ],
+    "presets": [
+      {
+        "name": "Banner",
+        "blocks": [
+          {
+            "type": "heading"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

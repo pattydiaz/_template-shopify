@@ -4,12 +4,22 @@
   assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
   assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
   assign spacing_header = section.settings.spacing_header
+
+  assign animated = section.settings.animated
+  assign animation = ''
+  if animated == true
+    assign animation = ' animated animated-group animate-up-in'
+  endif
   
   assign container_size = section.settings.container_size | prepend: ' container-'
   assign text_position = section.settings.text_position
   assign text_alignment = section.settings.text_alignment | prepend: 'text-'
 
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
+
   assign hero_fixed = section.settings.hero_fixed
+  assign hero_animate = section.settings.hero_animate
 
 %}
 
@@ -17,7 +27,7 @@
   <div class="gap-hh"></div>
 {% endif %}
 
-<div class="hero-wrapper{% if section_size contains 'none' %}{{ spacing_top }}{{ spacing_bottom }}{% else %}{{ section_size }}{% endif %}{% unless section_size contains 'none' or hero_fixed == false %} hero-animate{% endunless %}">
+<div class="hero-wrapper{% if section_size contains 'none' %}{{ spacing_top }}{{ spacing_bottom }}{% else %}{{ section_size }}{% endif %} bg-{{ bg_color }}{% if hero_animate == true %} hero-animate{% endif %}">
 
   {% unless section_size contains 'none' or hero_fixed == false %}
     <div class="hero-fixed">
@@ -26,70 +36,10 @@
       {% render 'component-background', class: 'hero-bg', bg_settings: section.settings, critical: true %}
     
       <div class="hero-container container{{ container_size }}">
-        {% if section.blocks %}
-          <div class="hero-text {{ text_position }} {{ text_alignment }}">
-      
-            {%- for block in section.blocks -%}
-              {%- case block.type -%}
-    
-    
-                {%- when 'subheading' -%}
-                {% liquid
-                  assign subheading = block.settings.subheading
-                  assign subheading_spacing_top = block.settings.subheading_spacing_top | prepend: ' mt-'
-                  assign subheading_spacing_bottom = block.settings.subheading_spacing_bottom | prepend: ' mb-'
-                %}  
-                <h3 class="subheading-1{{ subheading_spacing_top }}{{ subheading_spacing_bottom }}">{{ subheading }}</h3>
-    
-    
-                {%- when 'heading' -%}
-                {% liquid
-                  assign heading = block.settings.heading
-                  assign heading_spacing_top = block.settings.heading_spacing_top | prepend: ' mt-'
-                  assign heading_spacing_bottom = block.settings.heading_spacing_bottom | prepend: ' mb-'
-                  assign heading_hide = block.settings.heading_hide
-                %}
-                <h1 class="{% if heading_hide %}sr-only{% else %}hero-heading heading-1{{ heading_spacing_top }}{{ heading_spacing_bottom }}{% endif %}">{{ heading }}</h1>
-    
-    
-                {%- when 'blurb' -%}
-                {% liquid
-                  assign blurb = block.settings.blurb
-                  assign blurb_spacing_top = block.settings.blurb_spacing_top | prepend: ' mt-'
-                  assign blurb_spacing_bottom = block.settings.blurb_spacing_bottom | prepend: ' mb-'
-                  assign blurb_width_mobile = block.settings.blurb_width_mobile | prepend: '--mw:' | append: 'px;'
-                  assign blurb_width_desktop = block.settings.blurb_width_desktop | prepend: '--mw-upd:' | append: 'px;'
-                %}
-                <div class="contents w-100 w-max{% if text_alignment contains 'center' %} mx-auto{% endif %}{{ blurb_spacing_top }}{{ blurb_spacing_bottom }}" style="{{ blurb_width_mobile }} {{ blurb_width_desktop }}">{{ blurb }}</div>
-    
-    
-                {%- when 'button' -%}
-                {% liquid
-                  assign button_spacing_top = block.settings.button_spacing_top | prepend: ' mt-'
-                  assign button_spacing_bottom = block.settings.button_spacing_bottom | prepend: ' mb-'
-                  assign button_url = block.settings.button_url
-                  assign button_text = block.settings.button_text
-                %}
-                <div class="cta{{ button_spacing_top }}{{ button_spacing_bottom }}">
-                  <a href="{{ button_url }}" class="btn btn-primary" title="{{ button_text }}"{% if button_url contains 'http://' or button_url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ button_text }}</a>
-                </div>
+        {% if section.blocks.size > 0 %}
+          <div class="hero-text {{ text_position }} {{ text_alignment }} color-{{ text_color }}{{ animation }}">
 
-
-                {%- when 'logo' -%}
-                {% liquid
-                  assign logo = block.settings.logo
-                  assign logo_spacing_top = block.settings.logo_spacing_top | prepend: ' mt-'
-                  assign logo_spacing_bottom = block.settings.logo_spacing_bottom | prepend: ' mb-'
-                  assign logo_width_mobile = block.settings.logo_width_mobile | prepend: '--mw:' | append: 'px;'
-                  assign logo_width_desktop = block.settings.logo_width_desktop | prepend: '--mw-upd:' | append: 'px;'
-                %}
-                <div class="hero-heading hero-logo w-100 w-max{% if text_alignment contains 'center' %} mx-auto{% endif %}{{ logo_spacing_top }}{{ logo_spacing_bottom }}" style="{{ logo_width_mobile }} {{ logo_width_desktop }}">
-                  {% render 'component-image', img: logo, class: 'img-contain', size: 150, critical: true %}
-                </div>
-    
-    
-              {%- endcase -%}
-            {%- endfor -%}
+            {% content_for 'blocks' %}
             
           </div>
         {% endif %}
@@ -139,13 +89,14 @@
       {
         "type": "header",
         "content": "Spacing Options",
-        "info": "⚠️ Spacing only works if Section Size is set to 'None'"
+        "visible_if": "{{ section.settings.section_size == 'none' }}"
       },
       {
         "type": "select",
         "id": "spacing_top",
-        "default": "md",
         "label": "Section Spacing Top",
+        "default": "md",
+        "visible_if": "{{ section.settings.section_size == 'none' }}",
         "options": [
           {
             "label": "None",
@@ -178,8 +129,9 @@
       {
         "type": "select",
         "id": "spacing_bottom",
-        "default": "md",
         "label": "Section Spacing Bottom",
+        "default": "md",
+        "visible_if": "{{ section.settings.section_size == 'none' }}",
         "options": [
           {
             "label": "None",
@@ -213,7 +165,18 @@
         "type": "checkbox",
         "id": "spacing_header",
         "default": false,
-        "label": "Add extra spacing for header"
+        "label": "Add extra spacing for header",
+        "visible_if": "{{ section.settings.section_size == 'none' }}"
+      },
+      {
+        "type": "header",
+        "content": "Animation Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "animated",
+        "label": "Include default section animation",
+        "default": false
       },
       {
         "type": "header",
@@ -265,10 +228,25 @@
       },
       {
         "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "select",
         "id": "text_position",
         "label": "Text Position",
         "default": "middle",
-        "info": "⚠️ Text Position only works if Section Size is NOT set to 'None'",
+        "visible_if": "{{ section.settings.section_size != 'none' }}",
         "options": [
           {
             "label": "Top",
@@ -309,6 +287,25 @@
         "content": "Background Options"
       },
       {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
         "type": "image_picker",
         "id": "bg_img",
         "label": "Background Image"
@@ -317,7 +314,8 @@
         "type": "video",
         "id": "bg_video",
         "label": "Background Video",
-        "info": "⚠️ Image is required as a fallback for video"
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
       },
       {
         "type": "range",
@@ -327,7 +325,8 @@
         "step": 1,
         "min": 0,
         "max": 100,
-        "unit": "%"
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
       },
       {
         "type": "range",
@@ -337,7 +336,8 @@
         "step": 1,
         "min": 0,
         "max": 100,
-        "unit": "%"
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
       },
       {
         "type": "range",
@@ -346,495 +346,78 @@
         "min": 0,
         "max": 1,
         "step": 0.1,
-        "default": 0
+        "default": 0,
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_mobile",
+        "label": "Show different media on mobile",
+        "default": false
       },
       {
         "type": "header",
-        "content": "Scroll Options"
+        "content": "Mobile Background Options",
+        "visible_if": "{{ section.settings.bg_mobile == true }}"
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_img_mobile",
+        "label": "Background Image",
+        "visible_if": "{{ section.settings.bg_mobile == true }}"
+      },
+      {
+        "type": "video",
+        "id": "bg_video_mobile",
+        "label": "Background Video",
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_y_mobile",
+        "label": "Image Position (Top/Bottom)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_x_mobile",
+        "label": "Image Position (Left/Right)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      },
+      {
+        "type": "header",
+        "content": "Scroll Options",
+        "visible_if": "{{ section.settings.section_size != 'none' and section.settings.bg_img != blank }}"
       },
       {
         "type": "checkbox",
         "id": "hero_fixed",
         "label": "Fixed Background",
-        "info": "⚠️ Fixed Background only works if Section Size is NOT set to 'None'"
+        "visible_if": "{{ section.settings.section_size != 'none' and section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "hero_animate",
+        "label": "Animated Background",
+        "visible_if": "{{ section.settings.section_size != 'none' and section.settings.bg_img != blank }}"
       }
     ],
     "blocks": [
-      {
-        "type": "heading",
-        "name": "Heading",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "select",
-            "id":"heading_spacing_top",
-            "label": "Spacing Top",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id":"heading_spacing_bottom",
-            "label": "Spacing Bottom",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "id": "heading",
-            "default": "Lorem Ipsum",
-            "label": "Heading"
-          },
-          {
-            "type": "checkbox",
-            "id": "heading_hide",
-            "label": "Hide Heading",
-            "info": "⚠️ Selecting this option ensures the heading is visible exclusively to screen readers. This is recommended when adding a logo."
-          }
-        ]
-      },
-      {
-        "type": "subheading",
-        "name": "Subheading",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "select",
-            "id":"subheading_spacing_top",
-            "label": "Spacing Top",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id":"subheading_spacing_bottom",
-            "label": "Spacing Bottom",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "id": "subheading",
-            "default": "Lorem Ipsum",
-            "label": "Subheading"
-          }
-        ]
-      },
-      {
-        "type": "blurb",
-        "name": "Text Blurb",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "select",
-            "id":"blurb_spacing_top",
-            "label": "Spacing Top",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id":"blurb_spacing_bottom",
-            "label": "Spacing Bottom",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "range",
-            "id": "blurb_width_mobile",
-            "default": 760,
-            "label": "Text Blurb Width (Mobile)",
-            "step": 10,
-            "min": 200,
-            "max": 1200,
-            "unit": "px"
-          }, 
-          {
-            "type": "range",
-            "id": "blurb_width_desktop",
-            "default": 760,
-            "label": "Text Blurb Width (Desktop)",
-            "step": 10,
-            "min": 200,
-            "max": 1200,
-            "unit": "px"
-          }, 
-          {
-            "type": "richtext",
-            "id": "blurb",
-            "default": "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae quaerat dolore exercitationem aliquam repellendus accusamus laboriosam voluptate, nisi amet quis quos doloribus minima quas asperiores quae voluptas impedit eos ea?</p>",
-            "label": "Text Blurb"
-          }
-        ]
-      },
-      {
-        "type": "button",
-        "name": "Button",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "select",
-            "id":"button_spacing_top",
-            "label": "Spacing Top",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id":"button_spacing_bottom",
-            "label": "Spacing Bottom",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "id": "button_text",
-            "default": "Lorem Ipsum CTA",
-            "label": "Button Text"
-          }, 
-          {
-            "type": "url",
-            "id": "button_url",
-            "label": "Button Link"
-          }
-        ]
-      },
-      {
-        "type": "logo",
-        "name": "Logo",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "select",
-            "id":"logo_spacing_top",
-            "label": "Spacing Top",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id":"logo_spacing_bottom",
-            "label": "Spacing Bottom",
-            "default": "none",
-            "options": [
-              {
-                "label": "None",
-                "value": "none"
-              },
-              {
-                "label": "5px",
-                "value": "h"
-              },
-              {
-                "label": "10px",
-                "value": "1"
-              },
-              {
-                "label": "15px",
-                "value": "q"
-              },
-              {
-                "label": "20px",
-                "value": "2"
-              },
-              {
-                "label": "30px",
-                "value": "3"
-              },
-              {
-                "label": "40px",
-                "value": "4"
-              }
-            ]
-          },
-          {
-            "type": "range",
-            "id": "logo_width_mobile",
-            "default": 600,
-            "label": "Logo Width (Mobile)",
-            "step": 10,
-            "min": 200,
-            "max": 1200,
-            "unit": "px"
-          }, 
-          {
-            "type": "range",
-            "id": "logo_width_desktop",
-            "default": 1200,
-            "label": "Logo Width (Desktop)",
-            "step": 10,
-            "min": 200,
-            "max": 1200,
-            "unit": "px"
-          }, 
-          {
-            "type": "image_picker",
-            "id": "logo",
-            "label": "Logo Image"
-          }
-        ]
-      }
+      { "type": "heading" },
+      { "type": "subheading" },
+      { "type": "blurb" },
+      { "type": "button" }
     ],
     "presets": [
       {

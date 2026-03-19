@@ -17,7 +17,7 @@
 
         a {
           &:hover,&:focus {
-            color: $black-transparent;
+            opacity: 0.5;
           }
         }
       }
@@ -31,7 +31,7 @@
 
     &__btn-manage-prefs {
       &:hover,&:focus {
-        color: $black-transparent !important;
+        opacity: 0.5 !important;
       }
     }
 
@@ -49,7 +49,7 @@
 
       h2 {
         margin-bottom: $spacing*2 !important;
-        @include heading-3($important: !important);
+        @include heading-4($important: !important);
       }
     }
 

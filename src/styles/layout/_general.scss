@@ -2,7 +2,7 @@
 
 ::selection {
   background: $global-accent;
-  color: $global-bg;
+  color: $global-color;
 }
 
 html,
@@ -39,3 +39,11 @@ a:not(a[class]){
     @include text-decoration;
   }
 }
+
+/*! purgecss start ignore */
+
+.grecaptcha-badge {
+  @include sr-only;
+}
+
+/*! purgecss end ignore */

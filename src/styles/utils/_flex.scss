@@ -24,6 +24,8 @@
     display: inline-flex;
   }
 
+  /*! purgecss start ignore */
+
   &--align-center { align-items: center;}
   &--align-top { align-items: flex-start;}
   &--align-bottom { align-items: flex-end;}
@@ -34,6 +36,8 @@
   &--justify-between { justify-content: space-between;}
   &--justify-around { justify-content: space-around;}
   &--justify-evenly { justify-content: space-evenly;}
+
+  /*! purgecss end ignore */
 
   &--center {
     align-items: center;

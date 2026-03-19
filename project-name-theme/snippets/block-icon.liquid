@@ -1,0 +1,15 @@
+{% liquid
+
+  assign icon_spacing_left = block.settings.icon_spacing_left | prepend: ' ml-'
+  assign icon_spacing_right = block.settings.icon_spacing_right | prepend: ' mr-'
+  assign icon_type = block.settings.icon_type
+  assign icon_url = block.settings.icon_url
+  assign icon_size = block.settings.icon_size | prepend: 'icon-'
+
+%}
+
+<div class="d-ib{{ icon_spacing_left }}{{ icon_spacing_right }}">
+  <a href="{{ icon_url }}" class="button-scale {{ icon_size }} color-current" title="{{ icon_type | capitalize }}" target="_blank" rel="nofollow">
+    <span><i class="social-icon {{ icon_type }}"></i></span>
+  </a>
+</div>

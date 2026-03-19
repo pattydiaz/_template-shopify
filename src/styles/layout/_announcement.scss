@@ -22,11 +22,6 @@
     height: 0;
   }
 
-  &-wrapper {
-    background-color: $global-color;
-    color: $global-bg;
-  }
-
   &-slide {
     padding-top: calc($spacing / 1.25);
     padding-bottom: calc($spacing / 1.25);

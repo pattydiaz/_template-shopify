@@ -5,9 +5,7 @@
 @mixin drawer-heading { @include heading-6; }
 @mixin drawer-subheading { @include heading-5; }
 @mixin drawer-body { @include body; }
-
-$drawer-bg: $global-bg;
-$drawer-color: $global-color;
+@mixin drawer-price { @include caption; }
 
 .drawer {
   $self: &;
@@ -51,8 +49,6 @@ $drawer-color: $global-color;
     height: 100%;
     max-width: 500px;
 
-    background: $drawer-bg;
-    color: $drawer-color;
     transform: translate3d(100%,0,0);
   }
 
@@ -84,10 +80,13 @@ $drawer-color: $global-color;
 
       tbody {
         td.cart-item-details {
-          
           .cart-details {
             .cart-title { @include drawer-heading; }
           }
+        }
+
+        td.cart-item-total {  
+          .cart-total { @include drawer-price; }
         }
       }
     }

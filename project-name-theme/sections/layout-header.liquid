@@ -1,14 +1,33 @@
-<div class="header-wrapper">
+{% liquid
+
+  assign header_logo = section.settings.header_logo
+  assign header_logo_width_mobile = section.settings.header_logo_width_mobile
+  assign header_logo_width_desktop = section.settings.header_logo_width_desktop
+  assign header_logo_ratio = section.settings.header_logo_ratio
+
+  assign header_bg_color = section.settings.header_bg_color
+  assign header_bg_scroll_option = section.settings.header_bg_scroll_option
+  assign header_animation_scroll = section.settings.header_animation_scroll
+
+%}
+
+<div class="header-wrapper{% unless header_animation_scroll == true %} header--fixed{% endunless %}{% if header_bg_scroll_option == true %} header--background{% endif %}" style="--header-bg: var(--{{ header_bg_color }});">
   <div class="header-container">
 
-    <a href="{{ routes.root_url }}" class="header-logo w-100 ratio-21x9 bg-black w-max" title="{{ shop.name }}" style="--mw: 110px;">
-      <span class="sr-only">{{ shop.name }}</span>
-      <div class="header-logo-wrapper bg-black"></div>
-    </a>
+    <div class="header-column">
+      <a href="{{ routes.root_url }}" class="header-logo button-opacity ratio-{{ header_logo_ratio }} w-max" title="{{ shop.name }}" style="--mw: {{ header_logo_width_mobile }}px;  --mw-upt: {{ header_logo_width_desktop }}px;">
+        <span class="sr-only">{{ shop.name }}</span>
+        <div class="header-logo-wrapper float--cover"{% unless header_logo %} style="background-color: hsl(from var(--{{ header_bg_color }}) h s calc(l - 5));"{% endunless %}>
+          {% render 'component-image', img: header_logo, class: 'img-contain', size: 150, critical: true %}
+        </div>
+      </a>
+    </div>
 
-    <button id="menu" class="header-btn button-transparent" aria-label="Menu">Menu</button>
-
-    {% comment %} {% render 'navigation', header_settings: section.settings %} {% endcomment %}
+    {% if section.blocks.size > 0 %}
+      <div class="header-column">
+        {% content_for 'blocks' %}
+      </div>
+    {% endif %}
 
   </div>
 </div>
@@ -21,13 +40,173 @@
     "settings" : [
       {
         "type": "header",
-        "content": "Navigation Options"
+        "content": "Logo Options"
       },
       {
-        "type": "link_list",
-        "id": "nav",
-        "label": "Navigation Menu"
+        "type": "image_picker",
+        "id": "header_logo",
+        "label": "Logo Image"
+      },
+      {
+        "type": "range",
+        "label": "Logo Width (Mobile)",
+        "id": "header_logo_width_mobile",
+        "min": 45,
+        "max": 400,
+        "unit": "px",
+        "step": 5,
+        "default": 100,
+        "visible_if": "{{ section.settings.header_logo != blank }}"
+      },
+      {
+        "type": "range",
+        "label": "Logo Width (Desktop)",
+        "id": "header_logo_width_desktop",
+        "min": 45,
+        "max": 400,
+        "unit": "px",
+        "step": 5,
+        "default": 150,
+        "visible_if": "{{ section.settings.header_logo != blank }}"
+      },
+      {
+        "type": "select",
+        "label": "Logo Aspect Ratio",
+        "id": "header_logo_ratio",
+        "default": "16x9",
+        "visible_if": "{{ section.settings.header_logo != blank }}",
+        "options": [
+          { 
+            "value": "1x1", 
+            "label": "Aspect Ratio 1:1" 
+          },
+          { 
+            "value": "2x1", 
+            "label": "Aspect Ratio 2:1" 
+          },
+          { 
+            "value": "1x2", 
+            "label": "Aspect Ratio 1:2" 
+          },
+          { 
+            "value": "3x1", 
+            "label": "Aspect Ratio 3:1" 
+          },
+          { 
+            "value": "1x3", 
+            "label": "Aspect Ratio 1:3" 
+          },
+          { 
+            "value": "4x3", 
+            "label": "Aspect Ratio 4:3" 
+          },
+          { 
+            "value": "3x4", 
+            "label": "Aspect Ratio 3:4" 
+          },
+          { 
+            "value": "5x4", 
+            "label": "Aspect Ratio 5:4" 
+          },
+          { 
+            "value": "4x5", 
+            "label": "Aspect Ratio 4:5" 
+          },
+          { 
+            "value": "5x7", 
+            "label": "Aspect Ratio 5:7" 
+          },
+          { 
+            "value": "7x5", 
+            "label": "Aspect Ratio 7:5" 
+          },
+          { 
+            "value": "16x9", 
+            "label": "Aspect Ratio 16:9" 
+          },
+          { 
+            "value": "9x16", 
+            "label": "Aspect Ratio 9:16" 
+          },
+          { 
+            "value": "16x10", 
+            "label": "Aspect Ratio 16:10" 
+          },
+          { 
+            "value": "10x16", 
+            "label": "Aspect Ratio 10:16" 
+          },
+          { 
+            "value": "21x9", 
+            "label": "Aspect Ratio 21:9" 
+          },
+          { 
+            "value": "9x21", 
+            "label": "Aspect Ratio 9:21" 
+          },
+          { 
+            "value": "18x6", 
+            "label": "Aspect Ratio 18:6" 
+          },
+          { 
+            "value": "6x18", 
+            "label": "Aspect Ratio 6:18" 
+          },
+          { 
+            "value": "10x1", 
+            "label": "Aspect Ratio 10:1" 
+          },
+          { 
+            "value": "1x10", 
+            "label": "Aspect Ratio 1:10"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "label": "Background Color",
+        "id": "header_bg_color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Animation Options"
+      },
+      {
+        "type": "checkbox",
+        "label": "Enable scrolling animation",
+        "id": "header_animation_scroll",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "label": "Enable background on scroll only",
+        "id": "header_bg_scroll_option",
+        "default": true
       }
+    ],
+    "blocks": [
+      { "type": "button" },
+      { "type": "_icons" },
+      { "type": "_cart" },
+      { "type": "_account" }
     ]
   }
 {% endschema %}

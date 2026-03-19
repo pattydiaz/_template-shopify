@@ -12,6 +12,8 @@
   assign spacing_header = section.settings.spacing_header
   
   assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
 
   assign collection_current = collection.handle
   assign collection_exclude = section.settings.collection_exclude | map: 'handle' | join: ', '
@@ -19,7 +21,7 @@
 %}
 
 
-<div {{ id }}class="products-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+<div {{ id }}class="products-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
   {% if spacing_header == true %}
     <div class="gap-hh"></div>
@@ -35,12 +37,12 @@
             <ul id="Collections" class="products-filters-list ls-none p-2">
 
               <li class="products-filters-item mb-q">
-                <a href="{{ collections['all'].url }}" class="btn-filter-item category all{% if collection_current == 'all' or collection_current contains 'all-' %} active{% endif %}" title="All"><span>All</span></a>
+                <a href="{{ collections['all'].url }}" class="btn-filter-item category all{% if collection_current == 'all' or collection_current contains 'all-' %} active{% endif %} color-{{ text_color }}" title="All"><span>All</span></a>
               </li>
               {% for collection in collections %}
                 {% unless collection_exclude contains collection.handle %}
                   <li class="products-filters-item mb-q">
-                    <a href="{{ collection.url }}" class="btn-filter-item category{% if collection_current == collection.handle %} active{% endif %}" title="{{ collection.title }}"><span>{{ collection.title }}</span></a>
+                    <a href="{{ collection.url }}" class="btn-filter-item category{% if collection_current == collection.handle %} active{% endif %} color-{{ text_color }}" title="{{ collection.title }}"><span>{{ collection.title }}</span></a>
                   </li>
                 {% endunless %}
               {% endfor %}
@@ -59,7 +61,7 @@
             {% assign products = collection.products | sort: 'title' %}
             {% for product in products %}
               <li class="products-results-item w-100 wt-50 wd-33 pb-2 px-1 p-1-upt p-2-upd mb-1">
-                {% render 'card-product', product: product %}
+                {% render 'card-product', product: product, product_bg: bg_color, product_color: text_color %}
               </li>
             {% else %}
               <li class="w-100 text-center">
@@ -104,7 +106,7 @@
         "type": "text",
         "id": "id",
         "label": "Section ID",
-        "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
       },
       {
         "type": "header",
@@ -229,6 +231,44 @@
           {
             "label": "Extra",
             "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
           }
         ]
       },

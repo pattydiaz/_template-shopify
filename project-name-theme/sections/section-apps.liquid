@@ -12,11 +12,13 @@
   assign spacing_header = section.settings.spacing_header
   
   assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
 
 %}
 
 
-<div {{ id }}class="apps-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+<div {{ id }}class="apps-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
   {% if spacing_header == true %}
     <div class="gap-hh"></div>
@@ -44,7 +46,7 @@
       "type": "text",
       "id": "id",
       "label": "Section ID",
-      "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+      "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
     },
     {
       "type": "header",
@@ -169,6 +171,44 @@
         {
           "label": "Extra",
           "value": "xtr"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text Color",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Background Options"
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Background Color",
+      "options": [
+        {
+          "label": "Transparent",
+          "value": "transparent"
+        },
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
         }
       ]
     }

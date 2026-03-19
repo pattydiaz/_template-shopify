@@ -11,7 +11,7 @@ var Project = {
     Parallax.init();
     Accordion.init();
     Slider.init();
-    // Newsletter.init();
+    Newsletter.init();
     Header.init();
     Navigation.init();
     // Modal.init();

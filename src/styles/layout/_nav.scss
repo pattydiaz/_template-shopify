@@ -4,6 +4,103 @@
 
 .nav {
   $self: &;
+  @include cover($position: fixed);
+  @include hide(true, 0.45s);
+  z-index: -1;
+
+  &--open {
+    @include show;
+  }
+
+  &-container {
+    height: 100%;
+    padding-top: calc(var(--hh) + #{$spacing*2});
+    padding-bottom: calc(var(--hh) + #{$spacing*2});
+
+    #{$self}:not(#{$self}--scroll) & {
+      @include flex-center;
+      flex-direction: column;
+    }
+
+    #{$self}#{$self}--scroll & {
+      display: flex;
+      justify-content: center;
+      overflow-y: scroll;
+    }
+  }
+
+  &-list,
+  &-contact {
+
+    &#{$self}--animate {
+
+      >* {
+        @include fade-right-in;
+      }
+      
+      &.active {
+        
+        >* {
+          @include child-delay;
+          @include end-transform;
+        }
+      }
+    }
+  }
+
+  &--list {
+
+    @include bp-up(md) {
+      position: relative;
+      top: unset;
+      left: unset;
+      @include show;
+      background-color: $transparent;
+      z-index: 0;
+    }
+
+    #{$self}-bg {
+      @include bp-up(md) {
+        display: none;
+      }
+    }
+
+    #{$self}-container {
+
+      @include bp-up(md) {
+        display: block;
+        height: auto;
+        padding: 0 !important;
+      }
+    }
+
+    #{$self}-list {
+
+      @include bp-up(md) {
+        display: flex;
+        align-items: center;
+      }
+
+      li {
+
+        .heading-nav {
+          @include bp-up(md) {
+            padding: $spacing;
+            @include body;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      &#{$self}--animate {
+        li {
+          @include bp-up(md) {
+            @include end-transform; 
+          }
+        }
+      }
+    }
+  }
 }
 
 /*! purgecss end ignore */

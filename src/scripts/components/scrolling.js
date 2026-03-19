@@ -12,8 +12,9 @@ const Scrolling = {
   scrollTo(targetEl, duration = 1) {
     if (!targetEl) return;
 
+    const headerHeight = document.querySelector('header')?.offsetHeight || 0;
     const startY = window.scrollY;
-    const endY = targetEl.getBoundingClientRect().top + window.scrollY;
+    const endY = targetEl.getBoundingClientRect().top + window.scrollY - headerHeight;
 
     gsap.to({ y: startY }, {
       y: endY,

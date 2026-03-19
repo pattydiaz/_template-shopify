@@ -19,8 +19,7 @@ const Hero = {
     const height = el.offsetHeight;
 
     const bg = $hero.find('.hero-bg').el;
-    const heading = $hero.find('.hero-heading').el;
-    // const indicator = parent.find('.hero-indicator').el;
+    const text = $hero.find('.hero-text').el;
 
     const tl = gsap.timeline({ paused: true });
 
@@ -32,8 +31,8 @@ const Hero = {
       tl.to(bg, { scale: 1.1, duration: 1, ease: 'power1.inOut' });
     });
 
-    addIf(heading, () => {
-      tl.to(heading, { scale: 0.9, duration: 1, ease: 'power1.inOut' }, "<");
+    addIf(text, () => {
+      tl.to(text, { y: 20, opacity: 0, duration: 1, ease: 'power1.inOut' }, "<");
     });
 
     ScrollTrigger.create({

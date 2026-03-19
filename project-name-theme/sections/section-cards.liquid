@@ -1,0 +1,635 @@
+{% liquid
+
+  assign id = section.settings.id
+  if id != blank
+    assign id = id | downcase | replace: " ", "-" | prepend: 'id="' | append: '" '
+  else
+    assign id = ''
+  endif
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
+  assign spacing_header = section.settings.spacing_header
+  
+  assign animated = section.settings.animated
+  assign animation = ''
+  if animated == true
+    assign animation = ' animated animated-group animate-up-in'
+  endif
+  
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+
+  assign bg_color = section.settings.bg_color
+  assign text_color = section.settings.text_color
+  assign accent_color = section.settings.accent_color
+
+  assign cards_layout = section.settings.cards_layout
+  assign cards_view_mobile = section.settings.cards_view_mobile
+  assign cards_view_tablet = section.settings.cards_view_tablet
+  assign cards_view_desktop = section.settings.cards_view_desktop
+
+  case cards_view_mobile
+    when 1 
+      assign cards_width_mobile = 'w-100'
+    when 2 
+      assign cards_width_mobile = 'w-50'
+    when 3 
+      assign cards_width_mobile = 'w-33'
+  endcase
+
+  case cards_view_tablet
+    when 1 
+      assign cards_width_tablet = 'wt-100'
+    when 2 
+      assign cards_width_tablet = 'wt-50'
+    when 3 
+      assign cards_width_tablet = 'wt-33'
+    when 4 
+      assign cards_width_tablet = 'wt-25'
+    when 5 
+      assign cards_width_tablet = 'wt-20'
+  endcase
+
+  case cards_view_desktop
+    when 1 
+      assign cards_width_desktop = 'wd-100'
+    when 2 
+      assign cards_width_desktop = 'wd-50'
+    when 3 
+      assign cards_width_desktop = 'wd-33'
+    when 4 
+      assign cards_width_desktop = 'wd-25'
+    when 5 
+      assign cards_width_desktop = 'wd-20'
+  endcase
+
+  assign cards_media = section.settings.cards_media
+  assign cards_ratio = section.settings.cards_ratio
+  assign cards_fit = section.settings.cards_fit | prepend: 'img-'
+
+%}
+
+
+<div {{ id }}class="cards-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
+
+  {% if spacing_header == true %}
+    <div class="gap-hh"></div>
+  {% endif %}
+    
+  <div class="cards-container container{{ container_size }}{{ animation }}">
+
+      {% if cards_layout == 'slider' %}
+      <div class="cards-slider slider-default pos-relative{% if section.blocks.size > cards_view_desktop %} px-10-upd{% endif %}">
+        <div class="swiper py-4" data-center="true" data-slides-sm="{{ cards_view_mobile }}" data-slides-md="{{ cards_view_tablet }}" data-slides-lg="{{ cards_view_desktop }}" data-spacing-sm="20" data-spacing-md="20" data-spacing-lg="30">
+      {% endif %}
+
+        {% if section.blocks %}
+          <ul class="cards-list ls-none {% if cards_layout == 'slider' %}swiper-wrapper{% else %}d-flex-wrap my-n2 mx-n2-upt m-n3-upd{% endif %} color-{{ text_color }}">
+      
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+
+
+                {%- when 'card' -%}
+                {% liquid
+                  assign card_image = block.settings.card_image
+                  assign card_video = block.settings.card_video
+
+                  assign card_heading = block.settings.card_heading
+                  assign card_heading_type = block.settings.card_heading_type
+                  assign card_blurb = block.settings.card_blurb
+                %}
+                <li class="cards-item{% if cards_layout == 'slider' %} swiper-slide{% else %} {{ cards_width_mobile }} {{ cards_width_tablet }} {{ cards_width_desktop }} py-2 p-2-upt p-3-upd{% endif %}">
+
+                  {% if cards_media %}
+                    <div class="cards-item-image ratio-{{ cards_ratio }}"{% unless card_image %} style="background-color: var(--{{ text_color }});"{% endunless %}>
+                      {% if card_image and card_video %}
+                        <div class="video-cover">
+                          {% render 'component-video', video: card_video, class: cards_fit, poster: card_image, lazy: true %}
+                        </div>
+                      {% endif %}
+                      {% render 'component-image', img: card_image, class: cards_fit, size: 1100, lazy: true %}
+                    </div>
+                  {% endif %}
+
+                  {% if card_heading or card_blurb %}
+                    <div class="cards-item-content {{ text_alignment }}{% if cards_media %} mt-2{% endif %}">
+                      {% if card_heading %}
+                        <h3 class="{{ card_heading_type }}">{{ card_heading }}</h3>
+                      {% endif %}
+                      {% if card_blurb %}
+                        <div class="blurb contents{% if card_heading %} mt-h{% endif %}{% unless cards_media == true %} px-1 px-2-upt{% endunless %}">{{ card_blurb }}</div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+
+                </li>
+
+
+              {%- endcase -%}
+            {%- endfor -%}
+            
+          </ul>
+        {% endif %}
+
+      {% if cards_layout == 'slider' %}
+        </div>
+        <div class="slider-nav">
+          <button class="slider-prev slider-btn button-scale heading-1 mb-10 color-{{ accent_color }}">&larr;</button>
+          <button class="slider-next slider-btn button-scale heading-1 mb-10 color-{{ accent_color }}">&rarr;</button>
+        </div>
+        <div class="swiper-pagination swiper-pagination--dynamic slider-pagination color-{{ accent_color }}"></div>
+      </div>
+      {% endif %}
+  </div>
+
+</div>
+
+{% schema %}
+  {
+    "name": "Card Columns",
+    "tag": "section",
+    "class": "cards section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section ID Options"
+      },
+        {
+        "type": "text",
+        "id": "id",
+        "label": "Section ID",
+        "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
+      },
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "default": "md",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "spacing_header",
+        "default": false,
+        "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Animation Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "animated",
+        "label": "Include default section animation",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Content Options"
+      },
+      {
+        "type": "select",
+        "label": "Container Size",
+        "id": "container_size",
+        "default": "xl",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, 
+          {
+            "label": "X-Large",
+            "value": "xl"
+          }, 
+          {
+            "label": "XX-Large",
+            "value": "xx"
+          }, 
+          {
+            "label": "Maximum",
+            "value": "max"
+          },
+          {
+            "label": "Extra",
+            "value": "xtr"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "label": "Text Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "accent_color",
+        "label": "Accent Color",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text Alignment",
+        "default": "center",
+        "options": [
+          {
+            "label": "Left",
+            "value": "left"
+          },
+          {
+            "label": "Center",
+            "value": "center"
+          },
+          {
+            "label": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Options"
+      },
+      {
+        "type": "select",
+        "id": "bg_color",
+        "label": "Background Color",
+        "options": [
+          {
+            "label": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Card Options"
+      },
+      {
+        "type": "select",
+        "id": "cards_layout",
+        "label": "Layout Style",
+        "default": "list",
+        "options": [
+          {
+            "label":"List",
+            "value": "list"
+          },
+          {
+            "label":"Slider",
+            "value": "slider"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "cards_view_mobile",
+        "label": "Cards Per View (Mobile)",
+        "default": 1,
+        "min": 1,
+        "max": 3,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "cards_view_tablet",
+        "label": "Cards Per View (Tablet)",
+        "default": 3,
+        "min": 1,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "cards_view_desktop",
+        "label": "Cards Per View (Desktop)",
+        "default": 3,
+        "min": 1,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "type": "header",
+        "content": "Media Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "cards_media",
+        "label": "Show Media",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "cards_ratio",
+        "default": "1x1",
+        "label": "Media Aspect Ratio",
+        "visible_if": "{{ section.settings.cards_media == true }}",
+        "options": [
+          { 
+            "value": "1x1", 
+            "label": "Aspect Ratio 1:1" 
+          },
+          { 
+            "value": "2x1", 
+            "label": "Aspect Ratio 2:1" 
+          },
+          { 
+            "value": "1x2", 
+            "label": "Aspect Ratio 1:2" 
+          },
+          { 
+            "value": "3x1", 
+            "label": "Aspect Ratio 3:1" 
+          },
+          { 
+            "value": "1x3", 
+            "label": "Aspect Ratio 1:3" 
+          },
+          { 
+            "value": "4x3", 
+            "label": "Aspect Ratio 4:3" 
+          },
+          { 
+            "value": "3x4", 
+            "label": "Aspect Ratio 3:4" 
+          },
+          { 
+            "value": "5x4", 
+            "label": "Aspect Ratio 5:4" 
+          },
+          { 
+            "value": "4x5", 
+            "label": "Aspect Ratio 4:5" 
+          },
+          { 
+            "value": "5x7", 
+            "label": "Aspect Ratio 5:7" 
+          },
+          { 
+            "value": "7x5", 
+            "label": "Aspect Ratio 7:5" 
+          },
+          { 
+            "value": "16x9", 
+            "label": "Aspect Ratio 16:9" 
+          },
+          { 
+            "value": "9x16", 
+            "label": "Aspect Ratio 9:16" 
+          },
+          { 
+            "value": "16x10", 
+            "label": "Aspect Ratio 16:10" 
+          },
+          { 
+            "value": "10x16", 
+            "label": "Aspect Ratio 10:16" 
+          },
+          { 
+            "value": "21x9", 
+            "label": "Aspect Ratio 21:9" 
+          },
+          { 
+            "value": "9x21", 
+            "label": "Aspect Ratio 9:21" 
+          },
+          { 
+            "value": "18x6", 
+            "label": "Aspect Ratio 18:6" 
+          },
+          { 
+            "value": "6x18", 
+            "label": "Aspect Ratio 6:18" 
+          },
+          { 
+            "value": "10x1", 
+            "label": "Aspect Ratio 10:1" 
+          },
+          { 
+            "value": "1x10", 
+            "label": "Aspect Ratio 1:10"
+            }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "cards_fit",
+        "label": "Media Fit",
+        "default": "cover",
+        "visible_if": "{{ section.settings.cards_media == true }}",
+        "options": [
+          { 
+            "value": "contain", 
+            "label": "Contain"
+          },
+          { 
+            "value": "cover", 
+            "label": "Cover" 
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "card",
+        "name": "Card",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Content Options",
+            "info": "⚠️ Fields left blank will not be displayed"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "card_heading",
+            "label": "Heading",
+            "default": "Lorem Ipsum"
+          },
+          {
+            "type": "select",
+            "id": "card_heading_type",
+            "label": "Heading Type",
+            "default": "heading-5",
+            "options": [
+              {
+                "label": "Heading 2",
+                "value": "heading-2"
+              },
+              {
+                "label": "Heading 3",
+                "value": "heading-3"
+              },
+              {
+                "label": "Heading 4",
+                "value": "heading-4"
+              },
+              {
+                "label": "Heading 5",
+                "value": "heading-5"
+              },
+              {
+                "label": "Heading 6",
+                "value": "heading-6"
+              },
+              {
+                "label": "Subheading",
+                "value": "subheading"
+              }
+            ]
+          },
+          {
+            "type": "richtext",
+            "id": "card_blurb",
+            "label": "Text Blurb",
+            "default": "<p>Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.</p>"
+          },
+          {
+            "type": "header",
+            "content": "Media Options",
+            "info": "⚠️ Media will only display if 'Show Media' is selected",
+            "visible_if": "{{ section.settings.cards_media == true }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "card_image",
+            "label": "Image",
+            "visible_if": "{{ section.settings.cards_media == true }}"
+          },
+          {
+            "type": "video",
+            "id": "card_video",
+            "label": "Video",
+            "info": "⚠️ Image is required as a fallback for video",
+            "visible_if": "{{ section.settings.cards_media == true and section.settings.card_image != blank }}"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Card Columns",
+        "blocks": [
+          {
+            "type": "card"
+          },
+          {
+            "type": "card"
+          },
+          {
+            "type": "card"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

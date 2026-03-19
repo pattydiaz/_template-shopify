@@ -66,8 +66,10 @@
     {{ content_for_header }}
     {% render 'head-tracking' %}
     {% render 'head-fonts' %}
+    {% render 'head-scripts' %}
 
     {{ 'main.css' | asset_url | stylesheet_tag }}
+    
   </head>
 
   {% liquid

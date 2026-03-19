@@ -7,7 +7,7 @@ assign thumb_count = 0
 
 <div class="product-slider slider-default">
   
-  <div class="swiper border-radius" data-spacing-sm="10" data-spacing-md="10" data-spacing-lg="20">
+  <div class="swiper " data-spacing-sm="10" data-spacing-md="10" data-spacing-lg="20">
     <div class="swiper-wrapper">
       {% if product.media.size > 0 %}
 
@@ -25,7 +25,7 @@ assign thumb_count = 0
             endfor
           %}
           <div class="swiper-slide" data-slide="{{ media_count }}" data-variant-id="{{ variant_ids }}">
-            <div class="ratio-1x1 border-radius">
+            <div class="ratio-1x1 ">
               {% case media.media_type %}
 
                 {% when 'image' %}
@@ -49,7 +49,7 @@ assign thumb_count = 0
 
       {% else %}
         <div class="swiper-slide" data-slide="{{ media_count }}">
-          <div class="ratio-1x1 border-radius">
+          <div class="ratio-1x1 ">
             <div class="float--center w-100 heading-5 text-center px-1">No Image Available</div>
           </div>
         </div>
@@ -63,8 +63,8 @@ assign thumb_count = 0
     <div class="slider-thumbs py-1 mx-nh d-flex-wrap">
       {% for media in product.media %}
         <div class="thumb w-20 p-h" data-slide="{{ thumb_count }}">
-          <button class="button-transparent d-block w-100 border-radius" aria-label="Image {{ thumb_count }}">
-            <div class="ratio-5x4 border-radius">
+          <button class="button-transparent d-block w-100" aria-label="Image {{ thumb_count }}">
+            <div class="ratio-5x4">
               {% render 'component-image' img: media, class: 'img-cover', size: 150, lazy: false %}
             </div>
           </button>

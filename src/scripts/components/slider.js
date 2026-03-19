@@ -49,6 +49,7 @@ var Slider = {
 
       const paginationEl = root.querySelector('.swiper-fraction, .swiper-pagination');
       const isFraction = paginationEl?.classList.contains('swiper-fraction');
+      const isDynamic = paginationEl?.classList.contains('swiper-pagination--dynamic');
 
       const slider = new Swiper(swiperEl, {
         loop,
@@ -63,7 +64,9 @@ var Slider = {
         pagination: {
           el: paginationEl,
           clickable: !isFraction,
-          type: isFraction ? 'fraction' : 'bullets'
+          type: isFraction ? 'fraction' : 'bullets',
+          dynamicBullets: isDynamic ? true : false,
+          dynamicMainBullets: 1,
         },
 
         navigation: {
@@ -195,9 +198,12 @@ var Slider = {
       const group = parseInt(getData(swiperEl, 'group', 1));
       const spacing = parseInt(getData(swiperEl, 'spacing', 0));
 
-      const paginationEl = root.querySelector('.swiper-pagination');
       const nextBtn = root.querySelector('.slider-next');
       const prevBtn = root.querySelector('.slider-prev');
+
+      const paginationEl = root.querySelector('.swiper-fraction, .swiper-pagination');
+      const isFraction = paginationEl?.classList.contains('swiper-fraction');
+      const isDynamic = paginationEl?.classList.contains('swiper-pagination--dynamic');
 
       const sliderOptions = {
         init: false,
@@ -212,7 +218,13 @@ var Slider = {
 
         autoplay: swiperEl.classList.contains('autoplay') ? { delay: 8000 } : false,
 
-        pagination: { el: paginationEl, clickable: true },
+        pagination: {
+          el: paginationEl,
+          clickable: !isFraction,
+          type: isFraction ? 'fraction' : 'bullets',
+          dynamicBullets: isDynamic ? true : false,
+          dynamicMainBullets: 1,
+        },
 
         navigation: { nextEl: nextBtn, prevEl: prevBtn },
 

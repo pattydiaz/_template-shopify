@@ -1,0 +1,12 @@
+{% liquid
+
+  assign blurb = block.settings.blurb
+  assign blurb_spacing_top = block.settings.blurb_spacing_top | prepend: ' mt-'
+  assign blurb_spacing_bottom = block.settings.blurb_spacing_bottom | prepend: ' mb-'
+  assign blurb_color = block.settings.blurb_color
+  assign blurb_width_mobile = block.settings.blurb_width_mobile | prepend: '--mw:' | append: 'px;'
+  assign blurb_width_desktop = block.settings.blurb_width_desktop | prepend: '--mw-upd:' | append: 'px;'
+
+%}
+
+<div class="contents w-100 w-max{{ blurb_spacing_top }}{{ blurb_spacing_bottom }} color-{{ blurb_color }}" style="{{ blurb_width_mobile }} {{ blurb_width_desktop }}">{{ blurb }}</div>

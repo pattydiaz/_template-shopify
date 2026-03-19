@@ -13,6 +13,9 @@
   
   assign container_size = section.settings.container_size | prepend: ' container-'
   assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+  
+  assign text_color = section.settings.text_color
+  assign bg_color = section.settings.bg_color
 
   assign featured_collection_handle = section.settings.featured_collection | default: "" 
 
@@ -32,7 +35,7 @@
 
 {% if featured_source and featured_source.size > 0 %}
 
-  <div {{ id }}class="featured-wrapper{{ spacing_top }}{{ spacing_bottom }}">
+  <div {{ id }}class="featured-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
     {% if spacing_header %}
       <div class="gap-hh"></div>
@@ -53,7 +56,7 @@
     
             {% for related_product in featured_source limit: featured_limit %}
               <li class="featured-product w-100 wt-25 px-1{% if featured_source and featured_source.size > 2 %} swiper-slide{% endif %}">
-                {% render 'card-product', product: related_product, background_color: background_color, text_color: text_color %}
+                {% render 'card-product', product: related_product, bg_color: bg_color, text_color: text_color %}
               </li>
             {% endfor %}
     
@@ -102,7 +105,7 @@
       "type": "text",
       "id": "id",
       "label": "Section ID",
-      "info": "⚠️ Used for anchor links and must be unique, downcase, and use dashes"
+      "info": "⚠️ Used for anchor links and must be unique, lowercase, and use dashes"
     },
     {
       "type": "header",
@@ -232,6 +235,21 @@
     },
     {
       "type": "select",
+      "id": "text_color",
+      "label": "Text Color",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
       "id": "text_alignment",
       "label": "Text Alignment",
       "default": "center",
@@ -247,6 +265,29 @@
         {
           "label": "Right",
           "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Background Options"
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Background Color",
+      "options": [
+        {
+          "label": "Transparent",
+          "value": "transparent"
+        },
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
         }
       ]
     },

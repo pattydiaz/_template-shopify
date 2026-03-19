@@ -1,0 +1,98 @@
+@use "../shared" as *;
+
+@mixin products-filter { @include heading-5; }
+
+.products {
+  $self: &;
+
+  &-nav {
+
+    &-filters {
+
+      @include bp-up(md) {
+        max-height: none !important;
+      }
+
+      > * {
+        @include bp-up(md) {
+          opacity: 1;
+          visibility: visible;
+          transform: none;
+        }
+      }
+    }
+  }
+
+  &-filters {
+
+    &-list {
+
+      @include bp-up(md) {
+        text-align: center;
+      }
+    }
+
+    &-item {
+
+      @include bp-up(md) {
+        display: inline-block;
+        margin-right: $spacing*2.5;
+      }
+      
+      >a {
+        display: block;
+        position: relative;
+        transition: opacity 0.3s $ease-default;
+        @include products-filter;
+
+        @include bp-up(md) {
+          padding-right: $spacing*3.4;
+        }
+
+        &:before,
+        &:after {
+          content:'';
+          position: absolute;
+          top: 5px;
+          right: 0;
+          border-radius: 100%;
+
+          @include bp-up(lg) {
+            top: 8px;
+          }
+        }
+
+        &:before {
+          height: 18px;
+          width: 18px;
+          border: 1px solid $current;
+        }
+
+        &:after {
+          height: 13px;
+          width: 13px;
+          margin-top: 2.5px;
+          margin-right: 2.5px;
+          background-color: $current;
+          transform: scale(0) translate3d(0,0,0);
+          transition: transform 0.2s $ease-default;
+        }
+
+        &.active {
+          opacity: 0.5;
+
+          &:after {
+            transform: scale(1) translate3d(0,0,0);
+          }
+        }
+
+        &:not(.active) {
+          @include hover {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+  }
+
+}

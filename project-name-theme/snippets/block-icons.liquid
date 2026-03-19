@@ -1,0 +1,15 @@
+{% liquid
+
+  assign icons_spacing_top = block.settings.icons_spacing_top | prepend: ' mt-'
+  assign icons_spacing_bottom = block.settings.icons_spacing_bottom | prepend: ' mb-'
+  assign icons_spacing_left = block.settings.icons_spacing_left | prepend: ' ml-'
+  assign icons_spacing_right = block.settings.icons_spacing_right | prepend: ' mr-'
+  assign icons_position = block.settings.icons_position
+  assign icons_alignment = block.settings.icons_alignment
+  assign icons_color = block.settings.icons_color
+
+%}
+
+<div class="social d-flex d-flex--align-{{ icons_position }} d-flex--justify-{{ icons_alignment }} color-{{ icons_color }}{{ icons_spacing_top }}{{ icons_spacing_bottom }}{{ icons_spacing_left }}{{ icons_spacing_right }}">
+  {{ content }}
+</div>

@@ -1,0 +1,309 @@
+{% render 'block-graphic', block: block %}
+
+{% schema %}
+{
+  "name": "Graphic",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "graphic",
+      "label": "Graphic Image"
+    },
+    {
+      "type": "header",
+      "content": "Formatting Options",
+      "visible_if": "{{ block.settings.graphic != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "graphic_width_mobile",
+      "default": 100,
+      "label": "Graphic Width (Mobile)",
+      "step": 10,
+      "min": 10,
+      "max": 1000,
+      "unit": "px",
+      "visible_if": "{{ block.settings.graphic != blank }}"
+    }, 
+    {
+      "type": "range",
+      "id": "graphic_width_desktop",
+      "default": 100,
+      "label": "Graphic Width (Desktop)",
+      "step": 10,
+      "min": 50,
+      "max": 1000,
+      "unit": "px",
+      "visible_if": "{{ block.settings.graphic != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "graphic_ratio",
+      "default": "1x1",
+      "label": "Graphic Aspect Ratio",
+      "visible_if": "{{ block.settings.graphic != blank }}",
+      "options": [
+        { 
+          "value": "1x1", 
+          "label": "Aspect Ratio 1:1" 
+        },
+        { 
+          "value": "2x1", 
+          "label": "Aspect Ratio 2:1" 
+        },
+        { 
+          "value": "1x2", 
+          "label": "Aspect Ratio 1:2" 
+        },
+        { 
+          "value": "3x1", 
+          "label": "Aspect Ratio 3:1" 
+        },
+        { 
+          "value": "1x3", 
+          "label": "Aspect Ratio 1:3" 
+        },
+        { 
+          "value": "4x3", 
+          "label": "Aspect Ratio 4:3" 
+        },
+        { 
+          "value": "3x4", 
+          "label": "Aspect Ratio 3:4" 
+        },
+        { 
+          "value": "5x4", 
+          "label": "Aspect Ratio 5:4" 
+        },
+        { 
+          "value": "4x5", 
+          "label": "Aspect Ratio 4:5" 
+        },
+        { 
+          "value": "5x7", 
+          "label": "Aspect Ratio 5:7" 
+        },
+        { 
+          "value": "7x5", 
+          "label": "Aspect Ratio 7:5" 
+        },
+        { 
+          "value": "16x9", 
+          "label": "Aspect Ratio 16:9" 
+        },
+        { 
+          "value": "9x16", 
+          "label": "Aspect Ratio 9:16" 
+        },
+        { 
+          "value": "16x10", 
+          "label": "Aspect Ratio 16:10" 
+        },
+        { 
+          "value": "10x16", 
+          "label": "Aspect Ratio 10:16" 
+        },
+        { 
+          "value": "21x9", 
+          "label": "Aspect Ratio 21:9" 
+        },
+        { 
+          "value": "9x21", 
+          "label": "Aspect Ratio 9:21" 
+        },
+        { 
+          "value": "18x6", 
+          "label": "Aspect Ratio 18:6" 
+        },
+        { 
+          "value": "6x18", 
+          "label": "Aspect Ratio 6:18" 
+        },
+        { 
+          "value": "10x1", 
+          "label": "Aspect Ratio 10:1" 
+        },
+        { 
+          "value": "1x10", 
+          "label": "Aspect Ratio 1:10"
+          }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "graphic_fit",
+      "default": "contain",
+      "label": "Graphic Image Fit",
+      "visible_if": "{{ block.settings.graphic != blank }}",
+      "options": [
+        { 
+          "value": "contain", 
+          "label": "Contain"
+        },
+        { 
+          "value": "cover", 
+          "label": "Cover" 
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Spacing Options"
+    },
+    {
+      "type": "select",
+      "id":"graphic_spacing_top",
+      "label": "Spacing Top",
+      "default": "none",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "5px",
+          "value": "h"
+        },
+        {
+          "label": "10px",
+          "value": "1"
+        },
+        {
+          "label": "15px",
+          "value": "q"
+        },
+        {
+          "label": "20px",
+          "value": "2"
+        },
+        {
+          "label": "30px",
+          "value": "3"
+        },
+        {
+          "label": "40px",
+          "value": "4"
+        },
+        {
+          "label": "50px",
+          "value": "5"
+        },
+        {
+          "label": "60px",
+          "value": "6"
+        },
+        {
+          "label": "70px",
+          "value": "7"
+        },
+        {
+          "label": "80px",
+          "value": "8"
+        },
+        {
+          "label": "90px",
+          "value": "9"
+        },
+        {
+          "label": "100px",
+          "value": "10"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id":"graphic_spacing_bottom",
+      "label": "Spacing Bottom",
+      "default": "none",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "5px",
+          "value": "h"
+        },
+        {
+          "label": "10px",
+          "value": "1"
+        },
+        {
+          "label": "15px",
+          "value": "q"
+        },
+        {
+          "label": "20px",
+          "value": "2"
+        },
+        {
+          "label": "30px",
+          "value": "3"
+        },
+        {
+          "label": "40px",
+          "value": "4"
+        },
+        {
+          "label": "50px",
+          "value": "5"
+        },
+        {
+          "label": "60px",
+          "value": "6"
+        },
+        {
+          "label": "70px",
+          "value": "7"
+        },
+        {
+          "label": "80px",
+          "value": "8"
+        },
+        {
+          "label": "90px",
+          "value": "9"
+        },
+        {
+          "label": "100px",
+          "value": "10"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Animation Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "graphic_float",
+      "label": "Float the image in the center of container",
+      "default": false,
+      "visible_if": "{{ block.settings.graphic != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "graphic_rotate_animate",
+      "label": "Add a rotation animation",
+      "default": false,
+      "visible_if": "{{ block.settings.graphic != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "graphic_rotate_speed",
+      "label": "Rotation Speed",
+      "min": 1,
+      "max": 100,
+      "unit": "s",
+      "step": 1,
+      "default": 10,
+      "visible_if": "{{ block.settings.graphic != blank and block.settings.graphic_rotate_animate == true }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Graphic"
+    }
+  ]
+}
+{% endschema %}
