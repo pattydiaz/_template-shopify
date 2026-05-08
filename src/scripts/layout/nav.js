@@ -1,5 +1,6 @@
 const nav = $('#nav');
 const menu_btn = $('#menu');
+const nav_buttons = $$('#nav a');
 
 const Navigation = {
   
@@ -14,6 +15,10 @@ const Navigation = {
         const isActive = menu_btn.el.classList.toggle('active');
         isActive ? this.open() : this.close();
       });
+
+      nav_buttons.forEach(el =>
+        el.addEventListener('click', () => setTimeout(() => { Navigation.close() }, 100))
+      );
 
       w.on('keyup', (e) => {
         if (nav.el.classList.contains('nav--open') && e.key === 'Escape') {

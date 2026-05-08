@@ -230,7 +230,12 @@
         "type": "select",
         "id": "text_color",
         "label": "Text Color",
+        "default": "current",
         "options": [
+          {
+            "label": "Current Color",
+            "value": "current"
+          },
           {
             "label": "White",
             "value": "white"
@@ -292,10 +297,6 @@
         "label": "Background Color",
         "options": [
           {
-            "label": "Transparent",
-            "value": "transparent"
-          },
-          {
             "label": "White",
             "value": "white"
           },
@@ -348,6 +349,23 @@
         "step": 0.1,
         "default": 0,
         "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "select",
+        "id": "bg_overlay_color",
+        "label": "Overlay Background Color",
+        "default": "black",
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_overlay > 0 }}",
+        "options": [
+          {
+            "label": "White",
+            "value": "white"
+          },
+          {
+            "label": "Black",
+            "value": "black"
+          }
+        ]
       },
       {
         "type": "checkbox",

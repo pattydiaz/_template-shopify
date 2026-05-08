@@ -4,102 +4,273 @@
 
 .nav {
   $self: &;
-  @include cover($position: fixed);
-  @include hide(true, 0.45s);
-  z-index: -1;
 
-  &--open {
-    @include show;
+  &--button {
+    @include cover($position: fixed);
+    @include hide(true, 0.45s);
+    z-index: -1;
+  }
+
+  &--list {
+    background-color: $transparent;
+  }
+
+  &--both {
+    @include bp-down(md) {
+      @include cover($position: fixed);
+      @include hide(true, 0.45s);
+      z-index: -1;
+    }
+
+    @include bp-up(md) {
+      background-color: $transparent;
+    }
+  }
+
+  &-bg {
+
+    #{$self}--list & {
+      display: none;
+    }
+
+    #{$self}--both & {
+      @include bp-up(md) { display: none; }
+    }
   }
 
   &-container {
-    height: 100%;
-    padding-top: calc(var(--hh) + #{$spacing*2});
-    padding-bottom: calc(var(--hh) + #{$spacing*2});
 
-    #{$self}:not(#{$self}--scroll) & {
-      @include flex-center;
+    #{$self}--button & {
+      display: flex;
       flex-direction: column;
+      height: 100%;
+      padding-top: calc(var(--hh) + #{$spacing*10}); 
+      padding-bottom: $spacing*2;
+      overflow-y: scroll;
+      overflow-x: hidden;
     }
 
-    #{$self}#{$self}--scroll & {
+    #{$self}--list & {
+      padding: 0 !important;
+    }
+
+    #{$self}--both & {
+      @include bp-down(md) {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding-top: calc(var(--hh) + #{$spacing*10}); 
+        padding-bottom: $spacing*2;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+
+      @include bp-up(md) {
+        padding: 0 !important;
+      }
+
+      @media(max-height: 375px) {
+        padding-top: calc(var(--hh) + #{$spacing});
+      }
+    }
+
+  }
+
+  &-list {
+
+    #{$self}--list & {
       display: flex;
+      flex-wrap: wrap;
+    }
+    
+    #{$self}--both & {
+      @include bp-up(md) {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+
+    #{$self}--list.footer-nav & {
+      @include bp-up(lg) {
+        justify-content: flex-end;
+      }
+    }
+
+    &.text-center {
       justify-content: center;
-      overflow-y: scroll;
+    }
+
+    &-item, 
+    &-anchor {
+
+      #{$self}--button & {
+        @include heading-nav($size:'lg');
+      }
+
+      #{$self}--list & {
+        @include heading-nav($size:'default');
+      }
+
+      #{$self}--both & {
+        @include bp-down(md) {
+          @include heading-nav($size:'lg');
+        }
+        
+        @include bp-up(md) {
+          @include heading-nav($size:'default');
+        }
+      }
+
+    }
+
+    &-anchor {
+      padding-top: $spacing;
+      padding-bottom: $spacing;
+
+      #{$self}--button & {
+        display: block;
+        + span { display: block; }
+      }
+
+      #{$self}--list & {
+        display: inline-block;
+        + span { display: inline-block; }
+      }
+
+      #{$self}--both & {
+        @include bp-down(md) {
+          display: block;
+          + span { display: block; }
+        }
+
+        @include bp-up(md) {
+          display: inline-block;
+          + span { display: inline-block; }
+        }
+      }
+
+      + span {
+        padding-top: $spacing;
+        padding-bottom: $spacing;
+        padding-left: 1vw;
+        padding-right: 1vw;
+
+        @include bp-up(md) {
+          padding-left: 2vw;
+          padding-right: 2vw;
+        }
+
+        @include bp-up(xl) {
+          padding-left: $spacing*3;
+          padding-right: $spacing*3;
+        }
+      }
+
+      &.no-dividers {
+        padding-right: 3vw;
+
+        @include bp-up(xl) {
+          padding-right: $spacing*3;
+        }
+
+        #{$self}--button & {
+          padding-top: $spacing*2.5;
+          padding-bottom: $spacing*2.5;
+          padding-right: 0;
+        }
+
+        #{$self}--both & {
+          @include bp-down(md) {
+            padding-left: 3vw;
+            padding-top: $spacing*2.5;
+            padding-bottom: $spacing*2.5;
+          }
+        }
+
+      }
+    }
+
+    &-item {
+
+      #{$self}--list & {
+        display: inline-block;
+      }
+      
+      #{$self}--both & {
+        @include bp-up(md) {
+          display: inline-block;
+        }
+      }
+
+      &:last-child {
+
+        #{$self}--list:not(.footer-nav) & {
+          > *:not(span) { padding-right: 0; }
+        }
+  
+        #{$self}--both & {
+          > *:not(span) { @include bp-up(md) { padding-right: 0; }}
+        }
+
+      }
+    }
+  }
+
+  &-contact {
+    
+    #{$self}--both & {
+      @include bp-down(md) {
+        padding-top: $spacing*15;
+      }
+
+      @include bp-up(md) {
+        display: none;
+      }
     }
   }
 
   &-list,
   &-contact {
 
-    &#{$self}--animate {
+    @include bp-up(md) {
+      padding-top: 0;
+    }
 
-      >* {
-        @include fade-right-in;
+    &#{$self}--animate {
+      
+      #{$self}--button & {
+        >* { @include fade-right-in; }
+      }
+
+      #{$self}--both & {
+        @include bp-down(md) {
+          >* { @include fade-right-in; }
+        }
       }
       
+      
       &.active {
-        
-        >* {
-          @include child-delay;
-          @include end-transform;
+        #{$self}--button & {
+          >* { 
+            @include child-delay;
+            @include end-transform;
+          }
+        }
+  
+        #{$self}--both & {
+          @include bp-down(md) {
+            >* { 
+              @include child-delay;
+              @include end-transform;
+            }
+          }
         }
       }
     }
   }
 
-  &--list {
-
-    @include bp-up(md) {
-      position: relative;
-      top: unset;
-      left: unset;
-      @include show;
-      background-color: $transparent;
-      z-index: 0;
-    }
-
-    #{$self}-bg {
-      @include bp-up(md) {
-        display: none;
-      }
-    }
-
-    #{$self}-container {
-
-      @include bp-up(md) {
-        display: block;
-        height: auto;
-        padding: 0 !important;
-      }
-    }
-
-    #{$self}-list {
-
-      @include bp-up(md) {
-        display: flex;
-        align-items: center;
-      }
-
-      li {
-
-        .heading-nav {
-          @include bp-up(md) {
-            padding: $spacing;
-            @include body;
-            white-space: nowrap;
-          }
-        }
-      }
-
-      &#{$self}--animate {
-        li {
-          @include bp-up(md) {
-            @include end-transform; 
-          }
-        }
-      }
-    }
+  &--open {
+    @include show;
   }
 }
 

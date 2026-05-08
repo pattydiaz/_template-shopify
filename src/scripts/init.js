@@ -9,7 +9,7 @@ var Project = {
   build() {
     Buttons.init();
     Parallax.init();
-    Accordion.init();
+    // Accordion.init();
     Slider.init();
     Newsletter.init();
     Header.init();
@@ -23,6 +23,7 @@ var Project = {
 
   reinit() {
     lazyload.update();
+    Slider.init();
     Cart.init();
     Drawer.init();
     CartAdd.init();

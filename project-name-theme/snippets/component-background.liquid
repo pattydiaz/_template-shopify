@@ -6,7 +6,9 @@
   assign bg_position_x = bg_settings.bg_position_x | default: 50
   assign bg_position_y = bg_settings.bg_position_y | default: 50
   assign bg_position = '--position:' | append: bg_position_x | append: '% ' | append: bg_position_y | append: '%;'
-  assign bg_overlay = '--opacity:' | append: bg_settings.bg_overlay | default: 0 | append: ';'
+  assign bg_overlay = bg_settings.bg_overlay | default: 0 | prepend: '--opacity:' | append: ';'
+  assign bg_overlay_blur = bg_settings.bg_overlay_blur | default: false, allow_false: true
+  assign bg_overlay_color = bg_settings.bg_overlay_color | default: 'black' | prepend: '--bg: var(--' | append: ');'
 
   assign bg_mobile = bg_settings.bg_mobile
   assign bg_vid_mobile = bg_settings.bg_video_mobile
@@ -31,9 +33,8 @@
   endif
 %}
 
-
 {% if bg_img %}
-  <div class="{{ class }}bg-cover bg--overlay" style="{{ bg_overlay }}">
+  <div class="{{ class }}bg-cover bg--overlay{% if bg_settings.bg_overlay > 0 and bg_overlay_blur == true %} bg--blur{% endif %}" style="{{ bg_overlay }}{{ bg_overlay_color }}">
     {% if bg_mobile and bg_img_mobile %}
       <div class="bg-cover-inner d-block d-none-upt" style="{{ bg_position_mobile }}">
         {% render 'component-image', img: bg_img_mobile, lazy: lazy, critical: critical, class: img_class, attr: img_attr %}

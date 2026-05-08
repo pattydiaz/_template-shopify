@@ -8,7 +8,7 @@ const Buttons = {
   },
 
   anchor() {
-    // Smooth scroll using GSAP, wrapper-friendly
+    
     const scrollToTarget = (targetEl) => {
       const headerHeight = document.querySelector('header')?.offsetHeight || 0;
       const startY = window.scrollY;
@@ -24,18 +24,26 @@ const Buttons = {
       });
     };
 
-    // Handle anchors (#target)
     const handleAnchorClick = ($anchor, e) => {
-      const id = $anchor.attr('href');
-      if (!id || id === '#' || $anchor.el.classList.contains('skip-to-content')) return;
+      const href = $anchor.attr('href');
+      if (!href || href === '#' || $anchor.el.classList.contains('skip-to-content')) return;
+
+      const isHashLink = href.startsWith('#');
+      const isHomeHashLink = href.startsWith('/#');
+
+      if (!isHashLink && !isHomeHashLink) return;
+      if (isHomeHashLink && window.location.pathname !== '/') return;
 
       e.preventDefault();
 
-      const $target = $(id);
+      const $target = $(isHomeHashLink ? href.slice(1) : href);
       if ($target.el) scrollToTarget($target.el);
+
+      // if ($('body').el.classList.contains('nav-open')) {
+      //   Navigation.close();
+      // }
     };
 
-    // Handle 'next section' buttons
     const handleNextClick = ($btn, e) => {
       e.preventDefault();
 
@@ -45,9 +53,8 @@ const Buttons = {
       if ($next && $next.el) scrollToTarget($next.el);
     };
 
-    // EVENT DELEGATION (single listener)
     document.addEventListener('click', function (e) {
-      const anchorEl = e.target.closest('a[href^="#"]:not(.skip-to-content), .anchor');
+      const anchorEl = e.target.closest('a[href^="#"]:not(.skip-to-content), a[href^="/#"], .anchor');
       if (anchorEl) {
         return handleAnchorClick($(anchorEl), e);
       }
@@ -59,7 +66,6 @@ const Buttons = {
     });
   },
 
-  // Prevent double click
   doubleclick(el) {
     if (el.dataset.isclicked) return true;
     el.dataset.isclicked = true;
@@ -67,7 +73,6 @@ const Buttons = {
     return false;
   },
 
-  // Trigger element click async
   trigger(el) {
     setTimeout(() => el.click(), 0);
   }

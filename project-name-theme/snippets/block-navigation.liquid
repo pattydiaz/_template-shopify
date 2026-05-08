@@ -2,14 +2,20 @@
 
   assign nav = block.settings.nav
   assign nav_type = block.settings.nav_type
+
   assign nav_button = block.settings.nav_button
   assign nav_button_color = block.settings.nav_button_color
   assign nav_button_bg = block.settings.nav_button_bg
 
+  assign nav_button_visibility = ''
+  if nav_type == 'both'
+    assign nav_button_visibility = ' d-none-upt'
+  endif
+
 %}
 
-{% if nav != blank %}
-  <div class="header-cta{% if nav_type == 'list' %} d-none-upt{% endif %}">
+{% if nav != blank and nav_type != 'list' %}
+  <div class="header-cta{{ nav_button_visibility }}" {{ block.shopify_attributes }}>
     {% if nav_button == 'menu' %}
       <button id="menu" class="header-btn content button-opacity color-{{ nav_button_color }} bg-{{ nav_button_bg }}" aria-label="Menu">
         <span>
@@ -28,5 +34,5 @@
 {% endif %}
 
 {% if nav != blank %}
-  {% render 'navigation', nav_settings: block.settings %}
+  {% render 'navigation', nav_settings: block.settings, content: content, class_name: class_name %}
 {% endif %}

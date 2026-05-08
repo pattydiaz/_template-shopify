@@ -27,6 +27,7 @@
   &-center { text-align: center; }
   &-left { text-align: left; }
   &-right { text-align: right; }
+  &-align { text-align: inherit; }
   
   &-center-upt { @include bp-up(md) { text-align: center; } }
   &-left-upt { @include bp-up(md) { text-align: left; } }

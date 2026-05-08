@@ -26,6 +26,7 @@ $fw-black: 900;
 // Colors
 // ================
 
+$inherit: inherit;
 $current: currentColor;
 
 $black: #000000;
@@ -40,6 +41,7 @@ $error: red;
 
 
 $colors: (
+  'inherit' : $inherit,
   'current' : $current,
   'black' : $black,
   'black-transparent' : $black-transparent,

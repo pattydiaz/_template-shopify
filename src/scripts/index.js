@@ -33,9 +33,22 @@ const lazyloadSettings = {
   rootMargin: '50px 0px',
   elements_selector: '.lazy',
   load_delay: 0,
-  callback_loaded: el => el.classList.add('loaded'),
+  callback_loaded: el => {
+    el.classList.add('loaded');
+
+    if (el.tagName === 'VIDEO') {
+      el.muted = true;
+      el.load();
+
+      if (el.hasAttribute('autoplay')) {
+        el.play().catch(() => {});
+      }
+    }
+  },
   callback_error: el => {
-    el.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB2aWV3Qm94PSIwIDAgMSAxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4=';
+    if (el.tagName === 'VIDEO') return;
+
+    el.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB2aWV3Qm94PSIwIDAgMSAxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4=';
   }
 };
 

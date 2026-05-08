@@ -1,62 +1,124 @@
 {% liquid
+
+  assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
+  assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
   
   assign container_size = section.settings.container_size | prepend: ' container-'
-  assign bg_color = section.settings.bg_color
   assign text_color = section.settings.text_color
-
-  assign footer_email = section.settings.footer_email
-  assign footer_nav = section.settings.footer_nav
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+  assign bg_color = section.settings.bg_color
 
 %}
 
-<div class="footer-wrapper{% if footer_email != blank or section.blocks.size > 0  %} gap-tm--sm{% endif %} bg-{{ bg_color }} color-{{ text_color }}">
-  <div class="footer-container container{{ container_size }}{% if footer_email != blank or section.blocks.size > 0  %} mt-2{% endif %}">
+<div id="footer" class="footer-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
-    {% if footer_email != blank or section.blocks.size > 0  %}
-      
-      <div class="footer-columns columns columns-swap gap-ym--xs d-flex-t d-flex--align-center border-y-current">
-        <div class="footer-column column">
-          {% content_for 'blocks' %}
+  <div class="footer-inner">
+    {% render 'component-background', class: 'footer-bg', bg_settings: section.settings %}
+  
+    <div class="footer-container container{{ container_size }}">
+      <div class="footer-content color-{{ text_color }} {{ text_alignment }}">
+  
+        <div class="footer-main">
+          {% content_for "blocks" %}
         </div>
-        <div class="footer-column column" style="--column-margin: 5px;">
-          {% if footer_email != blank %}
-            <span class="subheading">Contact Us:</span>
-            <a href="mailto:{{ footer_email }}" class="button-opacity subheading" title="{{ footer_email }}">{{ footer_email }}</a>
-          {% endif %}
+  
+        <div class="footer-sub gap-tm--xl">
+          <div class="footer-sub-social footer-sub-section d-ib-upd p-1">
+            {% content_for 'block', type: '_icons', id: 'footer-social', class_name: 'footer-social' %}
+          </div>
+          <div class="footer-sub-copyright footer-sub-section d-ib-upt p-1">
+            <span>&copy; {{ "now" | date: "%Y" }} {{ shop.name }}</span>
+          </div>
+          <div class="footer-sub-nav footer-sub-section d-ib-upt p-1">
+            {% content_for 'block', type: '_navigation', id: 'footer-navigation', class_name: 'footer-nav' %}
+          </div>
         </div>
+  
       </div>
-
-    {% endif %}
-
-
-
-    {% if linklists[footer_nav] %}
-      <ul class="footer-nav ls-none text-center mt-h-upt py-3">
-        <li class="footer-nav-item d-ib-middle mr-h caption text-uppercase">
-          <span class="caption text-uppercase">&copy; {{ "now" | date: "%Y" }} {{ shop.name }}</span>
-        </li>
-        {% for link in linklists[footer_nav].links %}
-          {% if linklists[footer_nav].levels == 1 %}
-            <li class="footer-nav-item d-ib-middle mr-h caption text-uppercase">
-              <a href="{{ link.url }}" class="footer-nav-anchor caption text-uppercase button-opacity" title="{{ link.title | strip_html | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | strip_html | escape }}</a>
-            </li>
-          {% endif %}
-        {% endfor %}
-        <li class="footer-nav-item d-ib-middle mr-h caption text-uppercase">
-          <a href="https://makersandallies.com" class="footer-nav-anchor caption text-uppercase button-opacity" title="Made by Makers" target="_blank" rel="nofollow">Made by Makers</a>
-        </li>
-      </ul>
-    {% endif %}
-
+  
+    </div>
   </div>
+
 </div>
 
 {% schema %}
   {
     "name": "Footer",
     "tag": "footer",
-    "class": "footer",
+    "class": "footer section",
     "settings" : [
+      {
+        "type": "header",
+        "content": "Spacing Options"
+      },
+      {
+        "type": "select",
+        "id": "spacing_top",
+        "default": "md",
+        "label": "Section Spacing Top",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "spacing_bottom",
+        "default": "md",
+        "label": "Section Spacing Bottom",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "X-Small",
+            "value": "xs"
+          },
+          {
+            "label": "Small",
+            "value": "sm"
+          },
+          {
+            "label": "Medium",
+            "value": "md"
+          },
+          {
+            "label": "Large",
+            "value": "lg"
+          }, {
+            "label": "X-Large",
+            "value": "xl"
+          }, {
+            "label": "XX-Large",
+            "value": "xx"
+          }
+        ]
+      },
       {
         "type": "header",
         "content": "Content Options"
@@ -109,14 +171,39 @@
         "type": "select",
         "id": "text_color",
         "label": "Text Color",
+        "default": "white",
         "options": [
           {
-            "label": "White",
-            "value": "white"
+            "label": "Current Color",
+            "value": "current"
           },
           {
             "label": "Black",
             "value": "black"
+          },
+          {
+            "label": "White",
+            "value": "white"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text Alignment",
+        "default": "center",
+        "options": [
+          {
+            "label": "Left",
+            "value": "left"
+          },
+          {
+            "label": "Center",
+            "value": "center"
+          },
+          {
+            "label": "Right",
+            "value": "right"
           }
         ]
       },
@@ -128,11 +215,69 @@
         "type": "select",
         "id": "bg_color",
         "label": "Background Color",
+        "default": "black",
         "options": [
           {
-            "label": "Transparent",
-            "value": "transparent"
+            "label": "Black",
+            "value": "black"
           },
+          {
+            "label": "White",
+            "value": "white"
+          }
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "bg_img",
+        "label": "Background Image"
+      },
+      {
+        "type": "video",
+        "id": "bg_video",
+        "label": "Background Video",
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_y",
+        "label": "Image Position (Top/Bottom)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_x",
+        "label": "Image Position (Left/Right)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_overlay",
+        "label": "Image Overlay Opacity",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "default": 0,
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
+        "type": "select",
+        "id": "bg_overlay_color",
+        "label": "Overlay Background Color",
+        "default": "black",
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_overlay > 0 }}",
+        "options": [
           {
             "label": "White",
             "value": "white"
@@ -144,23 +289,67 @@
         ]
       },
       {
+        "type": "checkbox",
+        "id": "bg_overlay_blur",
+        "label": "Add blur to overlay",
+        "default": false,
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_overlay > 0 }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "bg_mobile",
+        "label": "Show different media on mobile",
+        "default": false,
+        "visible_if": "{{ section.settings.bg_img != blank }}"
+      },
+      {
         "type": "header",
-        "content": "Footer Options"
+        "content": "Mobile Background Options",
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true }}"
       },
       {
-        "type": "text",
-        "id": "footer_email",
-        "label": "Contact Email",
-        "placeholder": "emailaddress@email.com"
+        "type": "image_picker",
+        "id": "bg_img_mobile",
+        "label": "Background Image",
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true }}"
       },
       {
-        "type": "link_list",
-        "id": "footer_nav",
-        "label": "Footer Menu"
+        "type": "video",
+        "id": "bg_video_mobile",
+        "label": "Background Video",
+        "info": "⚠️ Image is required as a fallback for video",
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_y_mobile",
+        "label": "Image Position (Top/Bottom)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "bg_position_x_mobile",
+        "label": "Image Position (Left/Right)",
+        "default": 50,
+        "step": 1,
+        "min": 0,
+        "max": 100,
+        "unit": "%",
+        "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
       }
     ],
     "blocks": [
-      { "type": "_icons" }
+      { "type": "heading" },
+      { "type": "subheading" },
+      { "type": "blurb" },
+      { "type": "button" },
+      { "type": "_graphic" },
+      { "type": "_newsletter" }
     ]
   }
 {% endschema %}

@@ -31,14 +31,22 @@
   &--overlay {
 
     &:after {
+
       content: '';
       @include cover;
-      background-color: var(--bg, $black);
-      opacity: var(--opacity, .4);
+      background-color: rgb(from var(--bg, $black) r g b / var(--opacity, 0.4));
       pointer-events: none;
       z-index: 1;
       transform: translate3d(0, 0, 0);
     }
+
+    &#{$self}--blur {
+
+      &:after {
+        backdrop-filter: blur(32.5px);
+      }
+    }
+
   }
 }
 

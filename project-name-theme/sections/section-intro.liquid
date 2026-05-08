@@ -200,7 +200,12 @@
         "type": "select",
         "id": "text_color",
         "label": "Text Color",
+        "default": "current",
         "options": [
+          {
+            "label": "Current Color",
+            "value": "current"
+          },
           {
             "label": "White",
             "value": "white"
@@ -241,10 +246,6 @@
         "label": "Background Color",
         "options": [
           {
-            "label": "Transparent",
-            "value": "transparent"
-          },
-          {
             "label": "White",
             "value": "white"
           },
@@ -266,10 +267,16 @@
         "name": "Intro Text",
         "blocks": [
           {
-            "type": "heading"
+            "type": "heading",
+            "settings": {
+              "heading_type": "heading-2"
+            }
           },
           {
-            "type": "blurb"
+            "type": "blurb",
+            "settings": {
+              "blurb_spacing_top": "1"
+            }
           }
         ]
       }

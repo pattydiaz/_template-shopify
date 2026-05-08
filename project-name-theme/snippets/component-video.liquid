@@ -57,7 +57,7 @@
     class="{{ class }}{{ lazy_class }}"
     {{ autoplay_attr }}{{ muted_attr }}{{ playsinline_attr }}{{ loop_attr }}{{ controls_attr }}
     {{ data }}poster="{{ poster }}"
-    preload="none"
+    preload="{% if autoplay %}metadata{% else %}none{% endif %}"
   >
     {% for source in video.sources %}
       <source

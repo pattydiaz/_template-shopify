@@ -39,6 +39,13 @@ $border-sides: (
   }
 }
 
+[class*="border-y-"] + [class*="border-y-"] {
+  margin-top: -1px;
+}
+
+[class*="border-x-"] + [class*="border-x-"] {
+  margin-right: -1px;
+}
 
 $radius-sizes: (
   null: 10px,

@@ -23,11 +23,8 @@
   assign media_image = section.settings.media_image
   assign media_video = section.settings.media_video
   assign media_ratio = section.settings.media_ratio
+  assign media_fit = section.settings.media_fit | prepend: 'img-'
   assign media_animate = section.settings.media_animate
-
-  assign media_split = section.settings.media_split
-  assign media_image_2 = section.settings.media_image_2
-  assign media_video_2 = section.settings.media_video_2
 
 %}
 
@@ -42,43 +39,21 @@
     <div class="ratio ratio-{{ media_ratio }}"{% unless media_image %} style="background-color: hsl(from var(--{{ bg_color }}) h s calc(l - 5));"{% endunless %}>
 
       {% unless request.design_mode or media_animate == false %}
-        <div class="parallax parallax-item parallax-zoom" data-percent="-25">
+        <div class="parallax parallax-item" data-percent="-25">
       {% endunless %}
 
-        {% if media_split and media_image_2 != blank %}
-          <div class="media-split d-flex float--cover">
-            <div class="media-split-column pos-relative">
-        {% endif %}
 
-            {% render 'component-image', img: media_image, lazy: true %}
-            {% if media_image and media_video %}
-              <div class="video-cover">
-                {% render 'component-video', video: media_video, poster: media_image, lazy: true %}
-              </div>
-            {% endif %}
+          {% render 'component-image', img: media_image, lazy: true, class: media_fit %}
+          {% if media_image and media_video %}
+            <div class="video-cover">
+              {% render 'component-video', video: media_video, poster: media_image, lazy: true %}
+            </div>
+          {% endif %}
 
-        {% if media_split and media_image_2 != blank %}
-            </div>
-            <div class="media-split-column pos-relative">
-              {% render 'component-image', img: media_image_2, lazy: true %}
-              {% if media_image and media_video %}
-                <div class="video-cover">
-                  {% render 'component-video', video: media_video_2, poster: media_image, lazy: true %}
-                </div>
-              {% endif %}
-            </div>
-          </div>
-        {% endif %}
 
       {% unless request.design_mode or media_animate == false %}
         </div>
       {% endunless %}
-
-      {% if section.blocks.size > 0 %}       
-        <div class="float--center w-100 text-center px-q z-5">
-          {% content_for 'blocks' %}
-        </div>
-      {% endif %}
 
     </div>
   </div>
@@ -247,10 +222,6 @@
         "label": "Background Color",
         "options": [
           {
-            "label": "Transparent",
-            "value": "transparent"
-          },
-          {
             "label": "White",
             "value": "white"
           },
@@ -352,14 +323,6 @@
             "label": "Aspect Ratio 9:21" 
           },
           { 
-            "value": "18x6", 
-            "label": "Aspect Ratio 18:6" 
-          },
-          { 
-            "value": "6x18", 
-            "label": "Aspect Ratio 6:18" 
-          },
-          { 
             "value": "10x1", 
             "label": "Aspect Ratio 10:1" 
           },
@@ -370,34 +333,29 @@
         ]
       },
       {
+        "type": "select",
+        "id": "media_fit",
+        "label": "Media Fit",
+        "default": "cover",
+        "visible_if": "{{ section.settings.media_image != blank }}",
+        "options": [
+          { 
+            "value": "cover", 
+            "label": "Cover" 
+          },
+          { 
+            "value": "contain", 
+            "label": "Contain" 
+          }
+        ]
+      },
+      {
         "type": "checkbox",
         "id": "media_animate",
         "label": "Include parallax animation",
         "default": false,
         "visible_if": "{{ section.settings.media_image != blank }}"
-      },
-      {
-        "type": "checkbox",
-        "id": "media_split",
-        "label": "Add another media item",
-        "default": false
-      },
-      {
-        "type": "image_picker",
-        "id": "media_image_2",
-        "label": "Image 2",
-        "visible_if": "{{ section.settings.media_split == true }}"
-      },
-      {
-        "type": "video",
-        "id": "media_video_2",
-        "label": "Video 2",
-        "info": "⚠️ Image is required as a fallback for video",
-        "visible_if": "{{ section.settings.media_split == true and section.settings.media_image_2 != blank }}"
       }
-    ],
-    "blocks": [
-      { "type": "_graphic" }
     ],
     "presets": [
       {

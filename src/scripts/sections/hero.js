@@ -15,7 +15,6 @@ const Hero = {
 
   animate($hero) {
     const el = $hero.el;
-    const parent = $hero.closest('.hero');
     const height = el.offsetHeight;
 
     const bg = $hero.find('.hero-bg').el;

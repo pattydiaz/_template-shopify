@@ -1,13 +1,20 @@
 {% liquid
 
   assign subheading = block.settings.subheading
+
   assign subheading_spacing_top = block.settings.subheading_spacing_top | prepend: ' mt-'
   assign subheading_spacing_bottom = block.settings.subheading_spacing_bottom | prepend: ' mb-'
+  assign subheading_spacing_left = block.settings.subheading_spacing_left | prepend: ' ml-'
+  assign subheading_spacing_right = block.settings.subheading_spacing_right | prepend: ' mr-'
+
   assign subheading_tag = block.settings.subheading_tag
   assign subheading_type = block.settings.subheading_type
   assign subheading_color = block.settings.subheading_color
-  assign subheading_tag = 'h3'
+
+  assign subheading_width = block.settings.subheading_width
+  assign subheading_width_mobile = block.settings.subheading_width_mobile | prepend: '--mw:' | append: 'px;'
+  assign subheading_width_desktop = block.settings.subheading_width_desktop | prepend: '--mw-upd:' | append: 'px;'
 
 %}
 
-<{{ subheading_tag }} class="{{ subheading_type }}{{ subheading_spacing_top }}{{ subheading_spacing_bottom }} color-{{ subheading_color }}">{{ subheading }}</{{ subheading_tag }}>
+<{{ subheading_tag }} class="{{ subheading_type }}{{ subheading_spacing_top }}{{ subheading_spacing_bottom }}{{ subheading_spacing_left }}{{ subheading_spacing_right }} color-{{ subheading_color }}{% if subheading_width == true %} w-max" style="{{ subheading_width_mobile }} {{ subheading_width_desktop }}{% endif %}" {{ block.shopify_attributes }}>{{ subheading }}</{{ subheading_tag }}>

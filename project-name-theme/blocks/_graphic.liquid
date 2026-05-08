@@ -3,6 +3,7 @@
 {% schema %}
 {
   "name": "Graphic",
+  "tag": null,
   "settings": [
     {
       "type": "image_picker",
@@ -110,14 +111,6 @@
         { 
           "value": "9x21", 
           "label": "Aspect Ratio 9:21" 
-        },
-        { 
-          "value": "18x6", 
-          "label": "Aspect Ratio 18:6" 
-        },
-        { 
-          "value": "6x18", 
-          "label": "Aspect Ratio 6:18" 
         },
         { 
           "value": "10x1", 
@@ -269,35 +262,6 @@
           "value": "10"
         }
       ]
-    },
-    {
-      "type": "header",
-      "content": "Animation Options"
-    },
-    {
-      "type": "checkbox",
-      "id": "graphic_float",
-      "label": "Float the image in the center of container",
-      "default": false,
-      "visible_if": "{{ block.settings.graphic != blank }}"
-    },
-    {
-      "type": "checkbox",
-      "id": "graphic_rotate_animate",
-      "label": "Add a rotation animation",
-      "default": false,
-      "visible_if": "{{ block.settings.graphic != blank }}"
-    },
-    {
-      "type": "range",
-      "id": "graphic_rotate_speed",
-      "label": "Rotation Speed",
-      "min": 1,
-      "max": 100,
-      "unit": "s",
-      "step": 1,
-      "default": 10,
-      "visible_if": "{{ block.settings.graphic != blank and block.settings.graphic_rotate_animate == true }}"
     }
   ],
   "presets": [

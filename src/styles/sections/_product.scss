@@ -5,6 +5,8 @@
 @mixin product-title { @include heading-3; }
 @mixin product-variants { @include caption; }
 
+/*! purgecss start ignore */
+
 .product {
   $self: &;
 
@@ -27,7 +29,7 @@
 
       background-color: $global-accent;
       color: $global-color;
-      border-radius: 50px;
+      border-radius: 4px;
       @include product-badge;
     }
 
@@ -52,7 +54,7 @@
       margin-top: $spacing;
       background-color: $global-accent;
       color: $global-color;
-      border-radius: 50px;
+      border-radius: 4px;
       @include product-badge;
     }
   }
@@ -76,7 +78,7 @@
         margin-bottom: $spacing;
 
         border: 1px solid $current;
-        border-radius: 50px;
+        border-radius: 4px;
         background-color: $global-bg;
         color: $global-color;
         text-align: center;
@@ -136,7 +138,7 @@
       display: flex;
       margin-right: $spacing*1.5;
       border: 1px solid $current;
-      border-radius: 50px;
+      border-radius: 4px;
 
       button,input {
         min-width: 45px;
@@ -155,3 +157,5 @@
   }
 
 }
+
+/*! purgecss end ignore */

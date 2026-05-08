@@ -1,8 +1,17 @@
-{% render 'block-navigation', block: block %}
+{% liquid
+
+  capture nav_content
+    content_for 'blocks'
+  endcapture
+  
+%}
+
+{% render 'block-navigation', block: block, content: nav_content, class_name: class_name %}
 
 {% schema %}
 {
   "name": "Navigation",
+  "tag": null,
   "settings": [
     {
       "type": "link_list",
@@ -23,18 +32,23 @@
         {
           "label": "Button",
           "value": "button"
+        },
+        {
+          "label": "Both",
+          "value": "both"
         }
       ]
     },
     {
       "type": "header",
-      "content": "Button Options"
+      "content": "Button Options",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "select",
       "label": "Button Type",
       "id": "nav_button",
-      "visible_if": "{{ block.settings.nav != blank }}",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}",
       "options": [
         {
           "label": "Menu Button",
@@ -48,13 +62,13 @@
     },
     {
       "type": "select",
-      "label": "Text Color",
+      "label": "Button Text Color",
       "id": "nav_button_color",
       "default": "white",
-      "visible_if": "{{ block.settings.nav != blank }}",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}",
       "options": [
         {
-          "label": "Default",
+          "label": "Current Color",
           "value": "current"
         },
         {
@@ -64,24 +78,12 @@
         {
           "label": "White",
           "value": "white"
-        },
-        {
-          "label": "White Transparent",
-          "value": "white-transparent"
-        },
-        {
-          "label": "Black Transparent",
-          "value": "black-transparent"
-        },
-        {
-          "label": "Red",
-          "value": "red"
         }
       ]
     },
     {
       "type": "select",
-      "label": "Background Color",
+      "label": "Button Background Color",
       "id": "nav_button_bg",
       "default": "black",
       "visible_if": "{{ block.settings.nav != blank and block.settings.nav_button == 'menu' }}",
@@ -93,22 +95,6 @@
         {
           "label": "White",
           "value": "white"
-        },
-        {
-          "label": "Transparent",
-          "value": "transparent"
-        },
-        {
-          "label": "White Transparent",
-          "value": "white-transparent"
-        },
-        {
-          "label": "Black Transparent",
-          "value": "black-transparent"
-        },
-        {
-          "label": "Red",
-          "value": "red"
         }
       ]
     },
@@ -119,13 +105,13 @@
     },
     {
       "type": "select",
-      "label": "Text Color",
+      "label": "Navigation Text Color",
       "id": "nav_color",
       "default": "white",
       "visible_if": "{{ block.settings.nav != blank }}",
       "options": [
         {
-          "label": "Default",
+          "label": "Current Color",
           "value": "current"
         },
         {
@@ -135,24 +121,12 @@
         {
           "label": "White",
           "value": "white"
-        },
-        {
-          "label": "White Transparent",
-          "value": "white-transparent"
-        },
-        {
-          "label": "Black Transparent",
-          "value": "black-transparent"
-        },
-        {
-          "label": "Red",
-          "value": "red"
         }
       ]
     },
     {
       "type": "select",
-      "label": "Background Color",
+      "label": "Navigation Background Color",
       "id": "nav_bg_color",
       "default": "black",
       "visible_if": "{{ block.settings.nav != blank }}",
@@ -164,22 +138,6 @@
         {
           "label": "White",
           "value": "white"
-        },
-        {
-          "label": "Transparent",
-          "value": "transparent"
-        },
-        {
-          "label": "White Transparent",
-          "value": "white-transparent"
-        },
-        {
-          "label": "Black Transparent",
-          "value": "black-transparent"
-        },
-        {
-          "label": "Red",
-          "value": "red"
         }
       ]
     },
@@ -206,44 +164,30 @@
     },
     {
       "type": "checkbox",
-      "label": "Include email address",
-      "id": "nav_email",
-      "default": false,
-      "visible_if": "{{ block.settings.nav != blank }}"
-    },
-    {
-      "type": "checkbox",
-      "label": "Include social media",
-      "id": "nav_social",
-      "default": false,
-      "visible_if": "{{ block.settings.nav != blank }}"
-    },
-    {
-      "type": "checkbox",
       "label": "Add Background Media",
       "id": "nav_bg_media_option",
       "default": false,
-      "visible_if": "{{ block.settings.nav != blank }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "image_picker",
       "label": "Background Image",
       "id": "bg_img",
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "video",
       "label": "Background Video",
       "id": "bg_video",
       "info": "⚠️ Image is required as a fallback for video",
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "checkbox",
       "label": "Repeat Background Media",
       "id": "bg_repeat_option",
       "default": false,
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "text",
@@ -251,7 +195,7 @@
       "id": "bg_repeat_width",
       "info": "⚠️ Width can be 'px' value or '%' value",
       "default": "auto",
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.bg_repeat_option == true }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.bg_repeat_option == true and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "range",
@@ -262,7 +206,7 @@
       "min": 0,
       "max": 100,
       "unit": "%",
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "range",
@@ -273,7 +217,7 @@
       "min": 0,
       "max": 100,
       "unit": "%",
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' }}"
     },
     {
       "type": "range",
@@ -283,8 +227,80 @@
       "max": 1,
       "step": 0.1,
       "default": 0,
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank }}"
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' }}"
+    },
+    {
+      "type": "select",
+      "id": "bg_overlay_color",
+      "label": "Overlay Background Color",
+      "default": "black",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' and block.settings.bg_overlay > 0 }}",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_mobile",
+      "label": "Show different media on mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' }}"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Background Options",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' and block.settings.bg_mobile == true }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_img_mobile",
+      "label": "Background Image",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' and block.settings.bg_mobile == true }}"
+    },
+    {
+      "type": "video",
+      "id": "bg_video_mobile",
+      "label": "Background Video",
+      "info": "⚠️ Image is required as a fallback for video",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' and block.settings.bg_mobile == true and block.settings.bg_img_mobile != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "bg_position_y_mobile",
+      "label": "Image Position (Top/Bottom)",
+      "default": 50,
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' and block.settings.bg_mobile == true and block.settings.bg_img_mobile != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "bg_position_x_mobile",
+      "label": "Image Position (Left/Right)",
+      "default": 50,
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_bg_media_option == true and block.settings.bg_img != blank and block.settings.nav_type != 'list' and block.settings.bg_mobile == true and block.settings.bg_img_mobile != blank }}"
     }
+  ],
+  "blocks": [
+    { "type": "heading" },
+    { "type": "subheading" },
+    { "type": "blurb" },
+    { "type": "_icons" },
+    { "type": "_cart" },
+    { "type": "_account" }
   ],
   "presets": [
     {

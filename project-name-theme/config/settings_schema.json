@@ -8,69 +8,6 @@
     "theme_support_url": "https:\/\/support.shopify.com\/"
   },
   {
-    "name": "Social Media",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Social Accounts"
-      },
-      {
-        "type": "text",
-        "id": "social_instagram_link",
-        "label": "Instagram",
-        "info": "http://instagram.com/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_facebook_link",
-        "label": "Facebook",
-        "info": "https://facebook.com/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_twitter_link",
-        "label": "Twitter",
-        "info": "https://twitter.com/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_x_link",
-        "label": "X",
-        "info": "https://x.com/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_tiktok_link",
-        "label": "TikTok",
-        "info": "https://tiktok.com/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_linkedin_link",
-        "label": "LinkedIn",
-        "info": "https://www.linkedin.com/company/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_pinterest_link",
-        "label": "Pinterest",
-        "info": "https://www.pinterest.com/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_youtube_link",
-        "label": "YouTube",
-        "info": "https://www.youtube.com/shopify"
-      },
-      {
-        "type": "text",
-        "id": "social_vimeo_link",
-        "label": "Vimeo",
-        "info": "https://vimeo.com/shopify"
-      }
-    ]
-  },
-  {
     "name": "Favicon",
     "settings": [
       {
@@ -86,8 +23,8 @@
     "settings": [
       {
         "type": "text",
-        "id": "typekit",
-        "label": "Typekit"
+        "id": "adobe_typekit",
+        "label": "Adobe Typekit"
       },
       {
         "type": "text",

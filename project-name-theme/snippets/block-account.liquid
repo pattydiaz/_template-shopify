@@ -2,12 +2,22 @@
 
   assign account_spacing_left = block.settings.account_spacing_left | prepend: ' ml-'
   assign account_spacing_right = block.settings.account_spacing_right | prepend: ' mr-'
+
+  assign account_visibility = block.settings.account_visibility
+  if account_visibility == 'mobile'
+    assign account_visibility = ' d-ib d-none-upt'
+  elsif account_visibility == 'desktop'
+    assign account_visibility = ' d-none d-ib-upt'
+  else 
+    assign account_visibility = ''
+  endif
+
   assign account_color = block.settings.account_color
   assign account_size = block.settings.account_size | prepend: 'icon-'
 
 %}
 
-<div class="d-ib{{ account_spacing_left }}{{ account_spacing_right }}">
+<div class="{{ account_visibility }}{{ account_spacing_left }}{{ account_spacing_right }}" {{ block.shopify_attributes }}>
   <a href="{{ routes.account_login_url }}" class="button-scale {{ account_size }} color-{{ account_color }}" title="My Account">
     <span><i class="icon-account"></i></span>
   </a>

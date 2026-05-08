@@ -1,21 +1,22 @@
 {% liquid
 
+  if class_name != blank
+    assign class_name = class_name | append:' '
+  endif
+
   assign nav = nav_settings.nav
   assign nav_type = nav_settings.nav_type
-  assign nav_color = nav_settings.nav_color
-  assign nav_email = nav_settings.nav_email
-  assign nav_social = nav_settings.nav_social
-  assign nav_bg_color = nav_settings.nav_bg_color
+  
   assign nav_alignment = nav_settings.nav_alignment
+  assign nav_color = nav_settings.nav_color
+  assign nav_bg_color = nav_settings.nav_bg_color
   assign nav_bg_media_option = nav_settings.nav_bg_media_option
-
-  assign email_address = settings.email_address
 
 %}
 
-<nav id="nav" class="nav nav--{{ nav_type }} header-nav bg-{{ nav_bg_color }}" tabindex="-1">
+<nav id="nav" class="{{ class_name }}nav nav--{{ nav_type }} header-nav bg-{{ nav_bg_color }}" tabindex="-1">
 
-  {% if nav_bg_media_option == true %}
+  {% if nav_bg_media_option == true and nav_type != 'list' %}
     {% render 'component-background', bg_settings: nav_settings, class: 'nav-bg' %}
   {% endif %}
 
@@ -25,26 +26,24 @@
       <ul class="nav-list nav--animate ls-none text-{{ nav_alignment }}">
         {% for link in linklists[nav].links %}
           {% if linklists[nav].levels == 1 %}
-            <li class="nav-list-item py-q">
-              <a href="{{ link.url }}" class="button-opacity d-ib heading-nav color-{{ nav_color }}" title="{{ link.title | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | escape }}</a>
+            <li class="nav-list-item color-{{ nav_color }} text-nowrap">
+              {% if link.url == '#typeform' and settings.typeform_id != blank %}
+                <a href="javascript:void(0);" class="nav-list-anchor button-opacity color-{{ nav_color }}{% if nav_dividers == false %} no-dividers{% endif %}" title="{{ link.title | strip_html | escape }}" data-tf-popup="{{ settings.typeform_id }}">{{ link.title | strip_html | escape }}</a>
+              {% else %}
+                <a href="{{ link.url }}" class="nav-list-anchor button-opacity color-{{ nav_color }}{% if nav_dividers == false %} no-dividers{% endif %}" title="{{ link.title | strip_html | escape }}"{% if link.url contains 'http://' or link.url contains 'https://' %} target="_blank" rel="nofollow"{% endif %}>{{ link.title | strip_html | escape }}</a>
+              {% endif %}
             </li>
           {% endif %}
         {% endfor %}
       </ul>
     {% endif %}
-    
-    {% if nav_email == true and nav_social == true %}
-      <div class="nav-contact{% if nav_type == 'list' %} d-none-upt nav--animate{% endif %} pt-10">
-        {% if nav_email == true %}
-          <a href="mailto:{{ email_address }}" class="button-opacity subheading d-block py-q" title="{{ email_address }}">{{ email_address }}</a>
-        {% endif %}
-        {% if nav_social == true %}
-          {% render 'component-social', class: 'nav-social text-center' %}
-        {% endif %}
+
+    {% if content != blank and nav_type != 'list' %}
+      <div class="nav-contact nav--animate text-{{ nav_alignment }}">
+        {{ content }}
       </div>
     {% endif %}
     
-
   </div>
 
 </nav>

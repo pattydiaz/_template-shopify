@@ -2,10 +2,12 @@
 
   assign newsletter_spacing_top = block.settings.newsletter_spacing_top | prepend: ' mt-'
   assign newsletter_spacing_bottom = block.settings.newsletter_spacing_bottom | prepend: ' mb-'
+
   assign newsletter_action = block.settings.newsletter_action | default: settings.newsletter_action
   assign newsletter_alignment = block.settings.newsletter_alignment | prepend: 'text-'
   assign newsletter_width_mobile = block.settings.newsletter_width_mobile | prepend: '--mw:' | append: 'px;'
   assign newsletter_width_desktop = block.settings.newsletter_width_desktop | prepend: '--mw-upd:' | append: 'px;'
+  
   assign newsletter_button_type = block.settings.newsletter_button_type
   assign newsletter_input_color = block.settings.newsletter_input_color | prepend: '--input-color: var(--' | append: ');'
   assign newsletter_placeholder_color = block.settings.newsletter_input_color | prepend: '--input-placeholder-color: var(--' | append: ');'

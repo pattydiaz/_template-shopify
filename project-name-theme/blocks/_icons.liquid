@@ -12,10 +12,31 @@
 {% schema %}
 {
   "name": "Social Icons",
+  "tag": null,
   "settings": [
     {
       "type": "header",
       "content": "Formatting Options"
+    },
+    {
+      "type": "select",
+      "id": "icons_visibility",
+      "label": "Icon Visibility",
+      "default": "all",
+      "options": [
+        {
+          "label": "Mobile Only",
+          "value": "mobile"
+        },
+        {
+          "label": "Desktop Only",
+          "value": "desktop"
+        },
+        {
+          "label": "Both Mobile & Desktop",
+          "value": "all"
+        }
+      ]
     },
     {
       "type": "select",
@@ -61,7 +82,12 @@
       "type": "select",
       "id": "icons_color",
       "label": "Icon Color",
+      "default": "current",
       "options": [
+        {
+          "label": "Current Color",
+          "value": "current"
+        },
         {
           "label": "White",
           "value": "white"
@@ -325,10 +351,28 @@
       "name": "Social Icons",
       "blocks": [
         {
-          "type": "_icon"
+          "type": "_icon",
+          "settings": {
+            "icon_type": "facebook",
+            "icon_spacing_left": "h",
+            "icon_spacing_right": "h"
+          }
         },
         {
-          "type": "_icon"
+          "type": "_icon",
+          "settings": {
+            "icon_type": "instagram",
+            "icon_spacing_left": "h",
+            "icon_spacing_right": "h"
+          }
+        },
+        {
+          "type": "_icon",
+          "settings": {
+            "icon_type": "x",
+            "icon_spacing_left": "h",
+            "icon_spacing_right": "h"
+          }
         }
       ]
     }

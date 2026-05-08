@@ -12,3 +12,8 @@
 @mixin body($important: null) {}
 @mixin caption($important: null) {}
 @mixin button($important: null) {}
+@mixin heading-nav($size: 'default', $important: null) {
+  @if $size == 'default' {}
+  @if $size == 'lg' {}
+}
+@mixin heading-menu($important: null) {}

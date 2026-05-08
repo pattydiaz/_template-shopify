@@ -3,10 +3,31 @@
 {% schema %}
 {
   "name": "Cart Icon",
+  "tag": null,
   "settings": [
     {
       "type": "header",
       "content": "Formatting Options"
+    },
+    {
+      "type": "select",
+      "id": "cart_visibility",
+      "label": "Icon Visibility",
+      "default": "all",
+      "options": [
+        {
+          "label": "Mobile Only",
+          "value": "mobile"
+        },
+        {
+          "label": "Desktop Only",
+          "value": "desktop"
+        },
+        {
+          "label": "Both Mobile & Desktop",
+          "value": "all"
+        }
+      ]
     },
     {
       "type": "select",
@@ -40,7 +61,12 @@
       "type": "select",
       "id": "cart_color",
       "label": "Icon Color",
+      "default": "current",
       "options": [
+        {
+          "label": "Current Color",
+          "value": "current"
+        },
         {
           "label": "White",
           "value": "white"
@@ -54,13 +80,8 @@
     {
       "type": "select",
       "id": "cart_count_bg",
-      "default": "pink",
       "label": "Count Bubble Background",
       "options": [
-        {
-          "label": "Transparent",
-          "value": "transparent"
-        },
         {
           "label": "White",
           "value": "white"

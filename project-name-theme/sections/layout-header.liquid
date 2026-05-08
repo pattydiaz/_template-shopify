@@ -4,6 +4,7 @@
   assign header_logo_width_mobile = section.settings.header_logo_width_mobile
   assign header_logo_width_desktop = section.settings.header_logo_width_desktop
   assign header_logo_ratio = section.settings.header_logo_ratio
+  assign header_logo_height = section.settings.header_logo_height
 
   assign header_bg_color = section.settings.header_bg_color
   assign header_bg_scroll_option = section.settings.header_bg_scroll_option
@@ -12,10 +13,10 @@
 %}
 
 <div class="header-wrapper{% unless header_animation_scroll == true %} header--fixed{% endunless %}{% if header_bg_scroll_option == true %} header--background{% endif %}" style="--header-bg: var(--{{ header_bg_color }});">
-  <div class="header-container">
+  <div class="header-container container">
 
     <div class="header-column">
-      <a href="{{ routes.root_url }}" class="header-logo button-opacity ratio-{{ header_logo_ratio }} w-max" title="{{ shop.name }}" style="--mw: {{ header_logo_width_mobile }}px;  --mw-upt: {{ header_logo_width_desktop }}px;">
+      <a href="{{ routes.root_url }}" class="header-logo button-opacity ratio-{{ header_logo_ratio }} w-max{% if header_logo_ratio == 'none' %} h-min{% endif %}" title="{{ shop.name }}" style="--mw: {{ header_logo_width_mobile }}px;  --mw-upt: {{ header_logo_width_desktop }}px;{% if header_logo_ratio == 'none' %} --mh: {{ header_logo_height }}px;{% endif %}">
         <span class="sr-only">{{ shop.name }}</span>
         <div class="header-logo-wrapper float--cover"{% unless header_logo %} style="background-color: hsl(from var(--{{ header_bg_color }}) h s calc(l - 5));"{% endunless %}>
           {% render 'component-image', img: header_logo, class: 'img-contain', size: 150, critical: true %}
@@ -23,11 +24,11 @@
       </a>
     </div>
 
-    {% if section.blocks.size > 0 %}
-      <div class="header-column">
-        {% content_for 'blocks' %}
-      </div>
-    {% endif %}
+
+    <div class="header-column">
+      {% content_for 'blocks' %}
+      {% content_for 'block', type: '_navigation', id: 'navigation' %}
+    </div>
 
   </div>
 </div>
@@ -145,22 +146,29 @@
             "label": "Aspect Ratio 9:21" 
           },
           { 
-            "value": "18x6", 
-            "label": "Aspect Ratio 18:6" 
-          },
-          { 
-            "value": "6x18", 
-            "label": "Aspect Ratio 6:18" 
-          },
-          { 
             "value": "10x1", 
             "label": "Aspect Ratio 10:1" 
           },
           { 
             "value": "1x10", 
             "label": "Aspect Ratio 1:10"
+          },
+          { 
+            "value": "none", 
+            "label": "None"
           }
         ]
+      },
+      {
+        "type": "range",
+        "id": "header_logo_height",
+        "label": "Logo Height",
+        "min": 5,
+        "max": 500,
+        "default": 100,
+        "step": 5,
+        "unit": "px",
+        "visible_if": "{{ section.settings.header_logo != blank and section.settings.header_logo_ratio == 'none' }}"
       },
       {
         "type": "header",
@@ -170,18 +178,27 @@
         "type": "select",
         "label": "Background Color",
         "id": "header_bg_color",
+        "default": "transparent",
         "options": [
           {
             "label": "Transparent",
             "value": "transparent"
           },
           {
-            "label": "White",
-            "value": "white"
-          },
-          {
             "label": "Black",
             "value": "black"
+          },
+          {
+            "label": "Transparent Black",
+            "value": "black-transparent"
+          },
+          {
+            "label": "Transparent White",
+            "value": "white-transparent"
+          },
+          {
+            "label": "White",
+            "value": "white"
           }
         ]
       },

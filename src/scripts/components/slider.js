@@ -47,11 +47,10 @@ var Slider = {
       const spacing_lg = parseFloat(getData(swiperEl, 'spacing-lg', spacing_md));
       const spacing_xl = parseFloat(getData(swiperEl, 'spacing-xl', spacing_lg));
 
-      const paginationEl = root.querySelector('.swiper-fraction, .swiper-pagination');
-      const isFraction = paginationEl?.classList.contains('swiper-fraction');
-      const isDynamic = paginationEl?.classList.contains('swiper-pagination--dynamic');
+      const bulletsEl = root.querySelector('.swiper-pagination');
+      const isDynamic = bulletsEl?.classList.contains('swiper-pagination--dynamic');
 
-      const slider = new Swiper(swiperEl, {
+      const config = {
         loop,
         effect,
         speed: rate,
@@ -60,14 +59,6 @@ var Slider = {
         centeredSlides: center_all,
         centerInsufficientSlides: center,
         autoplay: swiperEl.classList.contains('autoplay') ? { delay: 8000 } : false,
-
-        pagination: {
-          el: paginationEl,
-          clickable: !isFraction,
-          type: isFraction ? 'fraction' : 'bullets',
-          dynamicBullets: isDynamic ? true : false,
-          dynamicMainBullets: 1,
-        },
 
         navigation: {
           nextEl: root.querySelector('.slider-next'),
@@ -83,16 +74,22 @@ var Slider = {
 
         on: {
           init() {
+            setTimeout(() => updateFraction(this), 0);
+
+            Slider.editor(this);
+
             const thumbs = root.querySelectorAll('.slider-thumbs .thumb');
 
             if (thumbs.length) {
               thumbs.forEach(t => t.classList.remove('active'));
-              root.querySelector(`.thumb[data-slide="${this.activeIndex}"]`)
+              root.querySelector(`.thumb[data-slide="${this.realIndex}"]`)
                 ?.classList.add('active');
 
               thumbs.forEach(t =>
                 t.addEventListener('click', () =>
-                  slider.slideTo(parseInt(t.dataset.slide), rate)
+                  slider.slideToLoop
+                    ? slider.slideToLoop(parseInt(t.dataset.slide), rate)
+                    : slider.slideTo(parseInt(t.dataset.slide), rate)
                 )
               );
             }
@@ -105,17 +102,63 @@ var Slider = {
 
             swiperEl.classList.toggle('swiper--active', this.activeIndex > 0);
 
+            updateFraction(this);
+
             const thumbs = root.querySelectorAll('.slider-thumbs .thumb');
             if (thumbs.length) {
               thumbs.forEach(t => t.classList.remove('active'));
-              root.querySelector(`.thumb[data-slide="${this.activeIndex}"]`)
+              root.querySelector(`.thumb[data-slide="${this.realIndex}"]`)
                 ?.classList.add('active');
             }
           },
 
-          update() { activeSlides(this); }
+          update() {
+            activeSlides(this);
+            updateFraction(this);
+          }
         }
-      });
+      };
+
+      if (bulletsEl instanceof HTMLElement) {
+        config.pagination = {
+          el: bulletsEl,
+          clickable: true,
+          type: 'bullets',
+          dynamicBullets: isDynamic ? true : false,
+          dynamicMainBullets: 1,
+        };
+      }
+
+      const slider = new Swiper(swiperEl, config);
+
+      this.nav(root, slider, rate);
+
+      function updateFraction(swiper) {
+        if (!bulletsEl) return;
+
+        let fractionEl = bulletsEl.querySelector('.swiper-fraction');
+
+        if (!fractionEl) {
+          fractionEl = document.createElement('div');
+          fractionEl.className = 'swiper-fraction slider-fraction';
+
+          bulletsEl.prepend(fractionEl);
+        }
+
+        const current = swiper.realIndex + 1;
+        const total = swiper.wrapperEl.querySelectorAll(
+          '.swiper-slide:not(.swiper-slide-duplicate)'
+        ).length;
+
+        const currentFormatted = String(current).padStart(2, '0');
+        const totalFormatted = String(total).padStart(2, '0');
+
+        fractionEl.innerHTML = `
+          <span class="swiper-pagination-current">${currentFormatted}</span>
+          /
+          <span class="swiper-pagination-total">${totalFormatted}</span>
+        `;
+      }
 
       function activeSlides(swiper) {
         const wrapper = swiper.wrapperEl;
@@ -154,7 +197,7 @@ var Slider = {
         grabCursor: true
       });
 
-      new Swiper(swiperEl, {
+      const slider = new Swiper(swiperEl, {
         spaceBetween: swiperSpacing,
         speed: swiperRate,
         grabCursor: true,
@@ -168,6 +211,9 @@ var Slider = {
         thumbs: { swiper: sliderThumbs },
 
         on: {
+          init() {
+            Slider.editor(this);
+          },
           slideChange() {
             if (swiperEl.querySelector('img') && window.lazyload) lazyload.update();
           }
@@ -229,7 +275,11 @@ var Slider = {
         navigation: { nextEl: nextBtn, prevEl: prevBtn },
 
         on: {
-          init() { isActive = true; activeSlides(this); },
+          init() { 
+            isActive = true; 
+            activeSlides(this);
+            Slider.editor(this);
+          },
 
           slideChange() {
             if (swiperEl.querySelector('img') && window.lazyload) lazyload.update();
@@ -264,5 +314,110 @@ var Slider = {
       updateSlider();
       window.addEventListener('resize', updateSlider);
     }
+  },
+
+  nav(root, slider, speed = 500) {
+    const links = $$('.slider-buttons a', root);
+    const slideLine = root.querySelector('span');
+    const buttons = root.querySelector('.slider-buttons');
+
+    const isMobile = () => window.matchMedia('(max-width: 1199.98px)').matches;
+
+    const getActive = () =>
+      root.querySelector('.slider-buttons a.active');
+
+    const animate = (el) => {
+      if (!el || !slideLine || !buttons) return;
+
+      const rect = el.getBoundingClientRect();
+      const parentRect = buttons.getBoundingClientRect();
+
+      if (isMobile()) {
+        slideLine.style.width = `${rect.width}px`;
+        slideLine.style.left = `${rect.left - parentRect.left}px`;
+        slideLine.style.top = '';
+      } else {
+        slideLine.style.top = `${rect.top - parentRect.top}px`;
+        slideLine.style.left = '';
+        slideLine.style.width = '';
+      }
+    };
+
+    links.forEach(link => {
+      if (link.__bound) return;
+      link.__bound = true;
+
+      $(link).on('click', (e) => {
+        e.preventDefault();
+
+        const index = parseInt(
+          $(link).attr('href').replace('#slide-', ''),
+          10
+        ) - 1;
+
+        slider.slideToLoop
+          ? slider.slideToLoop(index, speed)
+          : slider.slideTo(index, speed);
+      });
+
+      // link.addEventListener('mouseenter', () => {
+      //   animate(link);
+      // });
+
+      // link.addEventListener('mouseleave', () => {
+      //   animate(getActive());
+      // });
+    });
+
+    const updateActive = () => {
+      links.forEach(l => $(l).removeClass('active'));
+
+      const active = root.querySelector(
+        `.slider-buttons a[href="#slide-${slider.realIndex + 1}"]`
+      );
+
+      active?.classList.add('active');
+      animate(active);
+    };
+
+    updateActive();
+
+    if (!slider.__navBound) {
+      slider.__navBound = true;
+      slider.on('slideChange', updateActive);
+
+      window.addEventListener('resize', () => {
+        animate(getActive());
+      });
+    }
+  },
+
+  editor(swiper) {
+    if (!(window.Shopify && Shopify.designMode)) return;
+
+    const goTo = (slide, i = 0) => {
+      const index = parseInt(slide.dataset.swiperSlideIndex ?? i, 10);
+
+      swiper.params.loop && swiper.slideToLoop
+        ? swiper.slideToLoop(index, 0, false)
+        : swiper.slideTo(index, 0, false);
+
+      swiper.autoplay?.stop();
+    };
+
+    swiper.slides.forEach((slide, i) => {
+      if (slide.__editorBound) return;
+      slide.__editorBound = true;
+      slide.onclick = () => goTo(slide, i);
+    });
+
+    if (swiper.el.__editorSelectBound) return;
+    swiper.el.__editorSelectBound = true;
+
+    document.addEventListener('shopify:block:select', (e) => {
+      const slide = e.target.closest('.swiper-slide');
+      if (!slide || slide.closest('.swiper') !== swiper.el) return;
+      goTo(slide, [...slide.parentNode.children].indexOf(slide));
+    });
   }
 };
