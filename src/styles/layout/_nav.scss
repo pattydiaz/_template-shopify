@@ -7,7 +7,7 @@
 
   &--button {
     @include cover($position: fixed);
-    @include hide(true, 0.45s);
+    @include hide($animate: true, $duration: 0.45s);
     z-index: -1;
   }
 
@@ -18,13 +18,17 @@
   &--both {
     @include bp-down(md) {
       @include cover($position: fixed);
-      @include hide(true, 0.45s);
+      @include hide($animate: true, $duration: 0.45s);
       z-index: -1;
     }
 
     @include bp-up(md) {
       background-color: $transparent;
     }
+  }
+
+  #page.no-animate & {
+    transition: none;
   }
 
   &-bg {
@@ -44,10 +48,11 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      padding-top: calc(var(--hh) + #{$spacing*10}); 
-      padding-bottom: $spacing*2;
+      justify-content: center;
       overflow-y: scroll;
       overflow-x: hidden;
+      padding-top: calc(var(--hh) + #{$spacing*2});
+      padding-bottom: calc(var(--hh) + #{$spacing*2});
     }
 
     #{$self}--list & {
@@ -59,18 +64,15 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        padding-top: calc(var(--hh) + #{$spacing*10}); 
-        padding-bottom: $spacing*2;
+        justify-content: center;
         overflow-y: scroll;
         overflow-x: hidden;
+        padding-top: calc(var(--hh) + #{$spacing*2}); 
+        padding-bottom: calc(var(--hh) + #{$spacing*2}); 
       }
 
       @include bp-up(md) {
         padding: 0 !important;
-      }
-
-      @media(max-height: 375px) {
-        padding-top: calc(var(--hh) + #{$spacing});
       }
     }
 
@@ -103,15 +105,15 @@
     &-item, 
     &-anchor {
 
-      #{$self}--button & {
+      #{$self}:not(.footer-nav)#{$self}--button & {
         @include heading-nav($size:'lg');
       }
 
-      #{$self}--list & {
+      #{$self}:not(.footer-nav)#{$self}--list & {
         @include heading-nav($size:'default');
       }
 
-      #{$self}--both & {
+      #{$self}:not(.footer-nav)#{$self}--both & {
         @include bp-down(md) {
           @include heading-nav($size:'lg');
         }
@@ -128,7 +130,7 @@
       padding-bottom: $spacing;
 
       #{$self}--button & {
-        display: block;
+        display: inline-block;
         + span { display: block; }
       }
 
@@ -139,8 +141,8 @@
 
       #{$self}--both & {
         @include bp-down(md) {
-          display: block;
-          + span { display: block; }
+          display: inline-block;
+          + span { display: none; }
         }
 
         @include bp-up(md) {
@@ -152,38 +154,29 @@
       + span {
         padding-top: $spacing;
         padding-bottom: $spacing;
-        padding-left: 1vw;
-        padding-right: 1vw;
-
-        @include bp-up(md) {
-          padding-left: 2vw;
-          padding-right: 2vw;
-        }
-
-        @include bp-up(xl) {
-          padding-left: $spacing*3;
-          padding-right: $spacing*3;
-        }
+        padding-left: 0.5vw;
+        padding-right: calc(0.5vw + 6px);
       }
 
       &.no-dividers {
-        padding-right: 3vw;
-
-        @include bp-up(xl) {
+        padding-right: 2vw;
+        
+        @include bp-up(lg) {
           padding-right: $spacing*3;
         }
 
         #{$self}--button & {
-          padding-top: $spacing*2.5;
-          padding-bottom: $spacing*2.5;
           padding-right: 0;
+
+          @include bp-up(lg) {
+            padding-top: $spacing*1.5;
+            padding-bottom: $spacing*1.5;
+          }
         }
 
         #{$self}--both & {
           @include bp-down(md) {
-            padding-left: 3vw;
-            padding-top: $spacing*2.5;
-            padding-bottom: $spacing*2.5;
+            padding-right: 0;
           }
         }
 
@@ -204,7 +197,7 @@
 
       &:last-child {
 
-        #{$self}--list:not(.footer-nav) & {
+        #{$self}--list & {
           > *:not(span) { padding-right: 0; }
         }
   
@@ -239,12 +232,20 @@
     &#{$self}--animate {
       
       #{$self}--button & {
-        >* { @include fade-right-in; }
+        >* { 
+          #page:not(.no-animate) & {
+            @include fade-right-in; 
+          }
+        }
       }
 
       #{$self}--both & {
         @include bp-down(md) {
-          >* { @include fade-right-in; }
+          >* { 
+            #page:not(.no-animate) & {
+              @include fade-right-in; 
+            }
+          }
         }
       }
       
@@ -252,16 +253,20 @@
       &.active {
         #{$self}--button & {
           >* { 
-            @include child-delay;
-            @include end-transform;
+            #page:not(.no-animate) & {
+              @include end-transform;
+              @include child-delay;
+            }
           }
         }
   
         #{$self}--both & {
           @include bp-down(md) {
             >* { 
-              @include child-delay;
-              @include end-transform;
+              #page:not(.no-animate) & {
+                @include end-transform;
+                @include child-delay;
+              }
             }
           }
         }

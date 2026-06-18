@@ -1,0 +1,130 @@
+{% render 'block-media', block: block %}
+
+
+{% schema %}
+{
+  "name": "Media",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "media_video",
+      "label": "Video",
+      "info": "⚠️ Image is required as a fallback for video",
+      "visible_if": "{{ block.settings.media_image != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "media_ratio",
+      "default": "1x1",
+      "label": "Media Aspect Ratio",
+      "visible_if": "{{ block.settings.media_image != blank }}",
+      "options": [
+        { 
+          "value": "1x1", 
+          "label": "Aspect Ratio 1:1" 
+        },
+        { 
+          "value": "2x1", 
+          "label": "Aspect Ratio 2:1" 
+        },
+        { 
+          "value": "1x2", 
+          "label": "Aspect Ratio 1:2" 
+        },
+        { 
+          "value": "3x1", 
+          "label": "Aspect Ratio 3:1" 
+        },
+        { 
+          "value": "1x3", 
+          "label": "Aspect Ratio 1:3" 
+        },
+        { 
+          "value": "4x3", 
+          "label": "Aspect Ratio 4:3" 
+        },
+        { 
+          "value": "3x4", 
+          "label": "Aspect Ratio 3:4" 
+        },
+        { 
+          "value": "5x4", 
+          "label": "Aspect Ratio 5:4" 
+        },
+        { 
+          "value": "4x5", 
+          "label": "Aspect Ratio 4:5" 
+        },
+        { 
+          "value": "5x7", 
+          "label": "Aspect Ratio 5:7" 
+        },
+        { 
+          "value": "7x5", 
+          "label": "Aspect Ratio 7:5" 
+        },
+        { 
+          "value": "16x9", 
+          "label": "Aspect Ratio 16:9" 
+        },
+        { 
+          "value": "9x16", 
+          "label": "Aspect Ratio 9:16" 
+        },
+        { 
+          "value": "16x10", 
+          "label": "Aspect Ratio 16:10" 
+        },
+        { 
+          "value": "10x16", 
+          "label": "Aspect Ratio 10:16" 
+        },
+        { 
+          "value": "21x9", 
+          "label": "Aspect Ratio 21:9" 
+        },
+        { 
+          "value": "9x21", 
+          "label": "Aspect Ratio 9:21" 
+        },
+        { 
+          "value": "10x1", 
+          "label": "Aspect Ratio 10:1" 
+        },
+        { 
+          "value": "1x10", 
+          "label": "Aspect Ratio 1:10"
+          }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "media_fit",
+      "label": "Media Fit",
+      "default": "cover",
+      "visible_if": "{{ block.settings.media_image != blank }}",
+      "options": [
+        { 
+          "value": "cover", 
+          "label": "Cover" 
+        },
+        { 
+          "value": "contain", 
+          "label": "Contain" 
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media"
+    }
+  ]
+}
+{% endschema %}

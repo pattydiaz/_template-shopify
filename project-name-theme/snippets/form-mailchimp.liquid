@@ -10,6 +10,12 @@
     assign action = ''
   endif
 
+  if text_color == blank
+    assign text_color = 'current'
+  else
+    assign text_color = text_color
+  endif
+
   if button_type == blank
     assign button_type = 'primary'
   else
@@ -20,7 +26,7 @@
 
 <form class="newsletter{{ class }}" autocomplete="off" action="{{ action }}" data-recaptcha-key="{{ settings.newsletter_recaptcha_key }}">
   <div class="input">
-    <span class="sr-only">Email*</span>
+    <span class="sr-only">Email Address*</span>
     <input type="email" class="input-field" placeholder="Enter Your Email" name="EMAIL" id="mce-EMAIL-{{ section.id | default: block.id | default: unique }}" required>
   </div>
   <div class="pt-1">
@@ -31,4 +37,4 @@
   </div>
 </form>
 
-<div class="newsletter-success heading-5 d-none mt-2">Thank you for subscribing!</div>
+<div class="newsletter-success heading-4 color-{{ text_color }} d-none mt-2">Thank you for subscribing!</div>

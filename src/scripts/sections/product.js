@@ -17,7 +17,7 @@ const Product = {
 
     this.variantInput = form.querySelector('#variant-id');
     this.priceEl = document.querySelector('#product-price');
-    this.addBtn = document.querySelector('#add-to-cart-button');
+    this.addBtn = document.querySelector('.add-to-cart-button');
     this.qtyInput = form.querySelector('#ProductQuantity');
     this.minusBtn = form.querySelector('.minus');
     this.plusBtn = form.querySelector('.plus');

@@ -25,7 +25,7 @@ const Page = {
     page_anim.to(page.el, {
       opacity: 1,
       duration: 0.5,
-      onStart: () => Loader.init()
+      onStart: () => Agegate.init()
     });
   }
 };

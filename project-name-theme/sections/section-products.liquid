@@ -1,6 +1,6 @@
 {% liquid
-
   assign id = section.settings.id
+
   if id != blank
     assign id = id | downcase | replace: " ", "-" | prepend: 'id="' | append: '" '
   else
@@ -10,16 +10,28 @@
   assign spacing_top = section.settings.spacing_top | prepend: ' gap-tm--'
   assign spacing_bottom = section.settings.spacing_bottom | prepend: ' gap-bm--'
   assign spacing_header = section.settings.spacing_header
+
+  assign animated = section.settings.animated
+  assign animation = ''
+  if animated == true
+    assign animation = ' animated animated-item animate-up-in'
+  endif
   
   assign container_size = section.settings.container_size | prepend: ' container-'
   assign text_color = section.settings.text_color
   assign bg_color = section.settings.bg_color
 
   assign collection_current = collection.handle
-  assign collection_exclude = section.settings.collection_exclude | map: 'handle' | join: ', '
+  assign collection_exclude = section.settings.collection_exclude | map: 'handle'
+  assign collection_visible_count = 0
+
+  for collection_filter in collections
+    unless collection_exclude contains collection_filter.handle
+      assign collection_visible_count = collection_visible_count | plus: 1
+    endunless
+  endfor
 
 %}
-
 
 <div {{ id }}class="products-wrapper{{ spacing_top }}{{ spacing_bottom }} bg-{{ bg_color }}">
 
@@ -28,37 +40,44 @@
   {% endif %}
     
   <div class="products-container container{{ container_size }}">
-    <div id="products" class="products-columns">
+    <div id="products" class="products-columns{{ animation }}">
 
-      {% if collections.size > 0 %}
+      {% if collection_visible_count > 1 %}
         <aside id="products-nav" class="products-nav accordion-panel mb-4">
           <button class="products-nav-button btn btn-primary accordion-btn d-none-upt w-100" aria-label="Filter">Filter</button>
           <div id="products-filters" class="products-nav-filters products-filters accordion-content">
             <ul id="Collections" class="products-filters-list ls-none p-2">
 
               <li class="products-filters-item mb-q">
-                <a href="{{ collections['all'].url }}" class="btn-filter-item category all{% if collection_current == 'all' or collection_current contains 'all-' %} active{% endif %} color-{{ text_color }}" title="All"><span>All</span></a>
+                <a href="{{ collections['all'].url }}" class="btn-filter-item category all{% if collection_current == 'all' or collection_current contains 'all-' %} active{% endif %} color-{{ text_color }}" title="All">
+                  <span>All</span>
+                </a>
               </li>
-              {% for collection in collections %}
-                {% unless collection_exclude contains collection.handle %}
+
+              {% for collection_filter in collections %}
+                {% unless collection_exclude contains collection_filter.handle %}
                   <li class="products-filters-item mb-q">
-                    <a href="{{ collection.url }}" class="btn-filter-item category{% if collection_current == collection.handle %} active{% endif %} color-{{ text_color }}" title="{{ collection.title }}"><span>{{ collection.title }}</span></a>
+                    <a href="{{ collection_filter.url }}" class="btn-filter-item category{% if collection_current == collection_filter.handle %} active{% endif %} color-{{ text_color }}" title="{{ collection_filter.title | escape }}">
+                      <span>{{ collection_filter.title }}</span>
+                    </a>
                   </li>
                 {% endunless %}
               {% endfor %}
 
             </ul>
           </div>
+          
         </aside>
       {% endif %}
 
-      <div id="products-results" class="products-results">
+      <div id="products-results" class="products-results{% unless collection_visible_count > 1 %} pt-4{% endunless %}">
         {% assign product_limit = 1000 %}
-        {% paginate collection.products by product_limit %}
 
+        {% paginate collection.products by product_limit %}
           <ul class="products-results-list ls-none d-flex-wrap m-n1-upt m-n2-upd h-min" style="--mh: 600px;">
 
             {% assign products = collection.products | sort: 'title' %}
+
             {% for product in products %}
               <li class="products-results-item w-100 wt-50 wd-33 pb-2 px-1 p-1-upt p-2-upd mb-1">
                 {% render 'card-product', product: product, product_bg: bg_color, product_color: text_color %}
@@ -77,6 +96,7 @@
               <input class="d-none" type="hidden" value="{{ paginate.pages }}" data-all-pages>
               <input class="d-none" type="hidden" value="{{ paginate.current_page }}" data-this-page>
               <input class="d-none" type="hidden" value="{{ collection.url }}" data-coll-url>
+
               <button id="loadmore" class="btn btn-primary" aria-label="Load More">Load More</button>
             </div>
           {% endif %}
@@ -185,6 +205,16 @@
         "id": "spacing_header",
         "default": false,
         "label": "Add extra spacing for header"
+      },
+      {
+        "type": "header",
+        "content": "Animation Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "animated",
+        "label": "Include default section animation",
+        "default": false
       },
       {
         "type": "header",

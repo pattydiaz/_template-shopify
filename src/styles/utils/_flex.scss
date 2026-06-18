@@ -224,9 +224,19 @@
   }
 
   &-order {
-    
-    @include bp-up(lg) {
-      order: var(--order, 0);
+    order: var(--order, 0);
+
+    &-upt {
+      @include bp-up(md) {
+        order: var(--order-upt, var(--order, 0));
+      }
     }
+
+    &-upd {
+      @include bp-up(lg) {
+        order: var(--order-upd, var(--order, 0));
+      }
+    }
+    
   }
 }

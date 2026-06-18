@@ -46,7 +46,7 @@
       #{$self}-input {
         display: flex;
         align-items: center;
-        margin-top: calc($spacing/1.2);
+        margin-top: $spacing*1.2;
         
         .qty {
           display: flex;
@@ -89,6 +89,10 @@
       @include cart-subheading;
       text-align: left;
       border-bottom: 1px solid $current;
+
+      th {
+        font-weight: inherit;
+      }
     }
 
     #{$self}-item {
@@ -160,7 +164,7 @@
 
     #{$self}-subtotal {
       margin-bottom: $spacing;
-      @include cart-heading;
+      @include cart-subheading;
     }
 
     p {

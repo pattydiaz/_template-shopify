@@ -14,7 +14,7 @@
 
 %}
 
-<nav id="nav" class="{{ class_name }}nav nav--{{ nav_type }} header-nav bg-{{ nav_bg_color }}" tabindex="-1">
+<nav id="nav" class="{{ class_name }}nav nav--{{ nav_type }} header-nav bg-{{ nav_bg_color }}" tabindex="-1" aria-label="Main Navigation">
 
   {% if nav_bg_media_option == true and nav_type != 'list' %}
     {% render 'component-background', bg_settings: nav_settings, class: 'nav-bg' %}

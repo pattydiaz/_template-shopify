@@ -2,7 +2,7 @@ const nav = $('#nav');
 const menu_btn = $('#menu');
 const nav_buttons = $$('#nav a');
 
-const Navigation = {
+const Nav = {
   
   init() {
     this.build();

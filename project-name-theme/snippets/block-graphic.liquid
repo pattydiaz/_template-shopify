@@ -2,8 +2,8 @@
 
   assign graphic = block.settings.graphic
 
-  assign graphic_spacing_top = block.settings.graphic_spacing_top | prepend: ' mt-'
-  assign graphic_spacing_bottom = block.settings.graphic_spacing_bottom | prepend: ' mb-'
+  assign graphic_spacing_top = block.settings.graphic_spacing_top | prepend: ' pt-'
+  assign graphic_spacing_bottom = block.settings.graphic_spacing_bottom | prepend: ' pb-'
   assign graphic_spacing_left = block.settings.graphic_spacing_left | prepend: ' ml-'
   assign graphic_spacing_right = block.settings.graphic_spacing_right | prepend: ' mr-'
 
@@ -15,7 +15,7 @@
 %}
 
 <div class="graphic w-100 w-max{{ graphic_spacing_top }}{{ graphic_spacing_bottom }}{{ graphic_spacing_left }}{{ graphic_spacing_right }}" style="{{ graphic_width_mobile }} {{ graphic_width_desktop }}" {{ block.shopify_attributes }}>
-  <div class="ratio{{ graphic_ratio }}"{% unless graphic %} style="border: 2px solid black;"{% endunless %}>
+  <div class="ratio{{ graphic_ratio }}"{% unless graphic %} style="border: 2px solid var(--current);"{% endunless %}>
     {% render 'component-image', img: graphic, class: graphic_fit, lazy: true %}
   </div>
 </div>

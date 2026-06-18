@@ -19,7 +19,6 @@ const Loader = {
 
   animate(delay = 0) {
     setTimeout(() => {
-      lazyload = new LazyLoad(lazyloadSettings);
 
       document.body.classList.add('loaded');
       

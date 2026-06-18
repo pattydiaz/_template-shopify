@@ -7,18 +7,19 @@
   assign header_logo_height = section.settings.header_logo_height
 
   assign header_bg_color = section.settings.header_bg_color
+  assign header_bg_blur = section.settings.header_bg_blur
   assign header_bg_scroll_option = section.settings.header_bg_scroll_option
   assign header_animation_scroll = section.settings.header_animation_scroll
 
 %}
 
-<div class="header-wrapper{% unless header_animation_scroll == true %} header--fixed{% endunless %}{% if header_bg_scroll_option == true %} header--background{% endif %}" style="--header-bg: var(--{{ header_bg_color }});">
+<div class="header-wrapper{% unless header_animation_scroll == true %} header--fixed{% endunless %}{% if header_bg_scroll_option == true %} header--background{% endif %}{% if header_bg_blur == true %} header--blur{% endif %}" style="--header-bg: var(--{{ header_bg_color }});">
   <div class="header-container container">
 
     <div class="header-column">
       <a href="{{ routes.root_url }}" class="header-logo button-opacity ratio-{{ header_logo_ratio }} w-max{% if header_logo_ratio == 'none' %} h-min{% endif %}" title="{{ shop.name }}" style="--mw: {{ header_logo_width_mobile }}px;  --mw-upt: {{ header_logo_width_desktop }}px;{% if header_logo_ratio == 'none' %} --mh: {{ header_logo_height }}px;{% endif %}">
         <span class="sr-only">{{ shop.name }}</span>
-        <div class="header-logo-wrapper float--cover"{% unless header_logo %} style="background-color: hsl(from var(--{{ header_bg_color }}) h s calc(l - 5));"{% endunless %}>
+        <div class="header-logo-wrapper float--cover"{% unless header_logo %} style="background-color: var(--black);"{% endunless %}>
           {% render 'component-image', img: header_logo, class: 'img-contain', size: 150, critical: true %}
         </div>
       </a>
@@ -74,7 +75,7 @@
         "type": "select",
         "label": "Logo Aspect Ratio",
         "id": "header_logo_ratio",
-        "default": "16x9",
+        "default": "21x9",
         "visible_if": "{{ section.settings.header_logo != blank }}",
         "options": [
           { 
@@ -178,29 +179,35 @@
         "type": "select",
         "label": "Background Color",
         "id": "header_bg_color",
-        "default": "transparent",
+        "default": "black-transparent",
         "options": [
           {
             "label": "Transparent",
             "value": "transparent"
           },
           {
+            "label": "White",
+            "value": "white"
+          },
+          {
             "label": "Black",
             "value": "black"
           },
           {
-            "label": "Transparent Black",
+            "label": "Transparent Black (50%)",
             "value": "black-transparent"
           },
           {
-            "label": "Transparent White",
+            "label": "Transparent White (50%)",
             "value": "white-transparent"
-          },
-          {
-            "label": "White",
-            "value": "white"
           }
         ]
+      },
+      {
+        "type": "checkbox",
+        "label": "Include blur effect",
+        "id": "header_bg_blur",
+        "default": false
       },
       {
         "type": "header",

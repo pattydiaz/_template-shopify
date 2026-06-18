@@ -58,6 +58,8 @@ button {
 
   &-primary {
     @include btn-primary;
+
+    &.loading { @include btn-loading; }
   }
 
   &-secondary {

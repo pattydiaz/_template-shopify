@@ -18,7 +18,7 @@
     {
       "type": "select",
       "id": "subheading_tag",
-      "label": "Heading Tag",
+      "label": "Subheading HTML Tag",
       "default": "h3",
       "options": [
         {
@@ -46,9 +46,17 @@
     {
       "type": "select",
       "id":"subheading_type",
-      "label": "Subheading Type",
-      "default": "subheading",
+      "label": "Subheading Style Type",
+      "default": "heading-5",
       "options": [
+        {
+          "label": "Heading 5",
+          "value": "heading-5"
+        },
+        {
+          "label": "Heading 6",
+          "value": "heading-6"
+        },
         {
           "label": "Subheading",
           "value": "subheading"
@@ -72,6 +80,30 @@
         {
           "label": "Black",
           "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "subheading_alignment",
+      "label": "Text Alignment",
+      "default": "inherit",
+      "options": [
+        {
+          "label": "Inherit",
+          "value": "inherit"
+        },
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
         }
       ]
     },

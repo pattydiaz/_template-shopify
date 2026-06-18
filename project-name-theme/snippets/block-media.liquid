@@ -1,0 +1,18 @@
+{% liquid
+  
+  assign bg_color = bg_color | default: 'notblack'
+  assign media_image = block.settings.media_image
+  assign media_video = block.settings.media_video
+  assign media_ratio = block.settings.media_ratio
+  assign media_fit = block.settings.media_fit | prepend: 'img-'
+  
+%}
+
+<div class="ratio-{{ media_ratio }}"{% unless media_image %} style="background-color: hsl(from var(--{{ bg_color }}) h s calc(l + 8));"{% endunless %} {{ block.shopify_attributes }}>
+  {% render 'component-image', img: media_image, lazy: true, class: media_fit %}
+  {% if media_image and media_video %}
+    <div class="video-cover">
+      {% render 'component-video', video: media_video, poster: media_image, lazy: true %}
+    </div>
+  {% endif %}
+</div>

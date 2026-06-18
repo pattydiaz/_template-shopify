@@ -10,6 +10,7 @@
   height: auto;
   z-index: 100;
   transition: top 0.45s $ease-default;
+  pointer-events: none;
 
   &--scroll {
     top: 0;
@@ -26,8 +27,8 @@
 
     position: relative;
     padding: {
-      top: $spacing*2;
-      bottom: $spacing*2;
+      top: $spacing*1.2;
+      bottom: $spacing*1.2;
     }
     
     z-index: 100;
@@ -36,9 +37,12 @@
       content:'';
       @include cover;
       background-color: var(--header-bg);
-      transition: background-color 0.3s $ease-default;
-      backdrop-filter: blur(32.5px);
+      transition: all 0.45s $ease-default;
       z-index: -1;
+    }
+
+    body.nav-active & {
+      transform: none !important;
     }
   }
 
@@ -62,6 +66,10 @@
     &:nth-of-type(2) {
       justify-content: flex-end;
     }
+
+    > * {
+      pointer-events: all;
+    }
   }
 
   &-logo {
@@ -70,20 +78,91 @@
     width: 100%;
   }
 
+  &-btn {
+    &.content {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid $current;
+      @include heading-menu;
+
+      @include bp-up(md) {
+        width: 75px;
+        height: 75px;
+      }
+
+      > span {
+        display: block;
+        position: relative;
+        overflow: hidden;
+
+        >span {
+          display: block;
+          transition: transform 0.3s $ease-default;
+
+          &:nth-child(1) {
+            transform: translate3d(0,0,0);
+          }
+
+          &:nth-child(2) {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate3d(-50%,100%,0);
+          }
+        }
+      }
+
+      &.active {
+        > span {
+          >span {
+            &:nth-child(1) {
+              transform: translate3d(0,-100%,0);
+            }
+            &:nth-child(2) {
+              transform: translate3d(-50%,0%,0);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &--blur {
+    &:after {
+      backdrop-filter: blur(32.5px);
+    }
+  }
+
   &--background {
-    
     &:after {
       background-color: $transparent;
-      backdrop-filter: blur(0);
 
       #{$self}--scroll & {
         background-color: var(--header-bg);
-        backdrop-filter: blur(32.5px);
       }
 
       body.nav-open & {
         background-color: $transparent;
+        transition: all 0.45s $ease-default;
+      }
+    }
+
+    &#{$self}--blur {
+      &:after {
         backdrop-filter: blur(0);
+      }
+
+      #{$self}--scroll & {
+        &:after {
+          backdrop-filter: blur(32.5px);
+        }
+
+        body.nav-open & {
+          &:after {
+            backdrop-filter: blur(0);
+          }
+        }
       }
     }
   }

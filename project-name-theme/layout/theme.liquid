@@ -101,7 +101,12 @@
     {% render 'scripts-gtm' %}
 
     <div id="page" class="page{{ page_class }}">
-      {% section 'layout-header' %}  
+
+      {% if request.page_type != 'policy' or page.handle == 'style-guide' or page.handle == 'sample' %}
+        {% section 'layout-agegate' %}
+      {% endif %}
+
+      {% section 'layout-header' %}
       {% section 'layout-announcement' %}
       
       {% unless template == 'cart' %}

@@ -1,8 +1,8 @@
 {% liquid
 
   assign blurb = block.settings.blurb
-  assign blurb_spacing_top = block.settings.blurb_spacing_top | prepend: ' mt-'
-  assign blurb_spacing_bottom = block.settings.blurb_spacing_bottom | prepend: ' mb-'
+  assign blurb_spacing_top = block.settings.blurb_spacing_top | prepend: ' pt-'
+  assign blurb_spacing_bottom = block.settings.blurb_spacing_bottom | prepend: ' pb-'
   assign blurb_spacing_left = block.settings.blurb_spacing_left | prepend: ' ml-'
   assign blurb_spacing_right = block.settings.blurb_spacing_right | prepend: ' mr-'
 
@@ -14,9 +14,17 @@
   endif
 
   assign blurb_color = block.settings.blurb_color
+  assign blurb_alignment = block.settings.blurb_alignment
+
+  if blurb_alignment == 'inherit'
+    assign blurb_align = ''
+  else 
+    assign blurb_align = blurb_alignment | prepend: ' text-'
+  endif
+
   assign blurb_width_mobile = block.settings.blurb_width_mobile | prepend: '--mw:' | append: 'px;'
   assign blurb_width_desktop = block.settings.blurb_width_desktop | prepend: '--mw-upd:' | append: 'px;'
 
 %}
 
-<div class="contents blurb{{ blurb_type }} w-100 w-max{{ blurb_spacing_top }}{{ blurb_spacing_bottom }}{{ blurb_spacing_left }}{{ blurb_spacing_right }} color-{{ blurb_color }}" style="{{ blurb_width_mobile }} {{ blurb_width_desktop }}" {{ block.shopify_attributes }}>{{ blurb }}</div>
+<div class="contents blurb{{ blurb_type }}{{ blurb_align }} w-100 w-max{{ blurb_spacing_top }}{{ blurb_spacing_bottom }}{{ blurb_spacing_left }}{{ blurb_spacing_right }} color-{{ blurb_color }}" style="{{ blurb_width_mobile }} {{ blurb_width_desktop }}" {{ block.shopify_attributes }}>{{ blurb }}</div>

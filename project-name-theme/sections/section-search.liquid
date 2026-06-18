@@ -5,10 +5,7 @@
   assign spacing_header = section.settings.spacing_header
   
   assign container_size = section.settings.container_size | prepend: ' container-'
-  assign text_color = section.settings.text_color
   assign bg_color = section.settings.bg_color
-
-  assign search_heading = section.settings.search_heading
 
 %}
 
@@ -21,11 +18,7 @@
     
   <div class="search-container container{{ container_size }}">
 
-    <div class="search-heading text-center gap-bm--sm">
-      <h1 class="heading-3 text-{{ text_color }}">{{ search_heading }}</h1>
-    </div>
-
-    <form action="/search" method="get" class="search-form d-flex gap-bm--md w-max mx-auto" style="--mw: 800px;">
+    <form action="{{ routes.search_url }}" method="get" class="search-form d-flex gap-bm--md w-max mx-auto" style="--mw: 800px;">
       <input type="hidden" name="type" value="product">
       <input type="text" class="input-field" name="q" placeholder="Search Products">
       <div class="cta">
@@ -191,26 +184,6 @@
         ]
       },
       {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text Color",
-        "default": "current",
-        "options": [
-          {
-            "label": "Current Color",
-            "value": "current"
-          },
-          {
-            "label": "White",
-            "value": "white"
-          },
-          {
-            "label": "Black",
-            "value": "black"
-          }
-        ]
-      },
-      {
         "type": "header",
         "content": "Background Options"
       },
@@ -228,16 +201,6 @@
             "value": "black"
           }
         ]
-      },
-      {
-        "type": "header",
-        "content": "Search Heading Options"
-      },
-      {
-        "type": "text",
-        "id": "search_heading",
-        "label": "Heading",
-        "default": "Search Results"
       }
     ],
     "presets": [

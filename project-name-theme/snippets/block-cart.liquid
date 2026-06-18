@@ -19,9 +19,9 @@
 
 %}
 
-<div class="{{ cart_visibility }}{{ cart_spacing_left }}{{ cart_spacing_right }}" {{ block.shopify_attributes }}>
-  <a id="cart-btn" href="/cart" class="icon-cart button-scale {{ cart_size }} color-{{ cart_color }}" title="Cart">
-    <div class="count bg-{{ cart_count_bg }} color-{{ cart_count_color }}">{{ cart.item_count }}</div>
+<div class="cart-icon{{ cart_visibility }}{{ cart_spacing_left }}{{ cart_spacing_right }}" {{ block.shopify_attributes }}>
+  <a id="cart-btn" href="{{ routes.cart_url }}" class="icon-cart button-scale {{ cart_size }} color-{{ cart_color }}" title="Cart">
+    <div class="count cart-count bg-{{ cart_count_bg }} color-{{ cart_count_color }}">{{ cart.item_count }}</div>
     <span><i></i></span>
   </a>
 </div>

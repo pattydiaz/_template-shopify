@@ -18,9 +18,9 @@
     {
       "type": "select",
       "id":"heading_tag",
-      "label": "Heading Tag",
+      "label": "Heading HTML Tag",
       "default": "h2",
-      "info": "⚠️ H1 should only be used once at the top of the page.",
+      "info": "⚠️ Use only one H1 per page, typically at the top of the page",
       "options": [
         {
           "label": "H1",
@@ -51,7 +51,7 @@
     {
       "type": "select",
       "id":"heading_type",
-      "label": "Heading Type",
+      "label": "Heading Style Type",
       "default": "heading-1",
       "options": [
         {
@@ -89,6 +89,30 @@
         {
           "label": "Black",
           "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Text Alignment",
+      "default": "inherit",
+      "options": [
+        {
+          "label": "Inherit",
+          "value": "inherit"
+        },
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
         }
       ]
     },
@@ -363,6 +387,17 @@
           "value": "10"
         }
       ]
+    },
+    {
+      "type": "header",
+      "content": "Additional Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_hide",
+      "label": "Hide heading visually; include for SEO purposes only",
+      "info": "⚠️ Use this only when a graphic replaces a heading",
+      "default": false
     }
   ],
   "presets": [

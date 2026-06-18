@@ -7,6 +7,13 @@
   assign container_size = section.settings.container_size | prepend: ' container-'
   assign text_color = section.settings.text_color
   assign bg_color = section.settings.bg_color
+
+  case template.name
+    when 'page' 
+      assign content = page.content
+    when 'article' 
+      assign content = article.content
+  endcase
   
 %}
 
@@ -24,7 +31,7 @@
 
     <div class="container{{ container_size }}">
       
-      {% if page.content == blank %}
+      {% if content == blank %}
 
         <div class="text-center color-{{ text_color }}">
           <h3 class="mb-1">There is currently no content.</h3>
@@ -34,12 +41,13 @@
             {% else %}
               <p><a href="/admin" title="Log in">Log in</a> to Shopify to edit this page.</p>
             {% endif %}
-            <a href="/" class="btn btn-primary mt-2" title="Back to Home">Back to Home</a>
+            <a href="{{ routes.root_url }}" class="btn btn-primary mt-2" title="Back to Home">Back to Home</a>
           </div>
         </div>
 
       {% else %}
-        <div class="contents color-{{ text_color }}">{{ page.content }}</div>
+
+        <div class="contents color-{{ text_color }}">{{ content }}</div>
 
       {% endif %}
 

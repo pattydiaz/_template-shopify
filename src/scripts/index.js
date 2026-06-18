@@ -23,6 +23,8 @@ const footer = $('.footer');
 const announcement = $('.announcement');
 let loaded = false;
 
+const isShopifyEditor = window.Shopify && Shopify.designMode;
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Lazyload config

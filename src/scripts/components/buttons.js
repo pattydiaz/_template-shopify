@@ -40,7 +40,7 @@ const Buttons = {
       if ($target.el) scrollToTarget($target.el);
 
       // if ($('body').el.classList.contains('nav-open')) {
-      //   Navigation.close();
+      //   Nav.close();
       // }
     };
 

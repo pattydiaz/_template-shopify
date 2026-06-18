@@ -1,15 +1,7 @@
 .overflow {
   $self:&;
   
-  &-hidden {
-    overflow: hidden;
-  }
-
-  &-visible {
-    overflow: visible;
-  }
-
-  &-unset {
-    overflow: unset;
-  }
+  &-hidden { overflow: hidden; }
+  &-visible { overflow: visible; }
+  &-unset { overflow: unset; }
 }

@@ -13,17 +13,22 @@ var Project = {
     Slider.init();
     Newsletter.init();
     Header.init();
-    Navigation.init();
+    Nav.init();
     // Modal.init();
     Products.init();
     Product.init();
+    Cart.init();
     Drawer.init();
     CartAdd.init();
   },
 
   reinit() {
-    lazyload.update();
+    Agegate.init();
+
+    if (lazyload) lazyload.update();
+
     Slider.init();
+    Nav.init();
     Cart.init();
     Drawer.init();
     CartAdd.init();

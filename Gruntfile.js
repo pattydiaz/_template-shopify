@@ -7,6 +7,7 @@ const theme = `./ma-${pkg.name}-theme/`;
 const nm = "./node_modules/";
 
 const lib = [
+  nm + "js-cookie/dist/js.cookie.min.js",
   nm + "vanilla-lazyload/dist/lazyload.min.js",
   nm + "gsap/dist/gsap.min.js",
   nm + "gsap/dist/ScrollTrigger.min.js",

@@ -1,3 +1,5 @@
+{% assign product_form_id = 'product-form-' | append: section.id %}
+
 {% form 'product', product, id: product_form_id, class: 'product-form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
 
   {% if product.variants.size > 1 %}
@@ -7,8 +9,8 @@
       {% for option in product.options_with_values %}
         {% assign options_count = option.values | size %}
         <div class="product-variants variant-group my-2">
-          {% if options_count > 7 %}
-            <label class="product-variants-heading text-bold mb-1" for="option-{{ option.name | handleize }}">{{ option.name }}</label>
+          {% if options_count > 5 %}
+            <label class="product-variants-heading product-subtitle mb-1" for="option-{{ option.name | handleize }}">{{ option.name }}</label>
             <select class="variant-option" name="options[{{ option.name }}]" id="option-{{ option.name | handleize }}">
               {% for value in option.values %}
                 <option value="{{ value }}"{% if value.available %}{% if value.selected %} selected{% elsif forloop.first %} selected{% endif %}{% else %} disabled{% endif %}>
@@ -17,7 +19,7 @@
               {% endfor %}
             </select>
           {% else %}
-            <div class="product-variants-heading text-bold mb-1">{{ option.name }}</div>
+            <div class="product-variants-heading product-subtitle mb-1">{{ option.name }}</div>
             <fieldset>
               {% for value in option.values %}
                 <input class="variant-option float--center{% if value.available == false %} disabled{% endif %}" type="radio" name="options[{{ option.name }}]" id="{{ option.name | handleize }}-{{ value | handleize }}" value="{{ value }}"{% if value.available %}{% if value.selected %} checked{% elsif forloop.first %} checked{% endif %}{% else %} disabled{% endif %}>
@@ -42,7 +44,7 @@
 
 
     {% if product.available %}
-      <button id="add-to-cart-button" type="submit" name="add" class="btn btn-primary" aria-label="Add to Cart">Add to Cart</button>
+      <button id="add-to-cart-button" type="submit" name="add" class="add-to-cart-button btn btn-primary" aria-label="Add to Cart">Add to Cart</button>
     {% else %}
       <button class="btn btn-primary disabled" aria-label="Add to Cart" disabled>Add to Cart</button>
     {% endif %}

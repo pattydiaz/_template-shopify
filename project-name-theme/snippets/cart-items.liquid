@@ -11,7 +11,7 @@
 
     <tbody>
       {% for item in cart.items %}
-        <tr class="cart-item" data-line="{{ forloop.index }}">
+        <tr class="cart-item" data-line="{{ forloop.index }}" data-key="{{ item.key }}">
           
 
           <td class="cart-item-details">
@@ -24,7 +24,7 @@
             </a>
             <div class="cart-details">
               <div class="cart-description">
-                <a class="cart-title button-opacity" href="{{ item.url }}">{{ item.product.title }}</a>
+                <a class="cart-title button-opacity d-block mb-h" href="{{ item.url }}">{{ item.product.title }}</a>
                 {%- unless item.product.has_only_default_variant -%}
                   <div class="cart-variant variant">
                     {%- for option in item.options_with_values -%}
@@ -49,7 +49,7 @@
 
 
           <td class="cart-item-total">
-            <div class="cart-total">{{ item.line_price | money }}</div>
+            <div class="cart-total mt-h">{{ item.line_price | money }}</div>
           </td>
 
 

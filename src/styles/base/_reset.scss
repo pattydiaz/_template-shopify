@@ -108,6 +108,11 @@ select {
   }
 }
 
+hr {
+  border: 0;
+  border-top: 1px solid currentColor;
+}
+
 // -- bug fixes
 
 *, html {

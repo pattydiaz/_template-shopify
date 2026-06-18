@@ -15,21 +15,30 @@ const CartAdd = {
   async submit(e, form) {
     e.preventDefault();
 
-    const data = new FormData(form);
+    const btn = e.submitter || form.querySelector('[type="submit"]');
+    const shouldLoad = btn?.classList.contains('btn');
 
-    await fetch('/cart/add.js', {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    });
+    if (shouldLoad) btn.classList.add('loading');
 
-    const res = await fetch('/cart.js', { headers: { 'Accept': 'application/json' } });
-    const cart = await res.json();
+    try {
+      const data = new FormData(form);
 
-    await Drawer.refresh();
-    Drawer.open();
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
 
-    Cart.render(cart);
-    Drawer.sync(cart);
+      const res = await fetch('/cart.js', { headers: { 'Accept': 'application/json' } });
+      const cart = await res.json();
+
+      await Drawer.refresh();
+      Drawer.open();
+
+      Cart.render(cart);
+      Drawer.sync(cart);
+    } finally {
+      if (shouldLoad) btn.classList.remove('loading');
+    }
   }
 };

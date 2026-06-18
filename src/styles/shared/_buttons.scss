@@ -86,3 +86,20 @@
   opacity: 0.3;
   pointer-events: none;
 }
+
+@mixin btn-loading($color: $black) {
+  position: relative;
+  color: $transparent;
+  pointer-events: none;
+  cursor: no-drop;
+  opacity: 0.8;
+  
+  &:before {
+    content:'';
+    @include cover;
+    @include mask('icon-loading.svg', 28px);
+    background-color: $color;
+    animation: spin 1.2s linear infinite;
+    z-index: 5;
+  }
+}

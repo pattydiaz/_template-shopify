@@ -13,7 +13,7 @@
     margin-right: auto;
 
     @include container-spacing;
-    padding-top: calc(var(--hh, 80px) + var(--ah, 0px));
+    padding-top: calc(var(--hh));
 
     @include bp-up(md) {
       max-width: (map-get($breakpoints, 'lg') - 0.02 + 30);
@@ -23,25 +23,29 @@
       max-width: (map-get($breakpoints, 'lg') - 0.02 + 50);
     }
   }
-
-  &__title,
-  &__body {
-    padding-top: calc(#{map-get($gaps,'md')} / 2.5);
-
+  
+  &__title {
+    padding-top: calc(#{map-get($gaps,'md')} / 2);
+    padding-bottom: calc(#{map-get($gaps,'xs')} / 2);
+  
     @include bp-up(md) {
       padding-top: map-get($gaps,'md');
+      padding-bottom: map-get($gaps,'xs');
     }
-  }
 
-  &__title {
-    h1 { @include heading-1;}
+    h1 { 
+      @include heading-1; 
+      text-transform: capitalize;
+    }
   }
   
   &__body {
-    padding-bottom: calc(#{map-get($gaps,'md')} / 2.5);
+    padding-top: calc(#{map-get($gaps,'xs')} / 2);
+    padding-bottom: calc(#{map-get($gaps,'md')} / 2);
     @include contents;
 
     @include bp-up(md) {
+      padding-top: map-get($gaps,'xs');
       padding-bottom: map-get($gaps,'md');
     }
   }

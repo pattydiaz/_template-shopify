@@ -1,5 +1,6 @@
 const Drawer = {
   els: {},
+  isOpen: false,
 
   init() {
     this.build();
@@ -10,6 +11,16 @@ const Drawer = {
 
     this.cache();
     this.bind();
+    this.state();
+  },
+
+  state() {
+    if (!this.els.root?.el) return;
+
+    this.els.root.el.setAttribute(
+      'aria-hidden',
+      this.isOpen ? 'false' : 'true'
+    );
   },
 
   cache() {
@@ -29,8 +40,15 @@ const Drawer = {
   open() {
     if (document.body.classList.contains('cart')) return;
 
+    this.isOpen = true;
+    this.state();
+
     Scrolling.lock();
-    this.els.root.el.setAttribute('aria-hidden', 'false');
+
+    gsap.killTweensOf([
+      this.els.wrapper.el,
+      this.els.overlay.el
+    ]);
 
     gsap.set(this.els.wrapper.el, { x: '120%' });
     gsap.set(this.els.overlay.el, { opacity: 0 });
@@ -40,25 +58,34 @@ const Drawer = {
   },
 
   close() {
+    this.isOpen = false;
+    this.state();
+
+    gsap.killTweensOf([
+      this.els.wrapper.el,
+      this.els.overlay.el
+    ]);
+
     gsap.to(this.els.wrapper.el, {
       x: '120%',
       duration: 0.2,
-      ease: 'power2.in',
+      ease: 'power2.in'
+    });
+
+    gsap.to(this.els.overlay.el, {
+      opacity: 0,
+      duration: 0.15,
       onComplete: () => {
-        gsap.to(this.els.overlay.el, {
-          opacity: 0,
-          duration: 0.15,
-          onComplete: () => {
-            this.els.root.el.setAttribute('aria-hidden', 'true');
-            Scrolling.unlock();
-          }
-        });
+        this.state();
+        Scrolling.unlock();
       }
     });
   },
 
   sync(cart) {
     if (document.body.classList.contains('cart')) return;
+
+    this.state();
 
     const isEmpty = cart.item_count === 0;
 
@@ -72,6 +99,7 @@ const Drawer = {
       });
 
     const emptyMsg = this.els.root.el.querySelector('.drawer-empty');
+
     if (emptyMsg) {
       emptyMsg.classList.toggle('d-none', !isEmpty);
     }
@@ -87,6 +115,10 @@ const Drawer = {
 
     if (body && this.els.body.el) {
       this.els.body.el.innerHTML = body.innerHTML;
+
+      this.cache();
+      this.bind();
+      this.state();
 
       Cart.build(true);
       CartAdd.init();

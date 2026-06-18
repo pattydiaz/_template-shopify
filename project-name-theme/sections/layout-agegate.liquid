@@ -1,0 +1,286 @@
+{% liquid
+
+  assign container_size = section.settings.container_size | prepend: ' container-'
+  assign text_color = section.settings.text_color
+  assign text_alignment = section.settings.text_alignment | prepend: 'text-'
+  assign bg_color = section.settings.bg_color
+
+  assign agegate_hide = section.settings.agegate_hide
+  
+%}
+
+{% if request.design_mode and agegate_hide == false %}
+  <button id="ag_toggle" class="btn btn-primary">Hide Age Gate</button>
+{% endif %}
+
+<div {% if agegate_hide == true %}id="agegate_hidden" {% endif %}class="agegate-wrapper bg-{{ bg_color }}" role="dialog" aria-modal="true" aria-labelledby="agegate-title" aria-hidden="true">
+
+  <h2 id="agegate-title" class="sr-only">Age Verification</h2>
+
+  <div class="agegate-inner">
+    {% render 'component-background', class: 'agegate-bg', bg_settings: section.settings %}
+    
+    <div class="agegate-container container{{ container_size }}">
+      <div class="agegate-content color-{{ text_color }} {{ text_alignment }}">
+  
+        {% content_for 'blocks' %}
+  
+        <div class="agegate-validation">
+          <button id="ag_accept" class="btn btn-primary-{% if request.design_mode %} disabled{% endif %}" aria-label="Yes">Yes</button>
+          
+          <a href="https://www.cdc.gov/alcohol/underage-drinking/minimum-legal-drinking-age.html" class="btn btn-primary{% if request.design_mode %} disabled{% endif %}" title="No" target="_blank" rel="nofollow">No</a>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Age Gate",
+  "tag": "div",
+  "class": "agegate agegate--hidden",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Visibility Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "agegate_hide",
+      "label": "Do not display Age Gate on website"
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "container_size",
+      "default": "xl",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, 
+        {
+          "label": "X-Large",
+          "value": "xl"
+        }, 
+        {
+          "label": "XX-Large",
+          "value": "xx"
+        }, 
+        {
+          "label": "Maximum",
+          "value": "max"
+        },
+        {
+          "label": "Extra",
+          "value": "xtr"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "current",
+      "options": [
+        {
+          "label": "Current Color",
+          "value": "current"
+        },
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Background Options"
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "white",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_img",
+      "label": "Background Image"
+    },
+    {
+      "type": "video",
+      "id": "bg_video",
+      "label": "Background Video",
+      "info": "⚠️ Image is required as a fallback for video",
+      "visible_if": "{{ section.settings.bg_img != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "bg_position_y",
+      "label": "Image Position (Top/Bottom)",
+      "default": 50,
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "visible_if": "{{ section.settings.bg_img != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "bg_position_x",
+      "label": "Image Position (Left/Right)",
+      "default": 50,
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "visible_if": "{{ section.settings.bg_img != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "bg_overlay",
+      "label": "Image Overlay Opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0,
+      "visible_if": "{{ section.settings.bg_img != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "bg_overlay_color",
+      "label": "Overlay Background Color",
+      "default": "black",
+      "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_overlay > 0 }}",
+      "options": [
+        {
+          "label": "White",
+          "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_overlay_blur",
+      "label": "Add blur to overlay",
+      "default": false,
+      "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_overlay > 0 }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_mobile",
+      "label": "Show different media on mobile",
+      "default": false,
+      "visible_if": "{{ section.settings.bg_img != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Background Options",
+      "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_img_mobile",
+      "label": "Background Image",
+      "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true }}"
+    },
+    {
+      "type": "video",
+      "id": "bg_video_mobile",
+      "label": "Background Video",
+      "info": "⚠️ Image is required as a fallback for video",
+      "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "bg_position_y_mobile",
+      "label": "Image Position (Top/Bottom)",
+      "default": 50,
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "bg_position_x_mobile",
+      "label": "Image Position (Left/Right)",
+      "default": 50,
+      "step": 1,
+      "min": 0,
+      "max": 100,
+      "unit": "%",
+      "visible_if": "{{ section.settings.bg_img != blank and section.settings.bg_mobile == true and section.settings.bg_img_mobile != blank }}"
+    }
+  ],
+  "blocks": [
+    { "type": "heading" },
+    { "type": "subheading" },
+    { "type": "blurb" },
+    { "type": "_graphic" }
+  ]
+}
+{% endschema %}

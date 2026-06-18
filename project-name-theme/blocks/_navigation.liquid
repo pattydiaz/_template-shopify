@@ -86,7 +86,7 @@
       "label": "Button Background Color",
       "id": "nav_button_bg",
       "default": "black",
-      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_button == 'menu' }}",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' and block.settings.nav_button == 'menu' }}",
       "options": [
         {
           "label": "Black",
@@ -101,6 +101,13 @@
     {
       "type": "header",
       "content": "Navigation Options",
+      "visible_if": "{{ block.settings.nav != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "nav_dividers",
+      "label": "Include navigation item dividers",
+      "default": true,
       "visible_if": "{{ block.settings.nav != blank }}"
     },
     {
@@ -129,15 +136,60 @@
       "label": "Navigation Background Color",
       "id": "nav_bg_color",
       "default": "black",
-      "visible_if": "{{ block.settings.nav != blank }}",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}",
       "options": [
-        {
-          "label": "Black",
-          "value": "black"
-        },
         {
           "label": "White",
           "value": "white"
+        },
+        {
+          "label": "Black",
+          "value": "black"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "Container Size",
+      "id": "nav_container",
+      "default": "lg",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "X-Small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }, 
+        {
+          "label": "X-Large",
+          "value": "xl"
+        },
+        {
+          "label": "XX-Large",
+          "value": "xx"
+        }, 
+        {
+          "label": "Maximum",
+          "value": "max"
+        },
+        {
+          "label": "Extra",
+          "value": "xtr"
         }
       ]
     },
@@ -146,7 +198,7 @@
       "label": "Text Alignment",
       "id": "nav_alignment",
       "default": "center",
-      "visible_if": "{{ block.settings.nav != blank }}",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}",
       "options": [
         {
           "label": "Left",
@@ -159,6 +211,27 @@
         {
           "label": "Right",
           "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "label": "Text Position",
+      "id": "nav_position",
+      "default": "center",
+      "visible_if": "{{ block.settings.nav != blank and block.settings.nav_type != 'list' }}",
+      "options": [
+        {
+          "label": "Left",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "end"
         }
       ]
     },

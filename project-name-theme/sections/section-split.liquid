@@ -14,7 +14,7 @@
   assign animated = section.settings.animated
   assign animation = ''
   if animated == true
-    assign animation = ' animated animated-group animate-up-in'
+    assign animation = ' animated animated-group animate-up-in-slow'
   endif
   
   assign container_size = section.settings.container_size | prepend: ' container-'
@@ -51,7 +51,7 @@
     <div class="split-columns columns d-flex-t{{ columns_swap }} d-flex--align-{{ text_position }}{{ animation }}">
 
       <div class="split-column column" style="--column-width: {{ columns_width_media }}%;">
-        <div class="ratio ratio-{{ split_ratio }}"{% unless split_image %} style="background-color: hsl(from var(--{{ bg_color }}) h s calc(l - 5));"{% endunless %}>
+        <div class="ratio-{{ split_ratio }}"{% unless split_image != blank %} style="background-color: hsl(from var(--{{ bg_color }}) h s calc(l - 5));"{% endunless %}>
 
           {% unless request.design_mode or split_animate == false %}
             <div class="parallax parallax-item parallax-zoom" data-percent="-25">
@@ -73,10 +73,12 @@
 
       <div class="split-column column" style="--column-width: {{ columns_width_content }}%;">
         {% if section.blocks.size > 0 %}
-          <div class="split-text {{ text_alignment }} color-{{ text_color }}">
+          <div class="split-text {{ text_alignment }} color-{{ text_color }} d-flex-col d-flex--align-center">
+            <div>
       
             {% content_for 'blocks' %}
             
+            </div>
           </div>
         {% endif %}
       </div>
@@ -455,7 +457,10 @@
             "type": "heading"
           },
           {
-            "type": "blurb"
+            "type": "blurb",
+            "settings": {
+              "blurb_spacing_top": "1"
+            }
           }
         ]
       }
